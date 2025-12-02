@@ -1,0 +1,24 @@
+mutation CreateUser @auth(level: USER) {
+  user_insert(data: {
+    createdAt_expr: "request.time",
+    email: "example@example.com",
+    passwordHash: "examplehash",
+    updatedAt_expr: "request.time"
+  })
+}
+
+query ListUsers @auth(level: USER, insecureReason: "This operation is safe to expose to all logged in users.") {
+  users {
+    id
+    email
+    displayName
+  }
+}
+
+mutation UpdateUser($id: UUID!, $displayName: String) @auth(level: USER) {
+  user_update(key: {id: $id}, data: {displayName: $displayName, updatedAt_expr: "request.time"})
+}
+
+mutation DeleteUser($id: UUID!) @auth(level: USER) {
+  user_delete(key: {id: $id})
+}

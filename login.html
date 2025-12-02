@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professional Login | Dark Theme</title>
+    <!-- Added Font Awesome for professional icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        /* Define Color Variables */
+        :root {
+            --primary-bg: #0A0A10;
+            /* Deep Black/Navy */
+            --secondary-bg: #151A25;
+            /* Darker Card background */
+            --card-bg: #1F2937;
+            /* Slightly Lighter Dark Gray */
+            --accent-color: #00BFFF;
+            /* Deep Sky Blue Accent */
+            --text-light: #E5E7EB;
+            /* Gray-200 */
+            --text-muted: #9CA3AF;
+            --error-color: #ff4d4d;
+            /* Red for errors */
+            --success-color: #4CAF50;
+            /* Green for success */
+        }
+
+        /* Global Reset and Body Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            /* Enhanced background with subtle radial gradient for depth */
+            background: var(--primary-bg);
+            background-image: radial-gradient(circle at center, #111827 1px, transparent 1px),
+                linear-gradient(to bottom, var(--primary-bg), #000000);
+            background-size: 30px 30px;
+
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            font-size: 16px;
+        }
+
+        /* --- Login Container Styling --- */
+
+        .login-container {
+            background-color: var(--card-bg);
+            padding: 40px;
+            border-radius: 12px;
+            /* Enhanced shadow for a more "floating" professional look */
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.6),
+                0 0 0 1px rgba(255, 255, 255, 0.05);
+            width: 360px;
+            /* Slightly narrower */
+            max-width: 90%;
+            text-align: center;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .login-container:hover {
+            transform: translateY(-5px);
+        }
+
+        h2 {
+            margin-bottom: 30px;
+            color: var(--accent-color);
+            font-size: 1.8rem;
+            letter-spacing: 1px;
+            font-weight: 600;
+        }
+
+        /* --- Input Field Styling & Animation --- */
+
+        .input-group {
+            position: relative;
+            margin-bottom: 30px;
+            /* Increased margin */
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            font-size: 0.85rem;
+            margin-bottom: 6px;
+            color: var(--text-muted);
+            transition: color 0.3s;
+            font-weight: 500;
+        }
+
+        /* Wrapper for Icon and Input */
+        .input-field-wrapper {
+            display: flex;
+            align-items: center;
+            background-color: var(--secondary-bg);
+            border-radius: 6px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            position: relative;
+        }
+
+        /* Icon Styling */
+        .input-field-wrapper i {
+            color: var(--text-muted);
+            font-size: 1rem;
+            transition: color 0.3s;
+            padding: 0 12px;
+        }
+
+        .input-group input {
+            flex-grow: 1;
+            width: 100%;
+            padding: 12px 10px;
+            border: none;
+            border-radius: 0;
+            /* Changed to 0 so toggle button can sit nicely */
+            background-color: transparent;
+            /* Input itself is transparent */
+            color: var(--text-light);
+            font-size: 1rem;
+            outline: none;
+        }
+
+        /* New: Password Toggle Button Styling */
+        .password-toggle {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0 12px;
+            transition: color 0.3s;
+            outline: none;
+            border-radius: 0 6px 6px 0;
+            /* Apply rounding to the button side */
+        }
+
+        .password-toggle:hover {
+            color: var(--accent-color);
+        }
+
+        /* Focus state for the wrapper (better integrated look) */
+        .input-field-wrapper:has(input:focus) {
+            box-shadow: 0 0 0 2px var(--accent-color);
+            background-color: #273449;
+        }
+
+        /* Focus color for the icon */
+        .input-field-wrapper:has(input:focus) i {
+            color: var(--accent-color);
+        }
+
+        /* Accent line for focus animation (positioned relative to the wrapper) */
+        .input-accent-line {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background-color: var(--accent-color);
+            border-radius: 0 0 6px 6px;
+            transition: width 0.4s ease-in-out;
+        }
+
+        /* Expand the accent line on input focus */
+        .input-field-wrapper:has(input:focus)~.input-accent-line {
+            width: 100%;
+        }
+
+
+        /* --- Button Styling & Animation --- */
+
+        .login-btn,
+        .action-btn {
+            width: 100%;
+            padding: 14px;
+            background-color: var(--accent-color);
+            color: var(--primary-bg);
+            border: none;
+            border-radius: 6px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 25px;
+            transition: background-color 0.3s, transform 0.2s, box-shadow 0.3s;
+            letter-spacing: 0.8px;
+            /* Slight letter spacing for weight */
+        }
+
+        .login-btn:hover,
+        .action-btn:hover {
+            background-color: #33C7FF;
+            transform: translateY(-3px);
+            /* Increased lift */
+            box-shadow: 0 8px 20px rgba(0, 191, 255, 0.5);
+            /* Stronger glow */
+        }
+
+        .login-btn:active,
+        .action-btn:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        .switch-mode {
+            background: none;
+            color: var(--accent-color);
+            font-size: 0.9rem;
+            margin-top: 15px;
+            border: none;
+            cursor: pointer;
+            text-decoration: none;
+            /* Removed underline */
+            transition: opacity 0.2s;
+            font-weight: 500;
+        }
+
+        .switch-mode:hover {
+            opacity: 0.8;
+            text-decoration: underline;
+            /* Added underline on hover */
+        }
+
+        /* --- Message Box --- */
+        #message-box {
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            display: none;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+
+        .message-success {
+            background-color: var(--success-color);
+            color: var(--primary-bg);
+        }
+
+        .message-error {
+            background-color: var(--error-color);
+            color: var(--text-light);
+        }
+
+        /* --- Logged In View --- */
+        #user-dashboard {
+            display: none;
+            text-align: left;
+        }
+
+        .user-info p {
+            margin: 10px 0;
+        }
+
+        .user-id-text {
+            word-break: break-all;
+            background-color: var(--secondary-bg);
+            padding: 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
+
+        .logout-btn {
+            background-color: var(--error-color);
+            margin-top: 30px;
+        }
+
+        .logout-btn:hover {
+            background-color: #ff7070;
+            box-shadow: 0 5px 15px rgba(255, 77, 77, 0.4);
+        }
+
+        .info-block {
+            padding: 15px;
+            background-color: var(--secondary-bg);
+            border-left: 4px solid var(--accent-color);
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .info-block p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login-container">
+        <h2 id="form-title">Login</h2>
+
+        <!-- Message Box for Feedback -->
+        <div id="message-box"></div>
+
+        <!-- Authentication Form -->
+        <form id="auth-form">
+            <div id="auth-form-content">
+                <!-- Inputs are dynamically added here -->
+            </div>
+
+            <button type="submit" class="login-btn" id="submit-btn">
+                LOG IN
+            </button>
+
+            <button type="button" class="switch-mode" id="switch-mode-btn">
+                Need an account? Register
+            </button>
+        </form>
+
+        <!-- Logged In Dashboard -->
+        <div id="user-dashboard">
+            <div class="info-block">
+                <p>You are successfully logged in! This is your secure dashboard view.</p>
+            </div>
+            <div class="user-info">
+                <p><strong>Display Name:</strong> <span id="display-name-info">Loading...</span></p>
+                <p><strong>Your User ID:</strong></p>
+                <p class="user-id-text" id="user-id-display"></p>
+                <p><strong>Authentication Status:</strong> <span id="auth-status">Email/Password User</span></p>
+            </div>
+            <button type="button" class="action-btn logout-btn" onclick="handleLogout()">
+                LOG OUT
+            </button>
+        </div>
+
+    </div>
+
+    <script type="module">
+        import {
+            initializeApp
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import {
+            getAuth,
+            signInAnonymously,
+            signInWithCustomToken,
+            onAuthStateChanged,
+            createUserWithEmailAndPassword,
+            signInWithEmailAndPassword,
+            signOut,
+            updateProfile // Import updateProfile to save the user name
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- GLOBAL SETUP VARIABLES ---
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+            apiKey: "AIzaSyCqTre32R-JxlgqP7HhJ0ZufEeFtFSrOuo",
+            authDomain: "login-page-e809f.firebaseapp.com",
+            projectId: "login-page-e809f",
+            storageBucket: "login-page-e809f.firebasestorage.app",
+            messagingSenderId: "204682041114",
+            appId: "1:204682041114:web:0cff442a3a2a94010fbea3",
+            measurementId: "G-98WYFYQF1G"
+        };
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+
+        // --- DOM Elements ---
+        const formTitle = document.getElementById('form-title');
+        const authForm = document.getElementById('auth-form');
+        const formContent = document.getElementById('auth-form-content');
+        const submitBtn = document.getElementById('submit-btn');
+        const switchModeBtn = document.getElementById('switch-mode-btn');
+        const messageBox = document.getElementById('message-box');
+        const userDashboard = document.getElementById('user-dashboard');
+        const userIdDisplay = document.getElementById('user-id-display');
+        const authStatus = document.getElementById('auth-status');
+        const displayNameInfo = document.getElementById('display-name-info');
+
+
+        let isLoginMode = true; // State for form mode
+        let auth;
+
+        // --- UTILITY FUNCTIONS ---
+
+        // Function to display messages (replaces alert())
+        function showMessage(message, isError = false) {
+            messageBox.textContent = message;
+            messageBox.style.display = 'block';
+
+            // Clear previous classes and apply new ones
+            messageBox.classList.remove('message-success', 'message-error');
+            if (isError) {
+                messageBox.classList.add('message-error');
+            } else {
+                messageBox.classList.add('message-success');
+            }
+
+            // Hide after 5 seconds
+            setTimeout(() => {
+                messageBox.style.display = 'none';
+            }, 5000);
+        }
+
+        // --- FIREBASE INITIALIZATION & AUTH ---
+
+        async function initializeFirebase() {
+            try {
+                // Initialize services
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                const db = getFirestore(app);
+                setLogLevel('Debug');
+
+                // Attempt custom token sign-in or anonymous fallback
+                if (initialAuthToken) {
+                    await signInWithCustomToken(auth, initialAuthToken);
+                    console.log("Signed in with custom token.");
+                }
+                // Set up Auth State Listener
+                onAuthStateChanged(auth, (user) => {
+                    if (user) {
+                        console.log("User detected:", user.email);
+                        // Do NOT redirect automatically
+                    }
+                });
+
+
+
+
+            } catch (error) {
+                console.error("Firebase Initialization/Auth Error:", error);
+                showMessage(`Initialization failed: ${error.message}`, true);
+            }
+        }
+
+        // --- UI RENDERING (UPDATED for Name Input) ---
+
+        function renderFormContent() {
+            let html = '';
+
+            // Add Name Input only in Registration Mode
+            if (!isLoginMode) {
+                html += `
+                    <!-- Name Input Group -->
+                    <div class="input-group">
+                        <label for="name">Full Name</label>
+                        <div class="input-field-wrapper">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="name" name="name" placeholder="John Doe" required>
+                        </div>
+                        <span class="input-accent-line"></span>
+                    </div>
+                `;
+            }
+
+            // Email Input Group
+            html += `
+                <div class="input-group">
+                    <label for="email">Email Address</label>
+                    <div class="input-field-wrapper">
+                        <i class="fas fa-at"></i>
+                        <input type="email" id="email" name="email" placeholder="you@example.com" required>
+                    </div>
+                    <span class="input-accent-line"></span>
+                </div>
+
+                <!-- Password Input Group -->
+                <div class="input-group">
+                    <label for="password">Password</label>
+                    <div class="input-field-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="password" name="password" placeholder="Enter secure password" required>
+                        <!-- NEW: Password Visibility Toggle Button -->
+                        <button type="button" class="password-toggle" id="password-toggle-btn">
+                            <i class="fas fa-eye-slash"></i>
+                        </button>
+                    </div>
+                    <span class="input-accent-line"></span>
+                </div>
+            `;
+            formContent.innerHTML = html;
+        }
+
+        function renderUI(isAuthenticated, user = null) {
+            if (isAuthenticated && user && user.email) {
+                // Show Dashboard
+                authForm.style.display = 'none';
+                userDashboard.style.display = 'block';
+                formTitle.textContent = "Dashboard";
+
+                userIdDisplay.textContent = user.uid;
+                displayNameInfo.textContent = user.displayName || 'N/A (Update Profile)';
+                authStatus.textContent = user.isAnonymous ? 'Anonymous' : 'Email/Password User';
+
+            } else {
+                // Show Auth Form
+                authForm.style.display = 'block';
+                userDashboard.style.display = 'none';
+                updateFormMode(); // Ensure form mode is correct
+            }
+        }
+
+        /**
+         * Toggles the visibility of the password input field.
+         */
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('password');
+            const toggleBtnIcon = document.querySelector('#password-toggle-btn i');
+
+            if (passwordInput && toggleBtnIcon) {
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    toggleBtnIcon.classList.remove('fa-eye-slash');
+                    toggleBtnIcon.classList.add('fa-eye');
+                } else {
+                    passwordInput.type = 'password';
+                    toggleBtnIcon.classList.remove('fa-eye');
+                    toggleBtnIcon.classList.add('fa-eye-slash');
+                }
+            }
+        }
+
+
+        function updateFormMode() {
+            formTitle.textContent = isLoginMode ? 'Sign In' : 'Create Account';
+            submitBtn.textContent = isLoginMode ? 'LOG IN' : 'REGISTER';
+            switchModeBtn.textContent = isLoginMode ? 'Need an account? Register' : 'Have an account? Log In';
+
+            renderFormContent();
+
+            // Attach event listener for the password toggle button after rendering
+            const passwordToggleBtn = document.getElementById('password-toggle-btn');
+            if (passwordToggleBtn) {
+                passwordToggleBtn.addEventListener('click', togglePasswordVisibility);
+            }
+        }
+
+        // --- AUTH ACTION HANDLERS ---
+
+        async function handleAuth(e) {
+            e.preventDefault();
+            showMessage('Processing...', false);
+
+            const email = authForm.email.value;
+            const password = authForm.password.value;
+            const name = isLoginMode ? null : authForm.name.value; // Only get name if registering
+
+            try {
+                if (isLoginMode) {
+                    // LOGIN
+                    signInWithEmailAndPassword(auth, email, password)
+
+
+                    setTimeout(() => {
+                        window.location.href = "index.html";
+                    }, 1000); // 1000ms = 1 second
+
+
+                    showMessage('Login successful! Redirecting...', false);
+
+                    // Optional: Redirect
+                    // window.location.href = "index.html";
+
+                } else {
+                    // REGISTER
+                    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+
+                    // Save Display Name
+                    if (name) {
+                        await updateProfile(userCredential.user, {
+                            displayName: name
+                        });
+                        console.log("Display name updated successfully.");
+                    }
+
+                    showMessage('Registration successful!', false);
+
+                    // Optional: Redirect
+                    // setTimeout(() => {
+                    //     window.location.href = "index.html";
+                    // }, 1200);
+                }
+            } catch (error) {
+                console.error("Authentication Error:", error);
+                let errorMessage = error.message.replace('Firebase: ', '');
+
+                if (error.code === 'auth/operation-not-allowed') {
+                    errorMessage = "Email/Password sign-in is disabled. Please enable Email/Password in Firebase Authentication.";
+                } else if (error.code === 'auth/weak-password') {
+                    errorMessage = "Password should be at least 6 characters.";
+                }
+
+                showMessage(errorMessage, true);
+            }
+        }
+
+
+        window.handleLogout = async function () {
+            try {
+                await signOut(auth);
+                showMessage('You have been logged out.', false);
+            } catch (error) {
+                console.error("Logout Error:", error);
+                showMessage('Logout failed.', true);
+            }
+        }
+
+        // --- EVENT LISTENERS & STARTUP ---
+
+        authForm.addEventListener('submit', handleAuth);
+
+        switchModeBtn.addEventListener('click', () => {
+            isLoginMode = !isLoginMode;
+            updateFormMode();
+            messageBox.style.display = 'none'; // Clear messages on mode switch
+        });
+
+        // Start the application
+        initializeFirebase();
+        updateFormMode(); // Initial form render
+
+    </script>
+</body>
+
+</html>

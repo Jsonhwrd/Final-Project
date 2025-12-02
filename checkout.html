@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Checkout - BulkBase</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Include Lucide Icons for professional-looking symbols -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <style>
+        @keyframes floaty {
+            0% {
+                transform: translateY(0);
+            }
+
+            50% {
+                transform: translateY(-12px);
+            }
+
+            100% {
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes gradient-border {
+            0% {
+                border-image-source: linear-gradient(45deg, #00eaff, #006aff);
+            }
+
+            50% {
+                border-image-source: linear-gradient(45deg, #006aff, #00eaff);
+            }
+
+            100% {
+                border-image-source: linear-gradient(45deg, #00eaff, #006aff);
+            }
+        }
+
+        @keyframes fadeSlide {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Custom style for sticky navbar background and shadow */
+        .navbar-sticky {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-900 text-white min-h-screen animate-[fadeIn_0.8s_ease-in-out] overflow-x-hidden relative">
+
+    <!-- Parallax Floating Elements -->
+    <div class="absolute top-10 left-10 w-40 h-40 bg-cyan-500/20 blur-3xl rounded-full animate-[floaty_6s_infinite]">
+    </div>
+    <div
+        class="absolute bottom-20 right-10 w-56 h-56 bg-blue-600/20 blur-3xl rounded-full animate-[floaty_8s_infinite]">
+    </div>
+
+    <!-- Header removed, replaced by the checkout title section below -->
+
+    <!-- Checkout Page Title Section (Now acting as the main header/title) -->
+    <header class="py-10 text-center animate-[fadeSlide_0.7s_ease-out]">
+        <h1 class="text-4xl sm:text-5xl font-extrabold tracking-wide drop-shadow-xl">
+            <span class="text-cyan-400">Secure</span> Checkout
+        </h1>
+        <p class="text-gray-300 mt-2 text-md sm:text-lg">Review your order details and complete payment.</p>
+    </header>
+
+
+    <!-- Step Progress Bar -->
+    <div class="max-w-4xl mx-auto mt-8 mb-12 px-6">
+        <div class="flex justify-between items-center relative">
+            <div class="absolute top-1/2 left-0 right-0 h-1 bg-gray-700"></div>
+
+            <div
+                class="relative z-10 w-10 h-10 bg-cyan-500 rounded-full flex items-center justify-center font-bold shadow-lg">
+                1</div>
+            <div
+                class="relative z-10 w-10 h-10 bg-cyan-400/40 backdrop-blur-md border border-cyan-300/30 rounded-full flex items-center justify-center font-bold">
+                2</div>
+            <div
+                class="relative z-10 w-10 h-10 bg-cyan-400/20 backdrop-blur-md border border-cyan-300/20 rounded-full flex items-center justify-center font-bold">
+                3</div>
+        </div>
+        <div class="flex justify-between text-sm text-gray-400 mt-3 font-medium">
+            <span>Billing</span><span>Payment</span><span>Review</span>
+        </div>
+    </div>
+
+    <!-- Main Layout -->
+    <div class="max-w-6xl mx-auto px-4 pb-24 grid grid-cols-1 lg:grid-cols-3 gap-12 relative">
+
+        <!-- Billing Form -->
+        <div class="lg:col-span-2 bg-gray-800/60 backdrop-blur-xl border-2 border-transparent rounded-3xl p-8 shadow-2xl animate-[fadeSlide_0.9s_ease-out] hover:scale-[1.01] transition-all duration-300"
+            style="border-image-slice:1; animation:gradient-border 5s infinite; border-width:2px;">
+
+            <h2 class="text-3xl font-bold mb-8">Billing Information</h2>
+
+            <form class="space-y-7" id="checkout-form">
+                <div>
+                    <label class="text-gray-300 text-sm mb-1 block">Full Name</label>
+                    <input type="text" required placeholder="John Doe" id="fullname"
+                        class="w-full p-3.5 rounded-xl bg-gray-800/60 border border-gray-600 focus:ring-4 focus:ring-cyan-500/70 transition" />
+                </div>
+
+                <div>
+                    <label class="text-gray-300 text-sm mb-1 block">Email Address</label>
+                    <input type="email" required placeholder="john@example.com" id="email"
+                        class="w-full p-3.5 rounded-xl bg-gray-800/60 border border-gray-600 focus:ring-4 focus:ring-cyan-500/70 transition" />
+                </div>
+
+                <div>
+                    <label class="text-gray-300 text-sm mb-1 block">Shipping Address</label>
+                    <input type="text" required placeholder="123 Fitness St, Taipei, Taiwan" id="address"
+                        class="w-full p-3.5 rounded-xl bg-gray-800/60 border border-gray-600 focus:ring-4 focus:ring-cyan-500/70 transition" />
+                    <button type="button" id="open-address-book"
+                        class="mt-2 text-sm text-cyan-400 hover:text-cyan-300 underline">
+                        Choose from saved addresses
+                    </button>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                    <div>
+                        <label class="text-gray-300 text-sm mb-1 block">City</label>
+                        <input type="text" required placeholder="Taipei" id="city"
+                            class="w-full p-3.5 rounded-xl bg-gray-800/60 border border-gray-600 focus:ring-4 focus:ring-cyan-500/70 transition" />
+                    </div>
+                    <div>
+                        <label class="text-gray-300 text-sm mb-1 block">Postal Code</label>
+                        <input type="text" required placeholder="110" id="postal"
+                            class="w-full p-3.5 rounded-xl bg-gray-800/60 border border-gray-600 focus:ring-4 focus:ring-cyan-500/70 transition" />
+                    </div>
+                    <div>
+                        <label class="text-gray-300 text-sm mb-1 block">Country</label>
+                        <input type="text" required placeholder="Taiwan" id="country"
+                            class="w-full p-3.5 rounded-xl bg-gray-800/60 border border-gray-600 focus:ring-4 focus:ring-cyan-500/70 transition" />
+                    </div>
+                </div>
+
+                <!-- Payment Method Section -->
+                <h2 class="text-3xl font-bold pt-6">Payment Method</h2>
+
+                <div class="space-y-4">
+                    <div
+                        class="flex items-center space-x-3 bg-gray-800/60 p-4 rounded-xl border border-gray-600 hover:border-cyan-500 transition cursor-pointer">
+                        <input type="radio" name="payment" checked />
+                        <label class="flex items-center space-x-2">
+                            <span>Credit / Debit Card</span>
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" class="w-10" />
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg"
+                                class="w-10" />
+
+                        </label>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-gray-300 text-sm mb-1 block">Card Number</label>
+                        <input type="text" placeholder="1234 5678 9012 3456"
+                            class="w-full p-3.5 rounded-xl bg-gray-800/60 border border-gray-600 focus:ring-4 focus:ring-cyan-500/70 transition" />
+                    </div>
+                    <div>
+                        <label class="text-gray-300 text-sm mb-1 block">Name on Card</label>
+                        <input type="text" placeholder="John Doe"
+                            class="w-full p-3.5 rounded-xl bg-gray-800/60 border border-gray-600 focus:ring-4 focus:ring-cyan-500/70 transition" />
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label class="text-gray-300 text-sm mb-1 block">Expiry Date</label>
+                        <input type="text" placeholder="MM/YY"
+                            class="w-full p-3.5 rounded-xl bg-gray-800/60 border border-gray-600 focus:ring-4 focus:ring-cyan-500/70 transition" />
+                    </div>
+                    <div>
+                        <label class="text-gray-300 text-sm mb-1 block">CVV</label>
+                        <input type="text" placeholder="123"
+                            class="w-full p-3.5 rounded-xl bg-gray-800/60 border border-gray-600 focus:ring-4 focus:ring-cyan-500/70 transition" />
+                    </div>
+                </div>
+
+                <button type="button" id="place-order-btn"
+                    class="w-full mt-10 py-4 rounded-xl bg-cyan-500 text-black font-extrabold text-xl shadow-xl hover:bg-cyan-400 hover:shadow-cyan-500/50 transition-all">
+                    Place Order
+                </button>
+
+                <!-- Loading Overlay -->
+                <div id="loading-overlay"
+                    class="hidden fixed inset-0 flex items-center justify-center bg-black/70 backdrop-blur-sm z-50">
+                    <div class="flex flex-col items-center gap-4">
+                        <div class="w-12 h-12 border-4 border-cyan-400 border-t-transparent rounded-full animate-spin">
+                        </div>
+                        <p class="text-cyan-300 text-xl font-semibold">Processing your order...</p>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+
+        <!-- Glassy Floating Order Summary -->
+        <div
+            class="bg-gray-900/40 backdrop-blur-xl tilt-card p-8 rounded-3xl shadow-2xl border border-gray-700 animate-[fadeSlide_1.1s_ease-out] flex flex-col gap-6">
+
+            <h2 class="text-3xl font-bold">Order Summary</h2>
+
+            <!-- Items List -->
+            <div id="order-summary" class="space-y-4">
+                <!-- Skeleton / items will be injected by JS -->
+            </div>
+
+            <!-- Shipping Selector -->
+            <div class="mt-4">
+                <h3 class="text-xl font-semibold mb-2">Shipping Method</h3>
+                <div class="space-y-3">
+                    <label
+                        class="flex items-center justify-between bg-gray-800/60 p-4 rounded-xl border border-gray-700 hover:border-cyan-500 cursor-pointer transition">
+                        <div>
+                            <span class="font-semibold">Standard Shipping</span>
+                            <p class="text-gray-400 text-sm">5–7 business days</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-cyan-400 font-bold">$0.00</span>
+                            <input type="radio" name="shipping" value="0" checked class="accent-cyan-500" />
+                        </div>
+                    </label>
+
+                    <label
+                        class="flex items-center justify-between bg-gray-800/60 p-4 rounded-xl border border-gray-700 hover:border-cyan-500 cursor-pointer transition">
+                        <div>
+                            <span class="font-semibold">Express Shipping</span>
+                            <p class="text-gray-400 text-sm">2–3 business days</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-cyan-400 font-bold">$7.99</span>
+                            <input type="radio" name="shipping" value="7.99" class="accent-cyan-500" />
+                        </div>
+                    </label>
+
+                    <label
+                        class="flex items-center justify-between bg-gray-800/60 p-4 rounded-xl border border-gray-700 hover:border-cyan-500 cursor-pointer transition">
+                        <div>
+                            <span class="font-semibold">Overnight Shipping</span>
+                            <p class="text-gray-400 text-sm">Arrives tomorrow</p>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="text-cyan-400 font-bold">$19.99</span>
+                            <input type="radio" name="shipping" value="19.99" class="accent-cyan-500" />
+                        </div>
+                    </label>
+                </div>
+            </div>
+
+            <!-- Promo Code -->
+            <div class="mt-6">
+                <h3 class="text-xl font-semibold">Promo Code</h3>
+                <div class="flex gap-3 mt-3">
+                    <input id="promo-input" type="text" placeholder="Enter code"
+                        class="flex-1 p-3 rounded-xl bg-gray-800/60 border border-gray-600 focus:ring-4 focus:ring-cyan-500/70 transition" />
+                    <button id="apply-promo"
+                        class="px-5 py-3 rounded-xl bg-cyan-500 text-black font-bold hover:bg-cyan-400 transition">Apply</button>
+                </div>
+                <p id="promo-message" class="text-sm mt-2 text-cyan-400 hidden"></p>
+            </div>
+
+            <!-- Price Summary -->
+            <div class="border-t border-gray-700 pt-4 mt-6 space-y-3 text-lg">
+                <div class="flex justify-between">
+                    <span>Subtotal:</span>
+                    <span id="subtotal" class="text-gray-300">$0.00</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Discount:</span>
+                    <span id="discount" class="text-green-400">-$0.00</span>
+                </div>
+                <div class="flex justify-between">
+                    <span>Shipping:</span>
+                    <span id="shipping-cost" class="text-gray-300">$0.00</span>
+                </div>
+                <div class="flex justify-between text-2xl font-extrabold pt-3">
+                    <span>Total:</span>
+                    <span id="order-total" class="text-cyan-400">$0.00</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Message Box (Replaces alert()) -->
+    <div id="message-box"
+        class="fixed bottom-5 right-5 z-50 p-4 bg-green-600 text-white rounded-lg shadow-xl hidden transition-opacity duration-300">
+        <p id="message-text" class="font-semibold"></p>
+    </div>
+
+    <!-- Address Book Modal -->
+    <div id="address-modal" class="fixed inset-0 bg-black/70 z-50 hidden items-center justify-center">
+        <div
+            class="bg-gray-900/95 rounded-2xl p-6 w-full max-w-lg border border-cyan-500/30 shadow-[0_0_35px_rgba(0,255,255,0.5)]">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-2xl font-bold">Saved Addresses</h3>
+                <button id="close-address-book" class="text-gray-400 hover:text-white text-xl">&times;</button>
+            </div>
+            <div id="address-list" class="space-y-3 max-h-60 overflow-y-auto mb-4">
+                <!-- addresses injected here -->
+            </div>
+            <div class="border-t border-gray-700 pt-4 mt-2">
+                <h4 class="text-lg font-semibold mb-2">Add New Address</h4>
+                <div class="space-y-3">
+                    <input id="addr-label" type="text" placeholder="Label (Home, Dorm, Office)"
+                        class="w-full p-2.5 rounded-xl bg-gray-800/60 border border-gray-700 focus:ring-2 focus:ring-cyan-500/70 text-sm">
+                    <input id="addr-address" type="text" placeholder="Address"
+                        class="w-full p-2.5 rounded-xl bg-gray-800/60 border border-gray-700 focus:ring-2 focus:ring-cyan-500/70 text-sm">
+                    <div class="grid grid-cols-2 gap-3">
+                        <input id="addr-city" type="text" placeholder="City"
+                            class="w-full p-2.5 rounded-xl bg-gray-800/60 border border-gray-700 focus:ring-2 focus:ring-cyan-500/70 text-sm">
+                        <input id="addr-postal" type="text" placeholder="Postal Code"
+                            class="w-full p-2.5 rounded-xl bg-gray-800/60 border border-gray-700 focus:ring-2 focus:ring-cyan-500/70 text-sm">
+                    </div>
+                    <input id="addr-country" type="text" placeholder="Country"
+                        class="w-full p-2.5 rounded-xl bg-gray-800/60 border border-gray-700 focus:ring-2 focus:ring-cyan-500/70 text-sm">
+                    <button id="save-address"
+                        class="w-full mt-1 py-2.5 rounded-xl bg-cyan-500 text-black text-sm font-semibold hover:bg-cyan-400 transition">Save
+                        Address</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="module">
+        // 🔹 Step Progress Elements
+        const step1 = document.querySelectorAll(".flex.justify-between.items-center .w-10")[0];
+        const step2 = document.querySelectorAll(".flex.justify-between.items-center .w-10")[1];
+        const step3 = document.querySelectorAll(".flex.justify-between.items-center .w-10")[2];
+
+        const placeOrderBtn = document.getElementById("place-order-btn");
+        const loadingOverlay = document.getElementById("loading-overlay");
+
+        // 🔹 Free-shipping highlight (for auto free shipping & BULK10)
+        function applyFreeShippingHighlight() {
+            const standardOption = document.querySelector('input[name="shipping"][value="0"]');
+
+            if (standardOption) {
+                standardOption.checked = true;
+
+                // Highlight standard
+                standardOption.closest("label")
+                    .classList.add("border-cyan-500", "shadow-[0_0_15px_rgba(0,255,255,0.35)]");
+
+                // Dim the others
+                document.querySelectorAll('input[name="shipping"]').forEach(option => {
+                    if (option.value !== "0") {
+                        option.closest("label").classList.add("opacity-50");
+                    } else {
+                        option.closest("label").classList.remove("opacity-50");
+                    }
+                });
+            }
+        }
+
+        // 🔹 Lucide icons
+        if (window.lucide) {
+            lucide.createIcons();
+        }
+
+        // 🔹 Toast / message helper
+        function showMessage(text, isError = false) {
+            const box = document.getElementById('message-box');
+            const messageText = document.getElementById('message-text');
+
+            if (!box || !messageText) return;
+
+            box.classList.add('hidden', 'bg-green-600', 'bg-red-600');
+            box.classList.remove('bg-green-600', 'bg-red-600');
+
+            box.classList.add(isError ? 'bg-red-600' : 'bg-green-600');
+            messageText.textContent = text;
+            box.classList.remove('hidden');
+
+            setTimeout(() => {
+                box.classList.add('hidden');
+            }, 3000);
+        }
+
+        // 🔹 Firebase Auth (autofill profile info)
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCqTre32R-JxlgqP7HhJ0ZufEeFtFSrOuo",
+            authDomain: "login-page-e809f.firebaseapp.com",
+            projectId: "login-page-e809f",
+            storageBucket: "login-page-e809f.firebasestorage.app",
+            messagingSenderId: "204682041114",
+            appId: "1:204682041114:web:0cff442a3a2a94010fbea3"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        const fullnameInput = document.getElementById('fullname');
+        const emailInput = document.getElementById('email');
+        const addressInput = document.getElementById('address');
+        const cityInput = document.getElementById('city');
+        const postalInput = document.getElementById('postal');
+        const countryInput = document.getElementById('country');
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user) return;
+            if (user.displayName && !fullnameInput.value) fullnameInput.value = user.displayName;
+            if (user.email && !emailInput.value) emailInput.value = user.email;
+
+            if (window.userProfileData) {
+                const data = window.userProfileData;
+                if (data.address && !addressInput.value) addressInput.value = data.address;
+                if (data.city && !cityInput.value) cityInput.value = data.city;
+                if (data.postal && !postalInput.value) postalInput.value = data.postal;
+                if (data.country && !countryInput.value) countryInput.value = data.country;
+            }
+        });
+
+        // 🔹 Cart + pricing logic (shared with index via localStorage)
+        const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+        const summaryContainer = document.getElementById("order-summary");
+        const subtotalEl = document.getElementById("subtotal");
+        const discountEl = document.getElementById("discount");
+        const shippingEl = document.getElementById("shipping-cost");
+        const totalEl = document.getElementById("order-total");
+        const shippingOptions = document.querySelectorAll('input[name="shipping"]');
+        const promoInput = document.getElementById('promo-input');
+        const promoMessage = document.getElementById('promo-message');
+
+        let subtotal = 0;
+        let discount = 0;
+        let shipping = 0;
+
+        // 🔹 Order history saver
+        function saveOrderHistory() {
+            const currentOrders = JSON.parse(localStorage.getItem("orders") || "[]");
+
+            const newOrder = {
+                id: Date.now(),
+                date: new Date().toLocaleString(),
+                items: cart,
+                subtotal: subtotal,
+                discount: discount,
+                shipping: shipping,
+                total: subtotal - discount + shipping
+            };
+
+            currentOrders.push(newOrder);
+            localStorage.setItem("orders", JSON.stringify(currentOrders));
+        }
+
+        // 🔹 Skeleton loader while cart is “loading”
+        function showSkeleton() {
+            summaryContainer.innerHTML = `
+            <div class="animate-pulse bg-gray-700/50 h-16 rounded-xl border border-cyan-500/10 shadow-[0_0_20px_rgba(0,255,255,0.25)]"></div>
+            <div class="animate-pulse bg-gray-700/50 h-16 rounded-xl border border-cyan-500/10 shadow-[0_0_20px_rgba(0,255,255,0.25)] mt-3"></div>
+        `;
+        }
+
+        // 🔹 Total calculator (subtotal + discount + shipping)
+        function updateTotal() {
+            // Auto free shipping if subtotal > 75
+            if (subtotal > 75) {
+                shipping = 0;
+                promoMessage.textContent = "Free Shipping Applied Automatically!";
+                promoMessage.classList.remove("hidden");
+                applyFreeShippingHighlight();
+            }
+
+            discountEl.textContent = `-$${discount.toFixed(2)}`;
+            shippingEl.textContent = `$${shipping.toFixed(2)}`;
+
+            const total = subtotal - discount + shipping;
+            totalEl.textContent = `$${total.toFixed(2)}`;
+        }
+
+        // 🔹 Render cart items from localStorage
+        function renderCart() {
+            subtotal = 0;
+
+            if (!cart.length) {
+                summaryContainer.innerHTML = "<p class='text-red-400'>Your cart is empty.</p>";
+                subtotalEl.textContent = "$0.00";
+                discount = 0;
+                updateTotal();
+                return;
+            }
+
+            summaryContainer.innerHTML = "";
+            cart.forEach((item) => {
+                subtotal += item.price * item.quantity;
+
+                summaryContainer.innerHTML += `
+                <div class='flex justify-between bg-gray-800/50 p-4 rounded-xl border border-gray-700'>
+                    <span class='font-medium'>${item.name} x${item.quantity}</span>
+                    <span class='text-cyan-400 font-bold'>$${(item.price * item.quantity).toFixed(2)}</span>
+                </div>
+            `;
+            });
+
+            subtotalEl.textContent = `$${subtotal.toFixed(2)}`;
+            updateTotal();
+        }
+
+        // 🔹 Init shipping from selected radio
+        const checkedShipping = document.querySelector('input[name="shipping"]:checked');
+        shipping = checkedShipping ? parseFloat(checkedShipping.value) : 0;
+
+        // 🔹 Shipping option change listener
+        shippingOptions.forEach((option) => {
+            option.addEventListener("change", () => {
+                shipping = parseFloat(option.value);
+                updateTotal();
+            });
+        });
+
+        // 🔹 Promo code logic (FIT10, BULK5, BULK10)
+        document.getElementById("apply-promo").addEventListener("click", () => {
+            const code = promoInput.value.trim().toUpperCase();
+
+            if (code === "FIT10") {
+                discount = subtotal * 0.1;
+                promoMessage.textContent = "FIT10 applied: 10% off";
+                promoMessage.classList.remove("hidden");
+
+            } else if (code === "BULK5") {
+                discount = 5;
+                promoMessage.textContent = "BULK5 applied: $5 off";
+                promoMessage.classList.remove("hidden");
+
+            } else if (code === "BULK10") {
+                shipping = 0;
+                promoMessage.textContent = "BULK10 applied: Free Shipping!";
+                promoMessage.classList.remove("hidden");
+                applyFreeShippingHighlight();
+
+            } else {
+                discount = 0;
+                promoMessage.textContent = "Invalid code";
+                promoMessage.classList.remove("hidden");
+            }
+
+            updateTotal();
+        });
+
+        // 🔹 Show skeleton then real cart
+        showSkeleton();
+        setTimeout(renderCart, 400);
+
+        // 🔹 3D tilt effect on summary card (desktop only)
+        if (window.matchMedia("(pointer: fine)").matches) {
+            const tiltCards = document.querySelectorAll(".tilt-card");
+            const strength = 14;
+
+            tiltCards.forEach((card) => {
+                card.style.transformStyle = "preserve-3d";
+                card.style.transition = "transform 180ms ease-out, box-shadow 180ms ease-out";
+
+                card.addEventListener("mousemove", (event) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = event.clientX - rect.left;
+                    const y = event.clientY - rect.top;
+
+                    const rotateY = ((x - rect.width / 2) / rect.width) * strength;
+                    const rotateX = -((y - rect.height / 2) / rect.height) * strength;
+
+                    card.style.transform = `rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale(1.02)`;
+                    card.style.boxShadow = "0 25px 60px rgba(0, 255, 255, 0.35)";
+                });
+
+                card.addEventListener("mouseleave", () => {
+                    card.style.transform = "rotateX(0deg) rotateY(0deg) scale(1)";
+                    card.style.boxShadow = "";
+                });
+            });
+        }
+
+        // 🔹 Address Book using localStorage
+        const ADDRESS_KEY = "bulkbase_addresses";
+        const addressModal = document.getElementById("address-modal");
+        const addressList = document.getElementById("address-list");
+        const openAddressBookBtn = document.getElementById("open-address-book");
+        const closeAddressBookBtn = document.getElementById("close-address-book");
+        const saveAddressBtn = document.getElementById("save-address");
+        const labelInput = document.getElementById("addr-label");
+        const modalAddressInput = document.getElementById("addr-address");
+        const modalCityInput = document.getElementById("addr-city");
+        const modalPostalInput = document.getElementById("addr-postal");
+        const modalCountryInput = document.getElementById("addr-country");
+
+        function getAddresses() {
+            try {
+                return JSON.parse(localStorage.getItem(ADDRESS_KEY)) || [];
+            } catch (e) {
+                return [];
+            }
+        }
+
+        function saveAddresses(list) {
+            localStorage.setItem(ADDRESS_KEY, JSON.stringify(list));
+        }
+
+        function fillFormFromAddress(addr) {
+            if (!addr) return;
+            if (addr.address) addressInput.value = addr.address;
+            if (addr.city) cityInput.value = addr.city;
+            if (addr.postal) postalInput.value = addr.postal;
+            if (addr.country) countryInput.value = addr.country;
+        }
+
+        function renderAddressList() {
+            const addresses = getAddresses();
+            addressList.innerHTML = "";
+
+            if (!addresses.length) {
+                addressList.innerHTML = "<p class='text-gray-400 text-sm'>No saved addresses yet. Add one below.</p>";
+                return;
+            }
+
+            addresses.forEach((addr, index) => {
+                const div = document.createElement("div");
+                div.className = "bg-gray-800/70 border border-gray-700 rounded-xl p-4 flex justify-between items-start mb-3";
+                div.innerHTML = `
+                <div>
+                    <p class="font-semibold text-white">${addr.label || "Address " + (index + 1)}</p>
+                    <p class="text-gray-300 text-sm">${addr.address || ""}</p>
+                    <p class="text-gray-400 text-xs">${addr.city || ""} ${addr.postal || ""} ${addr.country || ""}</p>
+                </div>
+                <button data-index="${index}" class="use-address px-3 py-2 rounded-lg bg-cyan-500 text-black text-sm font-semibold hover:bg-cyan-400">Use</button>
+            `;
+                addressList.appendChild(div);
+            });
+
+            addressList.querySelectorAll(".use-address").forEach((btn) => {
+                btn.addEventListener("click", () => {
+                    const idx = parseInt(btn.getAttribute("data-index"), 10);
+                    const addresses = getAddresses();
+                    fillFormFromAddress(addresses[idx]);
+                    hideAddressModal();
+                });
+            });
+        }
+
+        function showAddressModal() {
+            renderAddressList();
+            addressModal.classList.remove("hidden");
+            addressModal.classList.add("flex");
+        }
+
+        function hideAddressModal() {
+            addressModal.classList.add("hidden");
+            addressModal.classList.remove("flex");
+        }
+
+        if (openAddressBookBtn) openAddressBookBtn.addEventListener("click", showAddressModal);
+        if (closeAddressBookBtn) closeAddressBookBtn.addEventListener("click", hideAddressModal);
+
+        if (saveAddressBtn) saveAddressBtn.addEventListener("click", () => {
+            const label = labelInput.value.trim() || "Saved Address";
+            const address = modalAddressInput.value.trim();
+            const city = modalCityInput.value.trim();
+            const postal = modalPostalInput.value.trim();
+            const country = modalCountryInput.value.trim();
+
+            if (!address || !city || !postal || !country) {
+                showMessage("Please fill all address fields before saving.", true);
+                return;
+            }
+
+            const addresses = getAddresses();
+            addresses.push({ label, address, city, postal, country });
+            saveAddresses(addresses);
+
+            labelInput.value = "";
+            modalAddressInput.value = "";
+            modalCityInput.value = "";
+            modalPostalInput.value = "";
+            modalCountryInput.value = "";
+
+            renderAddressList();
+            showMessage("Address saved successfully!");
+        });
+
+        // 🔹 Place Order: loading → success → save → clear cart → redirect
+        placeOrderBtn.addEventListener("click", () => {
+            if (!cart.length) {
+                showMessage("Your cart is empty.", true);
+                return;
+            }
+
+            // You could also validate form here if you want
+
+            loadingOverlay.classList.remove("hidden");
+
+            // Step bar: Payment step
+            step1.classList.remove("bg-cyan-500");
+            step1.classList.add("bg-cyan-400/40");
+            step2.classList.remove("bg-cyan-400/40");
+            step2.classList.add("bg-cyan-500");
+
+            setTimeout(() => {
+                loadingOverlay.classList.add("hidden");
+                showMessage("Order Placed Successfully!");
+
+                // Step bar: Review step
+                step3.classList.remove("bg-cyan-400/20");
+                step3.classList.add("bg-cyan-400/40");
+
+                // Save order + clear cart + go home
+                saveOrder();
+                localStorage.removeItem("cart");
+
+                setTimeout(() => {
+                    window.location.href = "index.html";
+                }, 1500);
+            }, 2000);
+        });
+
+
+        // 🔥 SAVE ORDER TO LOCAL STORAGE
+        function saveOrder() {
+            const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+            if (cart.length === 0) return;
+
+            // subtotal calculation
+            const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+            const newOrder = {
+                id: "BB-" + Math.floor(Math.random() * 9000 + 1000), // Example: BB-4921
+                date: new Date().toISOString().split("T")[0],        // 2025-12-03
+                status: "Delivered",
+                items: cart,                                          // full cart items
+                total: subtotal.toFixed(2)
+            };
+
+            let orders = JSON.parse(localStorage.getItem("orders") || "[]");
+            orders.unshift(newOrder); // add newest first
+            localStorage.setItem("orders", JSON.stringify(orders));
+        }
+
+    </script>
+
+
+</body>
+
+</html>

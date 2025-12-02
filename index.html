@@ -77,6 +77,7 @@
                 disabled onclick="handleCheckout()">
                 Proceed to Checkout
             </button>
+
         </div>
     </div>
 
@@ -481,7 +482,7 @@
                         </div>
                         <div>
                             <h3 class="text-xl sm:text-2xl font-semibold text-white mb-2">Boost Energy</h3>
-                            <p class="text-gray-400 text-sm sm:text-base">Mix 1 serving of Essential Pre-Workout 20-30
+                            <p class="text-gray-400 text-sm sm:text-base">Mix 1 serving of BCAA 20-30
                                 minutes before exercise for optimal energy, focus, and pump.</p>
                         </div>
                     </div>
@@ -506,7 +507,7 @@
                         <h5 class="text-sm font-semibold text-white mb-3">Connect With Us</h5>
                         <div class="flex space-x-4">
                             <!-- YouTube icon removed from here -->
-                            <a href="#"
+                            <a href="https://www.instagram.com/bulkbase_inc/"
                                 class="text-gray-400 hover:text-cyan-400 transition transform hover:scale-110 p-1 rounded-full hover:bg-gray-800"><i
                                     data-lucide="instagram" class="w-6 h-6"></i></a>
                             <a href="#"
@@ -774,198 +775,258 @@
                 <div class="space-y-4 text-gray-300">
                     <div class="flex justify-between items-center p-3 bg-gray-800 rounded-lg">
                         <span class="font-semibold text-gray-400">Name:</span>
-                        <span>Alex Johnson</span>
+                        <span id="profile-name">Loading...</span>
                     </div>
                     <div class="flex justify-between items-center p-3 bg-gray-800 rounded-lg">
                         <span class="font-semibold text-gray-400">Email:</span>
-                        <span>alex.j@example.com</span>
+                        <span id="profile-email">Loading...</span>
                     </div>
                     <div class="flex justify-between items-center p-3 bg-gray-800 rounded-lg">
                         <span class="font-semibold text-gray-400">Member Since:</span>
-                        <span>June 2024</span>
+                        <span id="profile-member-since">Loading...</span>
+
                     </div>
                 </div>
                 <button class="mt-6 btn-secondary w-full py-3 rounded-xl hover:border-red-500 hover:text-red-500"
-                    onclick="showMessage('Logout Simulated', 'You have been logged out.', event)">
+                    onclick="realLogout()">
                     Sign Out
                 </button>
+
             </div>
 
             <!-- Order History -->
-            <div class="bg-secondary-bg p-6 sm:p-8 rounded-2xl shadow-2xl border border-gray-700" data-aos="fade-up"
-                data-aos-delay="200">
+            <div class="bg-secondary-bg p-6 sm:p-8 rounded-2xl shadow-2xl border border-gray-700">
                 <h3 class="text-2xl sm:text-3xl font-bold text-white mb-6 flex items-center">
                     <i data-lucide="package-open" class="w-8 h-8 mr-3 text-cyan-500"></i> Order History
                 </h3>
 
-                <div class="space-y-4">
-                    <!-- Mock Order 1 -->
-                    <div class="bg-gray-800 p-4 rounded-lg border-l-4 border-cyan-500">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-sm font-medium text-gray-400">Order #BB-4921</span>
-                            <span class="text-sm font-semibold text-green-400">Delivered</span>
-                        </div>
-                        <div class="flex justify-between text-white">
-                            <span class="font-bold">$79.98</span>
-                            <span class="text-xs text-gray-500">Placed: 2025-11-15</span>
-                        </div>
-                        <p class="text-xs text-gray-500 mt-2">Items: Premium Whey Blend (2lb), Creatine (300g)</p>
-                    </div>
-
-                    <!-- Mock Order 2 -->
-                    <div class="bg-gray-800 p-4 rounded-lg border-l-4 border-yellow-500">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-sm font-medium text-gray-400">Order #BB-3105</span>
-                            <span class="text-sm font-semibold text-yellow-400">Shipped</span>
-                        </div>
-                        <div class="flex justify-between text-white">
-                            <span class="font-bold">$34.99</span>
-                            <span class="text-xs text-gray-500">Placed: 2025-10-01</span>
-                        </div>
-                        <p class="text-xs text-gray-500 mt-2">Items: Essential Pre-Workout (30 servings)</p>
-                    </div>
-                </div>
-
-                <div class="text-center mt-8">
-                    <button
-                        class="text-cyan-400 hover:text-cyan-300 transition text-sm font-medium inline-flex items-center group"
-                        onclick="showMessage('Full History', 'A full, filterable order history would appear here in a production application.', event)">
-                        View Full History
-                        <i data-lucide="chevron-right"
-                            class="w-4 h-4 ml-1 group-hover:translate-x-0.5 transition-transform"></i>
-                    </button>
+                <div class="space-y-4 order-history-container">
+                    <!-- JS will load user orders here -->
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- GIFT CARD PAGE -->
-    <div id="gift-card-page" class="page pt-20 pb-24">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16" data-aos="fade-down">
-                <h2 class="text-4xl sm:text-5xl font-extrabold text-white mb-4">BulkBase Gift Cards</h2>
-                <p class="text-lg sm:text-xl text-cyan-400">The perfect gift for any fitness enthusiast.</p>
-            </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                <!-- Image/Design Placeholder -->
-                <div class="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-cyan-500/50"
-                    data-aos="zoom-in-right">
-                    <img src="https://placehold.co/600x400/0A0A10/00BFFF?text=BULKBASE\nGIFT+CARD"
-                        alt="BulkBase Gift Card Design" class="w-full h-auto object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4 text-white text-3xl font-bold" id="card-display-value">$100
+            <!-- GIFT CARD PAGE -->
+            <div id="gift-card-page" class="page pt-20 pb-24">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16" data-aos="fade-down">
+                        <h2 class="text-4xl sm:text-5xl font-extrabold text-white mb-4">BulkBase Gift Cards</h2>
+                        <p class="text-lg sm:text-xl text-cyan-400">The perfect gift for any fitness enthusiast.</p>
                     </div>
-                </div>
 
-                <!-- Purchase Options -->
-                <div class="space-y-6" data-aos="zoom-in-left">
-                    <div class="bg-secondary-bg p-6 rounded-2xl border border-gray-700 shadow-xl">
-                        <h3 class="text-2xl font-bold text-white mb-4">Choose Value</h3>
-                        <div class="grid grid-cols-2 gap-4">
-                            <!-- Button Options. Data attribute used for value passing -->
-                            <button data-value="25"
-                                class="btn-secondary py-3 rounded-xl text-lg font-semibold hover:bg-cyan-500/20 hover:border-cyan-500 transition duration-150"
-                                onclick="selectGiftCardValue(25)">$25 Gift Card</button>
-                            <button data-value="50"
-                                class="btn-secondary py-3 rounded-xl text-lg font-semibold hover:bg-cyan-500/20 hover:border-cyan-500 transition duration-150"
-                                onclick="selectGiftCardValue(50)">$50 Gift Card</button>
-                            <button data-value="100"
-                                class="btn-secondary py-3 rounded-xl text-lg font-semibold hover:bg-cyan-500/20 hover:border-cyan-500 transition duration-150 border-cyan-500"
-                                onclick="selectGiftCardValue(100)">$100 Gift Card</button>
-                            <button data-value="200"
-                                class="btn-secondary py-3 rounded-xl text-lg font-semibold hover:bg-cyan-500/20 hover:border-cyan-500 transition duration-150"
-                                onclick="selectGiftCardValue(200)">$200 Gift Card</button>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+                        <!-- Image/Design Placeholder -->
+                        <div class="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-cyan-500/50"
+                            data-aos="zoom-in-right">
+                            <img src="https://placehold.co/600x400/0A0A10/00BFFF?text=BULKBASE\nGIFT+CARD"
+                                alt="BulkBase Gift Card Design" class="w-full h-auto object-cover">
+                            <div class="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent"></div>
+                            <div class="absolute bottom-4 left-4 text-white text-3xl font-bold" id="card-display-value">
+                                $100
+                            </div>
                         </div>
-                        <p id="selected-card-value" class="mt-4 text-center text-xl font-bold text-cyan-400">Selected:
-                            $100</p>
 
-                        <button class="btn-primary w-full text-black font-bold py-4 rounded-xl text-lg mt-6"
-                            onclick="purchaseGiftCard()">
-                            Purchase Digital Gift Card
-                        </button>
-                    </div>
+                        <!-- Purchase Options -->
+                        <div class="space-y-6" data-aos="zoom-in-left">
+                            <div class="bg-secondary-bg p-6 rounded-2xl border border-gray-700 shadow-xl">
+                                <h3 class="text-2xl font-bold text-white mb-4">Choose Value</h3>
+                                <div class="grid grid-cols-2 gap-4">
+                                    <!-- Button Options. Data attribute used for value passing -->
+                                    <button data-value="25"
+                                        class="btn-secondary py-3 rounded-xl text-lg font-semibold hover:bg-cyan-500/20 hover:border-cyan-500 transition duration-150"
+                                        onclick="selectGiftCardValue(25)">$25 Gift Card</button>
+                                    <button data-value="50"
+                                        class="btn-secondary py-3 rounded-xl text-lg font-semibold hover:bg-cyan-500/20 hover:border-cyan-500 transition duration-150"
+                                        onclick="selectGiftCardValue(50)">$50 Gift Card</button>
+                                    <button data-value="100"
+                                        class="btn-secondary py-3 rounded-xl text-lg font-semibold hover:bg-cyan-500/20 hover:border-cyan-500 transition duration-150 border-cyan-500"
+                                        onclick="selectGiftCardValue(100)">$100 Gift Card</button>
+                                    <button data-value="200"
+                                        class="btn-secondary py-3 rounded-xl text-lg font-semibold hover:bg-cyan-500/20 hover:border-cyan-500 transition duration-150"
+                                        onclick="selectGiftCardValue(200)">$200 Gift Card</button>
+                                </div>
+                                <p id="selected-card-value" class="mt-4 text-center text-xl font-bold text-cyan-400">
+                                    Selected:
+                                    $100</p>
 
-                    <div class="bg-secondary-bg p-6 rounded-2xl border border-gray-700 shadow-xl">
-                        <h4 class="text-xl font-bold text-white mb-3 flex items-center">
-                            <i data-lucide="info" class="w-5 h-5 mr-2 text-cyan-500"></i> Details
-                        </h4>
-                        <ul class="text-sm text-gray-400 space-y-2 list-disc list-inside ml-4">
-                            <li>Delivered instantly via email to your recipient.</li>
-                            <li>No expiration date or hidden fees.</li>
-                            <li>Redeemable on all products store-wide.</li>
-                        </ul>
+                                <button class="btn-primary w-full text-black font-bold py-4 rounded-xl text-lg mt-6"
+                                    onclick="purchaseGiftCard()">
+                                    Purchase Digital Gift Card
+                                </button>
+                            </div>
+
+                            <div class="bg-secondary-bg p-6 rounded-2xl border border-gray-700 shadow-xl">
+                                <h4 class="text-xl font-bold text-white mb-3 flex items-center">
+                                    <i data-lucide="info" class="w-5 h-5 mr-2 text-cyan-500"></i> Details
+                                </h4>
+                                <ul class="text-sm text-gray-400 space-y-2 list-disc list-inside ml-4">
+                                    <li>Delivered instantly via email to your recipient.</li>
+                                    <li>No expiration date or hidden fees.</li>
+                                    <li>Redeemable on all products store-wide.</li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <!-- TERMS OF SERVICE PAGE -->
-    <div id="terms-of-service-page" class="page pt-20 pb-24">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16" data-aos="fade-down">
-                <h2 class="text-4xl sm:text-5xl font-extrabold text-white mb-4">Terms of Service</h2>
-                <p class="text-lg sm:text-xl text-cyan-400">Last updated: December 2, 2025</p>
-            </div>
+            <!-- TERMS OF SERVICE PAGE -->
+            <div id="terms-of-service-page" class="page pt-20 pb-24">
+                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div class="text-center mb-16" data-aos="fade-down">
+                        <h2 class="text-4xl sm:text-5xl font-extrabold text-white mb-4">Terms of Service</h2>
+                        <p class="text-lg sm:text-xl text-cyan-400">Last updated: December 2, 2025</p>
+                    </div>
 
-            <div class="bg-secondary-bg p-6 sm:p-8 rounded-2xl shadow-2xl border border-gray-700 space-y-8"
-                data-aos="fade-up">
+                    <div class="bg-secondary-bg p-6 sm:p-8 rounded-2xl shadow-2xl border border-gray-700 space-y-8"
+                        data-aos="fade-up">
 
-                <section class="space-y-4">
-                    <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-2">1. Agreement to Terms</h3>
-                    <p class="text-gray-400">By accessing or using the BulkBase website and purchasing any products, you
-                        agree to be bound by these Terms of Service (the "Terms"). If you do not agree to all of these
-                        Terms, then you are expressly prohibited from using the Site and you must discontinue use
-                        immediately.</p>
-                </section>
+                        <section class="space-y-4">
+                            <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-2">1. Agreement to
+                                Terms</h3>
+                            <p class="text-gray-400">By accessing or using the BulkBase website and purchasing any
+                                products, you
+                                agree to be bound by these Terms of Service (the "Terms"). If you do not agree to all of
+                                these
+                                Terms, then you are expressly prohibited from using the Site and you must discontinue
+                                use
+                                immediately.</p>
+                        </section>
 
-                <section class="space-y-4">
-                    <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-2">2. Products and Availability
-                    </h3>
-                    <ul class="list-disc list-inside space-y-2 text-gray-400 ml-4">
-                        <li>All products listed on the site are subject to availability.</li>
-                        <li>We reserve the right to discontinue any product at any time.</li>
-                        <li>Prices for our products are subject to change without notice.</li>
-                        <li>Product statements have not been evaluated by the FDA and are not intended to diagnose,
-                            treat, cure, or prevent any disease.</li>
-                    </ul>
-                </section>
+                        <section class="space-y-4">
+                            <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-2">2. Products and
+                                Availability
+                            </h3>
+                            <ul class="list-disc list-inside space-y-2 text-gray-400 ml-4">
+                                <li>All products listed on the site are subject to availability.</li>
+                                <li>We reserve the right to discontinue any product at any time.</li>
+                                <li>Prices for our products are subject to change without notice.</li>
+                                <li>Product statements have not been evaluated by the FDA and are not intended to
+                                    diagnose,
+                                    treat, cure, or prevent any disease.</li>
+                            </ul>
+                        </section>
 
-                <section class="space-y-4">
-                    <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-2">3. User Conduct</h3>
-                    <p class="text-gray-400">You agree not to use the website for any purpose that is unlawful or
-                        prohibited by these Terms. This includes, but is not limited to, unauthorized access to our
-                        systems, posting offensive or illegal content, or violating any intellectual property rights.
-                    </p>
-                </section>
+                        <section class="space-y-4">
+                            <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-2">3. User Conduct</h3>
+                            <p class="text-gray-400">You agree not to use the website for any purpose that is unlawful
+                                or
+                                prohibited by these Terms. This includes, but is not limited to, unauthorized access to
+                                our
+                                systems, posting offensive or illegal content, or violating any intellectual property
+                                rights.
+                            </p>
+                        </section>
 
-                <section class="space-y-4">
-                    <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-2">4. Disclaimer of Warranties
-                    </h3>
-                    <p class="text-gray-400">The site and products are provided on an "as-is" and "as-available" basis.
-                        BulkBase makes no warranties, expressed or implied, regarding the operation of the Site or the
-                        information, content, materials, or products included on this Site.</p>
-                </section>
+                        <section class="space-y-4">
+                            <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-2">4. Disclaimer of
+                                Warranties
+                            </h3>
+                            <p class="text-gray-400">The site and products are provided on an "as-is" and "as-available"
+                                basis.
+                                BulkBase makes no warranties, expressed or implied, regarding the operation of the Site
+                                or the
+                                information, content, materials, or products included on this Site.</p>
+                        </section>
 
-                <section class="space-y-4">
-                    <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-2">5. Limitation of Liability
-                    </h3>
-                    <p class="text-gray-400">In no event shall BulkBase or its directors, employees, or agents be liable
-                        for any direct, indirect, incidental, punitive, special, or consequential damages arising from
-                        your use of any of the services or any products procured using the services, or for any other
-                        claim related in any way to your use of the service or any product.</p>
-                </section>
+                        <section class="space-y-4">
+                            <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-2">5. Limitation of
+                                Liability
+                            </h3>
+                            <p class="text-gray-400">In no event shall BulkBase or its directors, employees, or agents
+                                be liable
+                                for any direct, indirect, incidental, punitive, special, or consequential damages
+                                arising from
+                                your use of any of the services or any products procured using the services, or for any
+                                other
+                                claim related in any way to your use of the service or any product.</p>
+                        </section>
 
-                <div class="text-center pt-8 border-t border-gray-700">
-                    <p class="text-base text-cyan-400 font-semibold">For any questions about these Terms, please contact
-                        us directly.</p>
+                        <div class="text-center pt-8 border-t border-gray-700">
+                            <p class="text-base text-cyan-400 font-semibold">For any questions about these Terms, please
+                                contact
+                                us directly.</p>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
 
-    <script src="js/main.js"></script>
+            <script src="js/main.js"></script>
 
+
+
+
+
+            <!-- 🔥 ADD THE FIREBASE AUTH SCRIPT BELOW -->
+            <script type="module">
+                import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+                import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+                const firebaseConfig = {
+                    apiKey: "AIzaSyCqTre32R-JxlgqP7HhJ0ZufEeFtFSrOuo",
+                    authDomain: "login-page-e809f.firebaseapp.com",
+                    projectId: "login-page-e809f",
+                    storageBucket: "login-page-e809f.firebasestorage.app",
+                    messagingSenderId: "204682041114",
+                    appId: "1:204682041114:web:0cff442a3a2a94010fbea3"
+                };
+
+                const app = initializeApp(firebaseConfig);
+                const auth = getAuth(app);
+
+                // 🔐 Protect page if not logged in
+                onAuthStateChanged(auth, (user) => {
+                    if (!user) {
+                        window.location.href = "login.html";
+                    } else {
+                        // 🔥 Update Profile Section
+                        document.getElementById("profile-name").textContent =
+                            user.displayName || "User";
+
+                        document.getElementById("profile-email").textContent =
+                            user.email || "No Email";
+
+                        // 🕒 Member Since (Format: 3 Feb 2025)
+                        const memberDate = new Date(user.metadata.creationTime);
+
+                        const day = memberDate.getDate();
+                        const month = memberDate.toLocaleString('en-US', { month: 'short' }); // Feb
+                        const year = memberDate.getFullYear();
+
+                        document.getElementById("profile-member-since").textContent =
+                            `${day} ${month} ${year}`;
+
+                    }
+                });
+
+                // 🔥 REAL LOGOUT
+                window.realLogout = async function () {
+                    try {
+                        await signOut(auth);
+                        window.location.href = "login.html";
+                    } catch (err) {
+                        alert("Logout error: " + err.message);
+                    }
+                };
+            </script>
+            <script>
+
+
+                // ⭐ ADD THIS BELOW ALL OTHER FUNCTIONS ⭐
+                function handleCheckout() {
+                    // If cart is empty, block checkout
+                    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+                    if (cart.length === 0) {
+                        alert("Your cart is empty!");
+                        return;
+                    }
+
+                    // 🔥 Redirect to checkout.html
+                    window.location.href = "checkout.html";
+                }
+
+            </script>
+
+</body>
 
 </html>
