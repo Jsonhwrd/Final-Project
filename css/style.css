@@ -1,0 +1,229 @@
+ /* Modern Dark Theme Variables & Custom Styles */
+ :root {
+     --primary-bg: #0A0A10;
+     /* Deep Black/Navy */
+     --secondary-bg: #151A25;
+     /* Darker Card background */
+     --card-bg: #1F2937;
+     /* Slightly Lighter Dark Gray */
+     --accent-color: #00BFFF;
+     /* Deep Sky Blue Accent */
+     --text-light: #E5E7EB;
+     /* Gray-200 */
+     --text-muted: #9CA3AF;
+ }
+
+ body {
+     font-family: 'Inter', sans-serif;
+     background-color: var(--primary-bg);
+     color: var(--text-light);
+     scroll-behavior: smooth;
+     /* Subtle Grid Pattern */
+     background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+         linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+     background-size: 50px 50px;
+ }
+
+ /* --- Custom CSS Animations --- */
+
+ /* Floating Animation for Hero Image */
+ @keyframes float {
+     0% {
+         transform: translateY(0px);
+     }
+
+     50% {
+         transform: translateY(-20px);
+     }
+
+     100% {
+         transform: translateY(0px);
+     }
+ }
+
+ .animate-float {
+     animation: float 6s ease-in-out infinite;
+ }
+
+ /* Persistent Pulse for Discount Code */
+ @keyframes pulse-effect {
+
+     0%,
+     100% {
+         opacity: 1;
+     }
+
+     50% {
+         opacity: 0.8;
+     }
+ }
+
+ .animate-pulse-effect {
+     animation: pulse-effect 1.5s ease-in-out infinite;
+ }
+
+ /* Slow Bounce for "NEW" Tag */
+ @keyframes bounce-slow {
+
+     0%,
+     100% {
+         transform: translateY(0) rotate(-5deg);
+     }
+
+     50% {
+         transform: translateY(-5px) rotate(-5deg);
+     }
+ }
+
+ .animate-bounce-slow {
+     animation: bounce-slow 4s ease-in-out infinite;
+ }
+
+ /* Slide Up Button Text on Hover (Micro-interaction) */
+ .btn-quick-add:hover span {
+     transform: translateY(-2px);
+     transition: transform 0.2s ease-out;
+ }
+
+ .btn-quick-add:hover i {
+     transform: scale(1.1);
+     transition: transform 0.2s ease-out;
+ }
+
+
+ /* --- Component Styles --- */
+
+ /* Premium Gradient Button Style */
+ .btn-primary {
+     background-image: linear-gradient(to right, #00AEEF, #00BFFF);
+     color: #0A0A10;
+     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+     box-shadow: 0 4px 15px rgba(0, 191, 255, 0.4);
+     border: 1px solid rgba(255, 255, 255, 0.1);
+ }
+
+ .btn-primary:hover {
+     transform: translateY(-3px) scale(1.02);
+     box-shadow: 0 8px 30px rgba(0, 191, 255, 0.6);
+     filter: brightness(1.1);
+ }
+
+ /* Secondary Button Style */
+ .btn-secondary {
+     border: 2px solid #374151;
+     color: var(--text-light);
+     transition: all 0.3s ease;
+ }
+
+ .btn-secondary:hover {
+     border-color: var(--accent-color);
+     color: var(--accent-color);
+ }
+
+ /* Product Card Style */
+ .product-card {
+     background-color: var(--secondary-bg);
+     border: 1px solid #374151;
+     transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.4, 1), box-shadow 0.4s ease;
+     cursor: pointer;
+ }
+
+ .product-card:hover {
+     transform: translateY(-8px);
+     border-color: var(--accent-color);
+     box-shadow: 0 15px 40px rgba(0, 191, 255, 0.2);
+ }
+
+ /* Sticky Header Background Blur */
+ .header-sticky {
+     background-color: rgba(10, 10, 16, 0.95);
+     backdrop-filter: blur(10px);
+ }
+
+ /* Announcement Bar */
+ .announcement-bar {
+     background: linear-gradient(90deg, #00AEEF, #00BFFF);
+     color: #0A0A10;
+     font-weight: 700;
+     text-align: center;
+     padding: 0.5rem;
+     font-size: 0.875rem;
+     letter-spacing: 0.025em;
+ }
+
+ /* Cart Panel Styles */
+ #cart-panel {
+     transition: transform 0.3s ease-in-out;
+     transform: translateX(100%);
+ }
+
+ #cart-panel.open {
+     transform: translateX(0);
+ }
+
+ #overlay {
+     transition: opacity 0.3s ease-in-out;
+     opacity: 0;
+     pointer-events: none;
+ }
+
+ #overlay.active {
+     opacity: 0.75;
+     pointer-events: auto;
+ }
+
+ /* Back to Top Button */
+ #back-to-top {
+     opacity: 0;
+     visibility: hidden;
+     transition: all 0.3s ease;
+ }
+
+ #back-to-top.visible {
+     opacity: 1;
+     visibility: visible;
+ }
+
+ /* Page Management Styles */
+ .page {
+     display: none;
+ }
+
+ .page.active {
+     display: block;
+     animation: fadeIn 0.5s ease-out;
+ }
+
+ @keyframes fadeIn {
+     from {
+         opacity: 0;
+         transform: translateY(10px);
+     }
+
+     to {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ /* Star rating style */
+ .star-rating i {
+     fill: var(--accent-color);
+     stroke: var(--accent-color);
+ }
+
+ /* Custom BulkBase logo style */
+ .bb-logo {
+     color: var(--accent-color);
+ }
+
+ /* Mobile Menu Max-Height Transition (for smooth open/close) */
+ #mobile-menu {
+     max-height: 0;
+     overflow: hidden;
+     transition: max-height 0.3s ease-out;
+ }
+
+ #mobile-menu.is-open {
+     /* max-height will be set dynamically in JS to allow transition */
+ }
