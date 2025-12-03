@@ -227,3 +227,19 @@
  #mobile-menu.is-open {
      /* max-height will be set dynamically in JS to allow transition */
  }
+
+ .review-card {
+     min-width: 300px;
+     max-width: 320px;
+     background: rgba(31, 41, 55, 0.65);
+     border: 1px solid rgba(0, 255, 255, 0.18);
+     border-radius: 18px;
+     padding: 22px;
+     box-shadow: 0 0 20px rgba(0, 255, 255, 0.08);
+     transition: transform .35s ease, box-shadow .35s ease;
+ }
+
+ .review-card:hover {
+     transform: translateY(-6px) scale(1.02);
+     box-shadow: 0 14px 35px rgba(0, 255, 255, 0.2);
+ }

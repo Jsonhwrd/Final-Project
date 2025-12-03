@@ -8,6 +8,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Include Lucide Icons for professional-looking symbols -->
     <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    <!-- Google Places JS -->
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAxtrV7X9T_xWgPLeN3YJguW1ylDhFotkQ&libraries=places"></script>
+
     <style>
         @keyframes floaty {
             0% {
@@ -53,6 +57,105 @@
         .navbar-sticky {
             box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
         }
+
+        /* Keep Google dropdown above everything */
+        .pac-container {
+            z-index: 99999 !important;
+        }
+
+        /* ===============================
+           PREMIUM ANIMATED STEP PROGRESS
+           =============================== */
+        .step-container {
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .step-line-track {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            height: 4px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateY(-50%);
+            border-radius: 999px;
+        }
+
+        .step-line-fill {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            height: 4px;
+            width: 0%;
+            background: linear-gradient(90deg, #00cfff, #00eaff);
+            box-shadow: 0 0 14px rgba(0, 255, 255, 0.6);
+            transform: translateY(-50%);
+            border-radius: 999px;
+            transition: width 0.55s ease;
+        }
+
+        .step-circle {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.06);
+            border: 2px solid rgba(255, 255, 255, 0.16);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1rem;
+            color: #e5e7eb;
+            transition:
+                background 0.35s ease,
+                border-color 0.35s ease,
+                transform 0.35s ease,
+                box-shadow 0.35s ease,
+                color 0.35s ease;
+            position: relative;
+            z-index: 10;
+        }
+
+        .step-circle.active {
+            background: #00eaff;
+            border-color: #00eaff;
+            color: #020617;
+            transform: scale(1.18);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+        }
+
+        .step-circle.completed {
+            background: #009aff;
+            border-color: #00cfff;
+            color: #e5f6ff;
+            transform: scale(1.12);
+            box-shadow: 0 0 14px rgba(0, 170, 255, 0.55);
+        }
+
+        .step-circle.completed::after {
+            content: "✓";
+            position: absolute;
+            font-size: 20px;
+            font-weight: 800;
+            opacity: 0;
+            animation: stepCheck 0.45s ease forwards;
+        }
+
+        @keyframes stepCheck {
+            0% {
+                transform: scale(0.4);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
     </style>
 </head>
 
@@ -65,8 +168,6 @@
         class="absolute bottom-20 right-10 w-56 h-56 bg-blue-600/20 blur-3xl rounded-full animate-[floaty_8s_infinite]">
     </div>
 
-    <!-- Header removed, replaced by the checkout title section below -->
-
     <!-- Checkout Page Title Section (Now acting as the main header/title) -->
     <header class="py-10 text-center animate-[fadeSlide_0.7s_ease-out]">
         <h1 class="text-4xl sm:text-5xl font-extrabold tracking-wide drop-shadow-xl">
@@ -75,21 +176,15 @@
         <p class="text-gray-300 mt-2 text-md sm:text-lg">Review your order details and complete payment.</p>
     </header>
 
-
-    <!-- Step Progress Bar -->
+    <!-- Step Progress Bar (FULLY ANIMATED VERSION) -->
     <div class="max-w-4xl mx-auto mt-8 mb-12 px-6">
-        <div class="flex justify-between items-center relative">
-            <div class="absolute top-1/2 left-0 right-0 h-1 bg-gray-700"></div>
+        <div class="step-container">
+            <div class="step-line-track"></div>
+            <div class="step-line-fill" id="step-line"></div>
 
-            <div
-                class="relative z-10 w-10 h-10 bg-cyan-500 rounded-full flex items-center justify-center font-bold shadow-lg">
-                1</div>
-            <div
-                class="relative z-10 w-10 h-10 bg-cyan-400/40 backdrop-blur-md border border-cyan-300/30 rounded-full flex items-center justify-center font-bold">
-                2</div>
-            <div
-                class="relative z-10 w-10 h-10 bg-cyan-400/20 backdrop-blur-md border border-cyan-300/20 rounded-full flex items-center justify-center font-bold">
-                3</div>
+            <div class="step-circle" id="step1">1</div>
+            <div class="step-circle" id="step2">2</div>
+            <div class="step-circle" id="step3">3</div>
         </div>
         <div class="flex justify-between text-sm text-gray-400 mt-3 font-medium">
             <span>Billing</span><span>Payment</span><span>Review</span>
@@ -122,6 +217,36 @@
                     <label class="text-gray-300 text-sm mb-1 block">Shipping Address</label>
                     <input type="text" required placeholder="123 Fitness St, Taipei, Taiwan" id="address"
                         class="w-full p-3.5 rounded-xl bg-gray-800/60 border border-gray-600 focus:ring-4 focus:ring-cyan-500/70 transition" />
+
+                    <!-- Advanced Address Fields -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                        <div>
+                            <label class="text-gray-300 text-sm mb-1 block">Street Number</label>
+                            <input type="text" id="street_number" placeholder="e.g. 101"
+                                class="w-full p-3.5 rounded-xl bg-gray-800/60 border border-gray-600">
+                        </div>
+
+                        <div>
+                            <label class="text-gray-300 text-sm mb-1 block">Route (Street Name)</label>
+                            <input type="text" id="route" placeholder="e.g. Xinyi Rd"
+                                class="w-full p-3.5 rounded-xl bg-gray-800/60 border border-gray-600">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+                        <div>
+                            <label class="text-gray-300 text-sm mb-1 block">District</label>
+                            <input type="text" id="district" placeholder="e.g. Xinyi"
+                                class="w-full p-3.5 rounded-xl bg-gray-800/60 border border-gray-600">
+                        </div>
+
+                        <div>
+                            <label class="text-gray-300 text-sm mb-1 block">State / Province</label>
+                            <input type="text" id="state" placeholder="e.g. Taipei City"
+                                class="w-full p-3.5 rounded-xl bg-gray-800/60 border border-gray-600">
+                        </div>
+                    </div>
+
                     <button type="button" id="open-address-book"
                         class="mt-2 text-sm text-cyan-400 hover:text-cyan-300 underline">
                         Choose from saved addresses
@@ -158,7 +283,6 @@
                             <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/Visa.svg" class="w-10" />
                             <img src="https://upload.wikimedia.org/wikipedia/commons/2/2a/Mastercard-logo.svg"
                                 class="w-10" />
-
                         </label>
                     </div>
                 </div>
@@ -203,7 +327,6 @@
                         <p class="text-cyan-300 text-xl font-semibold">Processing your order...</p>
                     </div>
                 </div>
-
             </form>
         </div>
 
@@ -327,20 +450,315 @@
                     <input id="addr-country" type="text" placeholder="Country"
                         class="w-full p-2.5 rounded-xl bg-gray-800/60 border border-gray-700 focus:ring-2 focus:ring-cyan-500/70 text-sm">
                     <button id="save-address"
-                        class="w-full mt-1 py-2.5 rounded-xl bg-cyan-500 text-black text-sm font-semibold hover:bg-cyan-400 transition">Save
-                        Address</button>
+                        class="w-full mt-1 py-2.5 rounded-xl bg-cyan-500 text-black text-sm font-semibold hover:bg-cyan-400 transition">
+                        Save Address
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- ⭐ LUXURY DARK MODE REVIEW MODAL -->
+    <style>
+        /* Luxury dark mode styling */
+        #review-overlay {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(10px);
+            z-index: 9999;
+        }
+
+        #review-box {
+            width: 92%;
+            max-width: 460px;
+            background: #0f1115;
+            border: 1px solid rgba(0, 255, 255, 0.18);
+            border-radius: 20px;
+            box-shadow: 0 0 35px rgba(0, 255, 255, 0.25);
+            padding: 32px;
+            animation: fadeUp .35s ease;
+        }
+
+        @keyframes fadeUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        #review-box h2 {
+            color: white;
+            font-size: 28px;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 8px;
+        }
+
+        #review-box p {
+            color: #9ca3af;
+            text-align: center;
+            font-size: 14px;
+            margin-bottom: 22px;
+        }
+
+        /* Container for the stars */
+        .star-wrap {
+            display: flex;
+            justify-content: center;
+            gap: 14px;
+            margin-bottom: 22px;
+        }
+
+        /* Base star styling */
+        .star-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            border: 1px solid rgba(0, 255, 255, 0.25);
+            color: #6b7280;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            cursor: pointer;
+            transition: 0.25s ease;
+            position: relative;
+        }
+
+        /* Hover preview */
+        .star-btn:hover {
+            transform: scale(1.18);
+            color: #00eaff;
+            border-color: #00eaff;
+            box-shadow: 0 0 14px rgba(0, 255, 255, 0.45);
+        }
+
+        /* Filled stars */
+        .star-btn.filled {
+            background: #00eaff;
+            border-color: #00eaff;
+            color: black;
+            transform: scale(1.15);
+            box-shadow: 0 0 18px rgba(0, 255, 255, 0.7);
+            transition: 0.22s ease-out;
+        }
+
+        /* Nice pulse animation on selection */
+        @keyframes starFillPulse {
+            0% {
+                transform: scale(0.5);
+                opacity: 0.5;
+            }
+
+            100% {
+                transform: scale(1.15);
+                opacity: 1;
+            }
+        }
+
+        .star-btn.just-filled {
+            animation: starFillPulse 0.25s ease-out;
+        }
+
+        #review-text {
+            width: 100%;
+            height: 110px;
+            background: #1a1d22;
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 14px;
+            padding: 12px;
+            color: white;
+            resize: none;
+            outline: none;
+            font-size: 14px;
+        }
+
+        #review-text:focus {
+            border-color: #00eaff;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.35);
+        }
+
+        .review-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 24px;
+        }
+
+        .btn-primary {
+            flex: 1;
+            background: linear-gradient(135deg, #00eaff, #0088ff);
+            color: #0a0c0f;
+            padding: 16px 0;
+            border-radius: 16px;
+            font-weight: 900;
+            font-size: 1rem;
+            text-align: center;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+            box-shadow:
+                0 10px 28px rgba(0, 200, 255, 0.28),
+                inset 0 0 10px rgba(255, 255, 255, 0.35),
+                inset 0 -3px 8px rgba(0, 0, 0, 0.35);
+            transition: all .28s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-6px) scale(1.04);
+            box-shadow:
+                0 18px 38px rgba(0, 255, 255, 0.45),
+                inset 0 0 14px rgba(255, 255, 255, 0.45);
+        }
+
+        .btn-secondary {
+            flex: 1;
+            background: #13161b;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 16px 0;
+            border-radius: 16px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #d1d5db;
+            text-align: center;
+            cursor: pointer;
+            transition: all .25s ease;
+        }
+
+        .btn-secondary:hover {
+            background: #1c1f25;
+            border-color: rgba(0, 255, 255, 0.3);
+            color: #ffffff;
+            transform: translateY(-4px);
+        }
+    </style>
+
+    <div id="review-overlay">
+        <div id="review-box">
+            <h2>How was your experience?</h2>
+            <p>We value your feedback — rate your checkout experience.</p>
+            <div class="star-wrap" id="lux-stars">
+                <div class="star-btn" data-rate="1">★</div>
+                <div class="star-btn" data-rate="2">★</div>
+                <div class="star-btn" data-rate="3">★</div>
+                <div class="star-btn" data-rate="4">★</div>
+                <div class="star-btn" data-rate="5">★</div>
+            </div>
+            <textarea id="review-text" placeholder="Write your feedback (optional)..."></textarea>
+            <div class="review-actions">
+                <div class="btn-primary" id="lux-submit">Submit</div>
+                <div class="btn-secondary" id="lux-skip">Skip</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const luxOverlay = document.getElementById('review-overlay');
+        const luxStars = document.querySelectorAll('.star-btn');
+        let luxRating = 0;
+
+        luxStars.forEach((btn, index) => {
+            btn.addEventListener('click', () => {
+                luxRating = index + 1;
+
+                luxStars.forEach((s, i) => {
+                    s.classList.remove('filled', 'just-filled');
+
+                    if (i < luxRating) {
+                        s.classList.add('filled');
+
+                        if (i === index) {
+                            s.classList.add('just-filled');
+                        }
+                    }
+                });
+            });
+        });
+
+        document.getElementById('lux-submit').onclick = () => {
+            const txt = document.getElementById('review-text').value.trim();
+            const saved = JSON.parse(localStorage.getItem('bulkbase_reviews') || '[]');
+
+            // Save review
+            saved.unshift({
+                rating: luxRating || 5,
+                text: txt,
+                date: new Date().toISOString()
+            });
+            localStorage.setItem('bulkbase_reviews', JSON.stringify(saved));
+
+            // Show animated toast
+            const toast = document.getElementById('review-toast');
+            toast.style.opacity = "1";
+            toast.style.transform = "translateY(0)";
+
+            // Hide toast after 1.8 sec
+            setTimeout(() => {
+                toast.style.opacity = "0";
+                toast.style.transform = "translateY(20px)";
+            }, 1800);
+
+            // Redirect home after 2.3 sec
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 2300);
+        };
+
+
+        document.getElementById('lux-skip').onclick = () => window.location.href = 'index.html';
+
+        window.showLuxuryReview = () => {
+            luxOverlay.style.display = 'flex';
+        };
+    </script>
+
+    <!-- MAIN CHECKOUT LOGIC -->
     <script type="module">
-        // 🔹 Step Progress Elements
-        const step1 = document.querySelectorAll(".flex.justify-between.items-center .w-10")[0];
-        const step2 = document.querySelectorAll(".flex.justify-between.items-center .w-10")[1];
-        const step3 = document.querySelectorAll(".flex.justify-between.items-center .w-10")[2];
+        // 🔹 STEP PROGRESS ELEMENTS (new animated version)
+        const step1 = document.getElementById("step1");
+        const step2 = document.getElementById("step2");
+        const step3 = document.getElementById("step3");
+        const stepLine = document.getElementById("step-line");
+
+        function animateStep(stepNum) {
+            [step1, step2, step3].forEach(s => s.classList.remove("active", "completed"));
+
+            if (stepNum === 1) {
+                step1.classList.add("active");
+                stepLine.style.width = "0%";
+            } else if (stepNum === 2) {
+                step1.classList.add("completed");
+                step2.classList.add("active");
+                stepLine.style.width = "50%";
+            } else if (stepNum === 3) {
+                step1.classList.add("completed");
+                step2.classList.add("completed");
+                step3.classList.add("active");
+                stepLine.style.width = "100%";
+            }
+        }
+
+        // initial state
+        animateStep(1);
 
         const placeOrderBtn = document.getElementById("place-order-btn");
         const loadingOverlay = document.getElementById("loading-overlay");
+
+        // ⭐ Review elements (legacy – safe no-op)
+        const reviewModal = document.getElementById("review-modal");
+        const reviewStarsWrap = document.getElementById("review-stars");
+        const oldReviewText = document.getElementById("review-text");
+        const submitReviewBtn = document.getElementById("submit-review");
+        const skipReviewBtn = document.getElementById("skip-review");
+        let selectedRating = 0;
 
         // 🔹 Free-shipping highlight (for auto free shipping & BULK10)
         function applyFreeShippingHighlight() {
@@ -349,11 +767,9 @@
             if (standardOption) {
                 standardOption.checked = true;
 
-                // Highlight standard
                 standardOption.closest("label")
                     .classList.add("border-cyan-500", "shadow-[0_0_15px_rgba(0,255,255,0.35)]");
 
-                // Dim the others
                 document.querySelectorAll('input[name="shipping"]').forEach(option => {
                     if (option.value !== "0") {
                         option.closest("label").classList.add("opacity-50");
@@ -440,7 +856,7 @@
         let discount = 0;
         let shipping = 0;
 
-        // 🔹 Order history saver
+        // 🔹 Order history saver (unused but kept)
         function saveOrderHistory() {
             const currentOrders = JSON.parse(localStorage.getItem("orders") || "[]");
 
@@ -468,7 +884,6 @@
 
         // 🔹 Total calculator (subtotal + discount + shipping)
         function updateTotal() {
-            // Auto free shipping if subtotal > 75
             if (subtotal > 75) {
                 shipping = 0;
                 promoMessage.textContent = "Free Shipping Applied Automatically!";
@@ -690,65 +1105,174 @@
             showMessage("Address saved successfully!");
         });
 
-        // 🔹 Place Order: loading → success → save → clear cart → redirect
+        // 🔹 Place Order: loading → success → save → clear cart → LUXURY REVIEW OVERLAY
         placeOrderBtn.addEventListener("click", () => {
             if (!cart.length) {
                 showMessage("Your cart is empty.", true);
                 return;
             }
 
-            // You could also validate form here if you want
-
             loadingOverlay.classList.remove("hidden");
 
-            // Step bar: Payment step
-            step1.classList.remove("bg-cyan-500");
-            step1.classList.add("bg-cyan-400/40");
-            step2.classList.remove("bg-cyan-400/40");
-            step2.classList.add("bg-cyan-500");
+            // Step bar: go to Payment step (animated)
+            animateStep(2);
 
             setTimeout(() => {
                 loadingOverlay.classList.add("hidden");
                 showMessage("Order Placed Successfully!");
 
-                // Step bar: Review step
-                step3.classList.remove("bg-cyan-400/20");
-                step3.classList.add("bg-cyan-400/40");
+                // Step bar: go to Review step (animated)
+                animateStep(3);
 
-                // Save order + clear cart + go home
+                // Save order + clear cart
                 saveOrder();
                 localStorage.removeItem("cart");
 
-                setTimeout(() => {
+                // Show LUXURY REVIEW OVERLAY instead of old review modal
+                if (window.showLuxuryReview) {
+                    window.showLuxuryReview();
+                } else {
                     window.location.href = "index.html";
-                }, 1500);
+                }
             }, 2000);
         });
-
 
         // 🔥 SAVE ORDER TO LOCAL STORAGE
         function saveOrder() {
             const cart = JSON.parse(localStorage.getItem("cart") || "[]");
             if (cart.length === 0) return;
 
-            // subtotal calculation
             const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
             const newOrder = {
-                id: "BB-" + Math.floor(Math.random() * 9000 + 1000), // Example: BB-4921
-                date: new Date().toISOString().split("T")[0],        // 2025-12-03
+                id: "BB-" + Math.floor(Math.random() * 9000 + 1000),
+                date: new Date().toISOString().split("T")[0],
                 status: "Delivered",
-                items: cart,                                          // full cart items
+                items: cart,
                 total: subtotal.toFixed(2)
             };
 
             let orders = JSON.parse(localStorage.getItem("orders") || "[]");
-            orders.unshift(newOrder); // add newest first
+            orders.unshift(newOrder);
             localStorage.setItem("orders", JSON.stringify(orders));
         }
 
+        // ⭐ Old review-modal hooks (safe no-op)
+        if (reviewStarsWrap) {
+            const starButtons = reviewStarsWrap.querySelectorAll("button[data-rating]");
+            starButtons.forEach(btn => {
+                btn.addEventListener("click", () => {
+                    selectedRating = parseInt(btn.dataset.rating, 10) || 0;
+                    starButtons.forEach(b => {
+                        b.classList.remove("bg-cyan-500", "text-black", "border-cyan-400");
+                    });
+                    btn.classList.add("bg-cyan-500", "text-black", "border-cyan-400");
+                });
+            });
+        }
+
+        function goHome() {
+            window.location.href = "index.html";
+        }
+
+        if (submitReviewBtn) {
+            submitReviewBtn.addEventListener("click", () => {
+                const text = oldReviewText ? oldReviewText.value.trim() : "";
+                const ratingToSave = selectedRating || 5;
+
+                const reviews = JSON.parse(localStorage.getItem("bulkbase_reviews") || "[]");
+                reviews.unshift({
+                    rating: ratingToSave,
+                    text,
+                    date: new Date().toISOString()
+                });
+                localStorage.setItem("bulkbase_reviews", JSON.stringify(reviews));
+
+                goHome();
+            });
+        }
+
+        if (skipReviewBtn) {
+            skipReviewBtn.addEventListener("click", () => {
+                goHome();
+            });
+        }
     </script>
 
+    <!-- ADVANCED GOOGLE AUTOCOMPLETE -->
+    <script type="module">
+        let autocomplete;
+
+        function initAddressAutocomplete() {
+            const addressField = document.getElementById("address");
+            if (!addressField || !window.google || !google.maps || !google.maps.places) return;
+
+            autocomplete = new google.maps.places.Autocomplete(addressField, {
+                types: ["geocode"],
+                fields: ["address_components", "formatted_address"],
+            });
+
+            autocomplete.addListener("place_changed", fillAdvancedAddressFields);
+        }
+
+        function fillAdvancedAddressFields() {
+            if (!autocomplete) return;
+            const place = autocomplete.getPlace();
+            if (!place || !place.address_components) return;
+
+            const fieldIDs = ["street_number", "route", "district", "city", "state", "postal", "country"];
+            fieldIDs.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.value = "";
+            });
+
+            place.address_components.forEach(component => {
+                const types = component.types;
+
+                if (types.includes("street_number")) {
+                    const el = document.getElementById("street_number");
+                    if (el) el.value = component.long_name;
+                }
+                if (types.includes("route")) {
+                    const el = document.getElementById("route");
+                    if (el) el.value = component.long_name;
+                }
+                if (types.includes("sublocality") || types.includes("administrative_area_level_3")) {
+                    const el = document.getElementById("district");
+                    if (el) el.value = component.long_name;
+                }
+                if (types.includes("locality") || types.includes("administrative_area_level_2")) {
+                    const el = document.getElementById("city");
+                    if (el) el.value = component.long_name;
+                }
+                if (types.includes("administrative_area_level_1")) {
+                    const el = document.getElementById("state");
+                    if (el) el.value = component.long_name;
+                }
+                if (types.includes("postal_code")) {
+                    const el = document.getElementById("postal");
+                    if (el) el.value = component.long_name;
+                }
+                if (types.includes("country")) {
+                    const el = document.getElementById("country");
+                    if (el) el.value = component.long_name;
+                }
+            });
+
+            const addr = document.getElementById("address");
+            if (addr && place.formatted_address) {
+                addr.value = place.formatted_address;
+            }
+        }
+
+        window.addEventListener("load", initAddressAutocomplete);
+    </script>
+
+    <!-- Review Sent Toast -->
+    <div id="review-toast"
+        class="fixed bottom-6 right-6 bg-cyan-500 text-black font-bold px-6 py-3 rounded-xl shadow-xl opacity-0 pointer-events-none transition-all duration-300 z-[99999] translate-y-4">
+        Review sent successfully!
+    </div>
 
 </body>
 

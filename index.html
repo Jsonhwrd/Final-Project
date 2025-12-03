@@ -346,96 +346,117 @@
 
         <!-- Testimonials -->
         <section id="testimonials" class="py-16 sm:py-24 bg-secondary-bg">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div data-aos="fade-up">
-                    <h2 class="text-3xl sm:text-5xl font-extrabold text-center text-white mb-4">Hear From Our Community
-                    </h2>
-                    <p class="text-base sm:text-xl text-center text-gray-400 mb-12 sm:mb-16 max-w-2xl mx-auto">
-                        Trusted for quality and results by fitness enthusiasts everywhere.
-                    </p>
-                </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <!-- Review 1 -->
-                    <div class="bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-2xl border-l-4 border-cyan-500 hover:scale-[1.01] transition duration-300"
-                        data-aos="flip-up" data-aos-delay="100">
-                        <div class="flex items-center mb-4">
-                            <div class="star-rating flex space-x-1">
-                                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                            </div>
-                        </div>
-                        <p class="italic text-gray-300 mb-6 border-l pl-4 border-gray-600 leading-relaxed text-sm">"The
-                            Premium Whey is fantastic. Great flavor options, mixes effortlessly, and I appreciate the
-                            transparent sourcing. My new go-to protein."</p>
-                        <div class="flex items-center">
-                            <div
-                                class="w-10 h-10 sm:w-12 sm:h-12 bg-cyan-600 rounded-full flex items-center justify-center text-black font-bold text-base sm:text-lg mr-3 shadow-md">
-                                SM</div>
-                            <div>
-                                <p class="font-semibold text-white">Sarah M.</p>
-                                <p class="text-xs sm:text-sm text-gray-500">Endurance Runner</p>
-                            </div>
-                        </div>
-                    </div>
+            <div id="testimonials">
+                <div class="carousel-wrapper">
 
-                    <!-- Review 2 -->
-                    <div class="bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-2xl border-l-4 border-cyan-500 hover:scale-[1.01] transition duration-300"
-                        data-aos="flip-up" data-aos-delay="300">
-                        <div class="flex items-center mb-4">
-                            <div class="star-rating flex space-x-1">
-                                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                                <i data-lucide="star-half" class="w-5 h-5 fill-current"></i>
-                            </div>
-                        </div>
-                        <p class="italic text-gray-300 mb-6 border-l pl-4 border-gray-600 leading-relaxed text-sm">
-                            "Micronized Creatine has made a noticeable difference in my lifts. Pure product, great price
-                            point. BulkBase delivers exactly what they promise."</p>
-                        <div class="flex items-center">
-                            <div
-                                class="w-10 h-10 sm:w-12 sm:h-12 bg-gray-600 rounded-full flex items-center justify-center text-white font-bold text-base sm:text-lg mr-3 shadow-md">
-                                LK</div>
-                            <div>
-                                <p class="font-semibold text-white">Leon K.</p>
-                                <p class="text-xs sm:text-sm text-gray-500">Powerlifter</p>
-                            </div>
-                        </div>
-                    </div>
+                    <button id="review-prev" class="carousel-arrow left">‹</button>
 
-                    <!-- Review 3 -->
-                    <div class="bg-gray-800 p-6 sm:p-8 rounded-2xl shadow-2xl border-l-4 border-cyan-500 hover:scale-[1.01] transition duration-300 hidden lg:block"
-                        data-aos="flip-up" data-aos-delay="500">
-                        <div class="flex items-center mb-4">
-                            <div class="star-rating flex space-x-1">
-                                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                                <i data-lucide="star" class="w-5 h-5 fill-current"></i>
-                            </div>
-                        </div>
-                        <p class="italic text-gray-300 mb-6 border-l pl-4 border-gray-600 leading-relaxed text-sm">"The
-                            BCAA gives me clean, focused energy without the jitters or crash. It's the perfect
-                            kickstart for those early morning sessions."</p>
-                        <div class="flex items-center">
-                            <div
-                                class="w-10 h-10 sm:w-12 sm:h-12 bg-red-600 rounded-full flex items-center justify-center text-white font-bold text-base sm:text-lg mr-3 shadow-md">
-                                AJ</div>
-                            <div>
-                                <p class="font-semibold text-white">Alex J.</p>
-                                <p class="text-xs sm:text-sm text-gray-500">Cross-Training Athlete</p>
-                            </div>
-                        </div>
-                    </div>
+                    <div id="user-reviews-carousel" class="premium-carousel"></div>
+
+                    <button id="review-next" class="carousel-arrow right">›</button>
+
                 </div>
             </div>
+
+
         </section>
+
+        <style>
+            /* ============================================
+   PREMIUM CAROUSEL — FIXED & CENTERED
+============================================ */
+
+            /* Centers the whole carousel track */
+            #user-reviews-carousel {
+                display: flex;
+                justify-content: center;
+                /* CENTER CARDS */
+                align-items: center;
+                width: 100%;
+                gap: 40px;
+                padding: 60px 0;
+                overflow: hidden;
+                perspective: 1000px;
+            }
+
+            /* CONTAINER */
+            .carousel-wrapper {
+                width: 100%;
+                max-width: 1100px;
+                margin: 0 auto;
+                position: relative;
+                padding: 60px 0;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            /* REVIEW TRACK */
+            .premium-carousel {
+                display: flex;
+                gap: 40px;
+                position: relative;
+                height: 260px;
+                align-items: center;
+                overflow: hidden;
+            }
+
+            /* REVIEW CARD */
+            .review-card {
+                width: 380px;
+                padding: 30px;
+                background: rgba(15, 20, 30, 0.75);
+                border: 1px solid rgba(0, 255, 255, 0.1);
+                border-radius: 22px;
+                backdrop-filter: blur(6px);
+                box-shadow: 0 0 40px rgba(0, 255, 255, 0.12);
+                transition: 0.35s ease;
+                position: absolute;
+                opacity: 0.6;
+                transform: scale(0.88);
+            }
+
+            .review-card.active {
+                opacity: 1;
+                transform: scale(1);
+                z-index: 10;
+            }
+
+
+            /* ARROWS */
+            .carousel-arrow {
+                width: 60px;
+                height: 60px;
+                border-radius: 50%;
+                background: rgba(50, 60, 70, 0.55);
+                border: 1px solid rgba(0, 255, 255, 0.25);
+                color: white;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 26px;
+                position: absolute;
+                cursor: pointer;
+                transition: 0.25s;
+                z-index: 20;
+            }
+
+            .carousel-arrow:hover {
+                background: rgba(0, 255, 255, 0.25);
+            }
+
+            /* Arrow positioning relative to WRAPPER — FIXED */
+            .carousel-arrow.left {
+                left: -80px;
+            }
+
+            .carousel-arrow.right {
+                right: -80px;
+            }
+        </style>
+
+
 
         <!-- Guide Section -->
         <section id="guide" class="py-16 sm:py-24">
@@ -957,8 +978,11 @@
 
 
 
-            <!-- 🔥 ADD THE FIREBASE AUTH SCRIPT BELOW -->
             <script type="module">
+
+                /* ======================================================
+                   🔥 FIREBASE INITIALIZATION
+                ====================================================== */
                 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
                 import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
@@ -974,58 +998,161 @@
                 const app = initializeApp(firebaseConfig);
                 const auth = getAuth(app);
 
-                // 🔐 Protect page if not logged in
+                /* ======================================================
+                   🔐 AUTH LISTENER + PROFILE AUTO UPDATE
+                ====================================================== */
                 onAuthStateChanged(auth, (user) => {
                     if (!user) {
                         window.location.href = "login.html";
-                    } else {
-                        // 🔥 Update Profile Section
-                        document.getElementById("profile-name").textContent =
-                            user.displayName || "User";
-
-                        document.getElementById("profile-email").textContent =
-                            user.email || "No Email";
-
-                        // 🕒 Member Since (Format: 3 Feb 2025)
-                        const memberDate = new Date(user.metadata.creationTime);
-
-                        const day = memberDate.getDate();
-                        const month = memberDate.toLocaleString('en-US', { month: 'short' }); // Feb
-                        const year = memberDate.getFullYear();
-
-                        document.getElementById("profile-member-since").textContent =
-                            `${day} ${month} ${year}`;
-
+                        return;
                     }
+
+                    document.getElementById("profile-name").textContent = user.displayName || "User";
+                    document.getElementById("profile-email").textContent = user.email;
+
+                    const joined = new Date(user.metadata.creationTime);
+                    document.getElementById("profile-member-since").textContent =
+                        `${joined.getDate()} ${joined.toLocaleString("en-US", { month: "short" })} ${joined.getFullYear()}`;
+
+                    loadUserReviews();
                 });
 
-                // 🔥 REAL LOGOUT
+                /* LOGOUT */
                 window.realLogout = async function () {
-                    try {
-                        await signOut(auth);
-                        window.location.href = "login.html";
-                    } catch (err) {
-                        alert("Logout error: " + err.message);
-                    }
+                    await signOut(auth);
+                    window.location.href = "login.html";
                 };
-            </script>
-            <script>
 
 
-                // ⭐ ADD THIS BELOW ALL OTHER FUNCTIONS ⭐
-                function handleCheckout() {
-                    // If cart is empty, block checkout
+                /* ======================================================
+                   ⭐ LOAD USER REVIEWS (PREMIUM VERSION)
+                ====================================================== */
+
+                function loadUserReviews() {
+                    const track = document.getElementById("user-reviews-carousel");
+                    if (!track) return;
+
+                    const saved = JSON.parse(localStorage.getItem("bulkbase_reviews") || "[]");
+
+                    if (saved.length === 0) {
+                        track.innerHTML = `
+            <p class="text-gray-400 text-center w-full py-10 italic">
+                No reviews yet — be the first to review!
+            </p>`;
+                        return;
+                    }
+
+                    const latest = saved.slice(0, 12);
+
+                    track.innerHTML = latest.map(r => `
+        <div class="review-card premium-card">
+            <div class="review-stars">
+                ${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}
+            </div>
+
+            <p class="review-text">"${r.text}"</p>
+
+            <p class="review-date">
+                ${new Date(r.date).toLocaleDateString()}
+            </p>
+        </div>
+    `).join("");
+
+                    initPremiumCarousel();
+                }
+
+
+                /* ======================================================
+                   PREMIUM 3D CAROUSEL ENGINE
+                ====================================================== */
+
+                function initPremiumCarousel() {
+                    const track = document.getElementById("user-reviews-carousel");
+                    if (!track) return;
+
+                    const cards = [...track.children];
+                    let index = 0;
+
+                    function updateCarousel() {
+                        cards.forEach((c, i) => {
+                            c.classList.remove("active");
+                            if (i === index) c.classList.add("active");
+
+                            const offset = (i - index) * 380;
+                            c.style.transform = `translateX(${offset}px)`;
+                        });
+                    }
+
+                    updateCarousel();
+
+                    /* === Arrow Buttons === */
+                    document.getElementById("review-prev").onclick = () => {
+                        index = (index - 1 + cards.length) % cards.length;
+                        updateCarousel();
+                    };
+
+                    document.getElementById("review-next").onclick = () => {
+                        index = (index + 1) % cards.length;
+                        updateCarousel();
+                    };
+
+                    /* === Auto Slide === */
+                    setInterval(() => {
+                        index = (index + 1) % cards.length;
+                        updateCarousel();
+                    }, 4000);
+
+                    /* === Drag to slide === */
+                    let startX = 0;
+                    let dragging = false;
+
+                    track.addEventListener("mousedown", e => {
+                        dragging = true;
+                        startX = e.pageX;
+                    });
+
+                    window.addEventListener("mouseup", () => dragging = false);
+
+                    window.addEventListener("mousemove", e => {
+                        if (!dragging) return;
+
+                        const diff = e.pageX - startX;
+
+                        if (diff > 50) {
+                            document.getElementById("review-prev").click();
+                            dragging = false;
+                        }
+
+                        if (diff < -50) {
+                            document.getElementById("review-next").click();
+                            dragging = false;
+                        }
+                    });
+                }
+
+
+                /* ======================================================
+                   STARTUP
+                ====================================================== */
+                document.addEventListener("DOMContentLoaded", loadUserReviews);
+
+
+                /* ======================================================
+                   🛒 CHECKOUT HANDLER
+                ====================================================== */
+                window.handleCheckout = function () {
                     const cart = JSON.parse(localStorage.getItem("cart") || "[]");
                     if (cart.length === 0) {
                         alert("Your cart is empty!");
                         return;
                     }
-
-                    // 🔥 Redirect to checkout.html
                     window.location.href = "checkout.html";
-                }
+                };
 
             </script>
+
+
+
 
 </body>
 
