@@ -21,20 +21,165 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCartDisplay();
 });
 
-// 2. Product and Cart Data
+// 2. Product and Cart Data (with flavours)
 const products = {
-    'bbwhey49': { name: 'Isolate Whey', price: 49.99, img: 'source/image.jpg' },
-    'bbcreat29': { name: 'Micronized Creatine', price: 29.99, img: 'source/creatine 2.jpg' },
-    'bbpre34': { name: 'Essential BCAA', price: 34.99, img: 'source/bcaa.jpg' }
+    // Whey: Chocolate, Vanilla, Cookies & Cream
+    'bbwhey49': {
+        name: 'Isolate Whey',
+        price: 49.99,
+        img: 'source/image.jpg',
+        flavours: ['Chocolate', 'Vanilla', 'Cookies & Cream']
+    },
+    // Creatine: Unflavoured
+    'bbcreat29': {
+        name: 'Micronized Creatine',
+        price: 29.99,
+        img: 'source/creatine 2.jpg',
+        flavours: ['Unflavoured']
+    },
+    // BCAA: Mango, Lemon Lime
+    'bbpre34': {
+        name: 'Essential BCAA',
+        price: 34.99,
+        img: 'source/bcaa.jpg',
+        flavours: ['Mango', 'Lemon Lime']
+    }
 };
 
 // 🔒 Persistent cart stored in localStorage (so checkout.html can read it)
 let cart = JSON.parse(localStorage.getItem('cart') || '[]');
 let selectedCardValue = 100; // State for the gift card value
 
+// 🧃 Flavour selection modal state
+let flavourProductId = null;
+let currentSelectedFlavour = null;
+
+// Open flavour selector for a specific product
+window.openFlavourSelector = function (productId) {
+    const product = products[productId];
+    const modal = document.getElementById('flavour-modal');
+    const titleEl = document.getElementById('flavour-modal-title');
+    const flavourOptions = document.getElementById('flavour-options');
+
+    if (!product || !modal || !titleEl || !flavourOptions) return;
+
+    flavourProductId = productId;
+    currentSelectedFlavour = null;
+
+    titleEl.textContent = `Choose flavour for ${product.name}`;
+    flavourOptions.innerHTML = '';
+
+    const flavours = product.flavours && product.flavours.length
+        ? product.flavours
+        : ['Standard'];
+
+    flavours.forEach(flavour => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.textContent = flavour;
+        btn.dataset.flavour = flavour;
+
+        // ⭐ NEW PREMIUM BUTTON STYLE
+        btn.className = `
+        flavour-option
+        w-full p-4 rounded-2xl border flex items-center justify-between
+        bg-gray-900/40 border-cyan-400/20 text-gray-200
+        hover:border-cyan-400 hover:bg-gray-900/60
+        transition-all duration-200 cursor-pointer
+        mb-3
+    `;
+
+        // ⭐ Animated tick
+        const tick = document.createElement('span');
+        tick.innerHTML = '✔';
+        tick.className = 'opacity-0 text-cyan-400 text-sm ml-3 transition-all';
+        btn.appendChild(tick);
+
+        // ⭐ When selected
+        btn.addEventListener('click', () => {
+            document.querySelectorAll('#flavour-options .flavour-option').forEach(el => {
+                el.classList.remove(
+                    "border-cyan-400",
+                    "bg-cyan-500/10",
+                    "text-cyan-300",
+                    "shadow-[0_0_20px_rgba(0,255,255,0.25)]",
+                    "ring-2", "ring-cyan-400", "bg-gray-900"
+                );
+                el.querySelector('span').classList.add('opacity-0');
+            });
+
+            // ⭐ Selected glowing state
+            btn.classList.add(
+                "border-cyan-400",
+                "bg-cyan-500/10",
+                "text-cyan-300",
+                "shadow-[0_0_20px_rgba(0,255,255,0.25)]"
+            );
+
+            tick.classList.remove('opacity-0');
+            currentSelectedFlavour = flavour;
+        });
+
+        flavourOptions.appendChild(btn);
+    });
+
+
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+};
+
+// Close flavour modal
+window.closeFlavourModal = function () {
+    const modal = document.getElementById('flavour-modal');
+    if (!modal) return;
+
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+
+    flavourProductId = null;
+    currentSelectedFlavour = null;
+};
+
+
+// Confirm flavour and add to cart
+window.confirmFlavourAndAdd = function () {
+    if (!flavourProductId) {
+        closeFlavourModal();
+        return;
+    }
+
+    const product = products[flavourProductId];
+    if (!product) {
+        closeFlavourModal();
+        return;
+    }
+
+    // If only one flavour, auto-select it
+    if (!currentSelectedFlavour) {
+        if (product.flavours && product.flavours.length === 1) {
+            currentSelectedFlavour = product.flavours[0];
+        } else {
+            // no flavour selected and multiple options
+            const msgBox = document.getElementById('message-box');
+            if (msgBox) {
+                // reuse global message UI
+                showMessage('Select a Flavour', 'Please pick a flavour before adding to cart.');
+            }
+            return;
+        }
+    }
+
+    addToCart(flavourProductId, currentSelectedFlavour);
+    closeFlavourModal();
+
+    // Open cart with a nice slide-in after adding
+    toggleCart(true);
+};
+
 const saveCart = () => {
     localStorage.setItem('cart', JSON.stringify(cart));
 };
+
 
 // 3. Core Cart Functions
 const updateCartDisplay = () => {
@@ -63,20 +208,22 @@ const updateCartDisplay = () => {
             count += item.quantity;
 
             const itemHtml = `
-                <div class="flex items-center space-x-4 p-3 bg-gray-800 rounded-lg">
-                    <img src="${item.img}" alt="${item.name}"
-                         class="w-12 h-12 rounded object-cover border border-gray-700">
-                    <div class="flex-grow">
-                        <p class="font-semibold text-white truncate">${item.name}</p>
-                        <p class="text-sm text-gray-400">Qty: ${item.quantity}</p>
-                        <p class="text-sm text-cyan-400">$${item.price.toFixed(2)}</p>
-                    </div>
-                    <button onclick="removeFromCart('${item.id}')"
-                            class="text-gray-500 hover:text-red-500 transition p-1">
-                        <i data-lucide="trash-2" class="w-5 h-5"></i>
-                    </button>
-                </div>
-            `;
+    <div class="flex items-center space-x-4 p-3 bg-gray-800 rounded-lg">
+        <img src="${item.img}" alt="${item.name}"
+             class="w-12 h-12 rounded object-cover border border-gray-700">
+        <div class="flex-grow">
+            <p class="font-semibold text-white truncate">${item.name}</p>
+            ${item.flavour ? `<p class="text-xs text-cyan-300">Flavour: ${item.flavour}</p>` : ''}
+            <p class="text-sm text-gray-400">Qty: ${item.quantity}</p>
+            <p class="text-sm text-cyan-400">$${item.price.toFixed(2)}</p>
+        </div>
+        <button onclick="removeFromCart('${item.id}')"
+                class="text-gray-500 hover:text-red-500 transition p-1">
+            <i data-lucide="trash-2" class="w-5 h-5"></i>
+        </button>
+    </div>
+`;
+
             cartItemsContainer.insertAdjacentHTML('beforeend', itemHtml);
         });
 
@@ -89,13 +236,16 @@ const updateCartDisplay = () => {
     cartTotal.textContent = `$${total.toFixed(2)}`;
 };
 
-// Add item to cart (with quantity, and stored in localStorage)
-const addToCart = (productId) => {
+// Add item to cart (with flavour, quantity, and stored in localStorage)
+const addToCart = (productId, flavour = null) => {
     const product = products[productId];
     if (!product) return;
 
-    // If product already in cart, increase quantity
-    const existing = cart.find(item => item.productId === productId);
+    // Treat same product + same flavour as one line item
+    const existing = cart.find(
+        item => item.productId === productId && item.flavour === flavour
+    );
+
     if (existing) {
         existing.quantity += 1;
     } else {
@@ -105,13 +255,17 @@ const addToCart = (productId) => {
             name: product.name,
             price: product.price,
             img: product.img,
-            quantity: 1
+            quantity: 1,
+            flavour: flavour
         });
     }
 
     saveCart();
     updateCartDisplay();
-    showMessage('Item Added!', `${product.name} has been added to your cart.`);
+    showMessage(
+        'Item Added!',
+        `${product.name}${flavour ? ' - ' + flavour : ''} has been added to your cart.`
+    );
 };
 
 // Remove item from cart
@@ -286,3 +440,108 @@ function loadOrderHistory() {
         container.insertAdjacentHTML("beforeend", html);
     });
 }
+
+
+// ===============================
+// ORDER HISTORY SYSTEM (NEW)
+// ===============================
+
+function loadOrderHistory() {
+    const container = document.querySelector("#profile-page .order-history-container");
+    if (!container) return;
+
+    let orders = JSON.parse(localStorage.getItem("orders") || "[]");
+
+    if (orders.length === 0) {
+        container.innerHTML = `
+            <p class="text-gray-400 text-center italic">No orders yet.</p>
+        `;
+        return;
+    }
+
+    container.innerHTML = "";
+
+    orders.forEach(order => {
+        const itemsText = order.items
+            .map(i => `${i.name} (x${i.quantity})`)
+            .join(", ");
+
+        const html = `
+            <div class="bg-gray-800 p-4 rounded-lg border-l-4 border-cyan-500">
+                <div class="flex justify-between mb-2">
+                    <span class="text-sm font-medium text-gray-400">Order #${order.id}</span>
+                    <span class="text-sm font-semibold text-green-400">${order.status}</span>
+                </div>
+                <div class="flex justify-between text-white">
+                    <span class="font-bold">$${order.total}</span>
+                    <span class="text-xs text-gray-500">Placed: ${order.date}</span>
+                </div>
+                <p class="text-xs text-gray-500 mt-2">Items: ${itemsText}</p>
+            </div>
+        `;
+
+        container.insertAdjacentHTML("beforeend", html);
+    });
+}
+// Card builder: matches your UI theme
+function buildOrderCard(order) {
+    const items = order.items
+        .map(item => `${item.name} (x${item.quantity})`)
+        .join(", ");
+
+    const orderID = `BB-${String(order.id).slice(-4)}`;
+
+    return `
+    <div class="p-5 bg-gray-800 rounded-xl border border-gray-700 shadow-md">
+        <div class="flex justify-between items-center">
+            <p class="text-lg font-semibold text-white">Order #${orderID}</p>
+            <span class="text-green-400 font-semibold">Delivered</span>
+        </div>
+
+        <p class="text-2xl font-bold text-white mt-2">$${order.total.toFixed(2)}</p>
+        <p class="text-gray-400 text-sm mt-1">Items: ${items}</p>
+
+        <p class="text-gray-500 text-xs mt-2">Placed: ${order.date}</p>
+    </div>`;
+}
+
+// Run on page load
+document.addEventListener("DOMContentLoaded", () => {
+    loadOrderHistory();
+    setupHistoryToggle();
+});
+
+
+// ===============================
+// HISTORY DROPDOWN TOGGLE
+// ===============================
+
+function setupHistoryToggle() {
+    const btn = document.getElementById("toggle-history");
+    const fullList = document.getElementById("order-history-full");
+
+    if (!btn || !fullList) return;
+
+    btn.addEventListener("click", () => {
+        const isHidden = fullList.classList.contains("hidden");
+
+        if (isHidden) {
+            // Show with animation
+            fullList.classList.remove("hidden");
+            setTimeout(() => fullList.classList.add("history-animate"), 20);
+
+            btn.textContent = "Hide Full History";
+        } else {
+            // Hide with animation
+            fullList.classList.remove("history-animate");
+            setTimeout(() => fullList.classList.add("hidden"), 250);
+
+            btn.textContent = "View Full History";
+        }
+    });
+}
+
+
+
+
+

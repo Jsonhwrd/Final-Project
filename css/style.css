@@ -45,6 +45,22 @@
      animation: float 6s ease-in-out infinite;
  }
 
+ @keyframes flavour-pop {
+     0% {
+         transform: translateY(8px) scale(0.98);
+         opacity: 0;
+     }
+
+     100% {
+         transform: translateY(0) scale(1);
+         opacity: 1;
+     }
+ }
+
+ .flavour-option {
+     animation: flavour-pop 0.25s ease-out;
+ }
+
  /* Persistent Pulse for Discount Code */
  @keyframes pulse-effect {
 
@@ -242,4 +258,20 @@
  .review-card:hover {
      transform: translateY(-6px) scale(1.02);
      box-shadow: 0 14px 35px rgba(0, 255, 255, 0.2);
+ }
+
+ @keyframes slideFadeIn {
+     0% {
+         opacity: 0;
+         transform: translateY(20px) scale(0.97);
+     }
+
+     100% {
+         opacity: 1;
+         transform: translateY(0) scale(1);
+     }
+ }
+
+ .history-animate {
+     animation: slideFadeIn 0.45s ease-out forwards;
  }
