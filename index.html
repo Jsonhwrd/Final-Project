@@ -892,71 +892,71 @@
 
 
     <!-- GIFT CARD PAGE (FIXED — NOW A TOP-LEVEL PAGE) -->
-    <div id="gift-card-page" class="page pt-20 pb-24 hidden">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16" data-aos="fade-down">
-                <h2 class="text-4xl sm:text-5xl font-extrabold text-white mb-4">BulkBase Gift Cards</h2>
-                <p class="text-lg sm:text-xl text-cyan-400">The perfect gift for any fitness enthusiast.</p>
+    <!-- ===========================
+     PREMIUM ANIMATED GIFT CARD
+=============================== -->
+    <div id="gift-card-page" class="page hidden pt-20 pb-24">
+
+        <div class="max-w-4xl mx-auto px-6">
+
+            <!-- Header -->
+            <div class="text-center mb-14" data-aos="fade-down">
+                <h2 class="text-4xl font-extrabold text-white">BulkBase Digital Gift Card</h2>
+                <p class="text-cyan-400 mt-3 text-lg">Instant delivery • Never expires • Perfect for fitness lovers</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+            <!-- The Card Container -->
+            <div id="gift-card-box" class="relative bg-gray-900/40 backdrop-blur-xl border border-cyan-500/20 rounded-3xl p-10 shadow-[0_0_40px_rgba(0,255,255,0.15)]
+                    hover:shadow-[0_0_70px_rgba(0,255,255,0.35)]
+                    transition-all duration-700 hover:-translate-y-1 hover:scale-[1.02] cursor-pointer">
 
-                <!-- Gift Card Image -->
-                <div class="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-cyan-500/50"
-                    data-aos="zoom-in-right">
-                    <img src="https://placehold.co/600x400/0A0A10/00BFFF?text=BULKBASE\nGIFT+CARD"
-                        alt="BulkBase Gift Card Design" class="w-full h-auto object-cover">
-                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent"></div>
-                    <div class="absolute bottom-4 left-4 text-white text-3xl font-bold" id="card-display-value">
-                        $100
-                    </div>
+                <!-- Glow Background -->
+                <div
+                    class="absolute inset-0 rounded-3xl bg-gradient-to-br from-cyan-500/10 to-blue-500/10 blur-2xl pointer-events-none">
                 </div>
 
-                <!-- Gift Card Options -->
-                <div class="space-y-6" data-aos="zoom-in-left">
-                    <div class="bg-secondary-bg p-6 rounded-2xl border border-gray-700 shadow-xl">
-                        <h3 class="text-2xl font-bold text-white mb-4">Choose Value</h3>
-                        <div class="grid grid-cols-2 gap-4">
-                            <button data-value="25"
-                                class="btn-secondary py-3 rounded-xl text-lg font-semibold hover:bg-cyan-500/20 hover:border-cyan-500 transition duration-150"
-                                onclick="selectGiftCardValue(25)">$25 Gift Card</button>
-                            <button data-value="50"
-                                class="btn-secondary py-3 rounded-xl text-lg font-semibold hover:bg-cyan-500/20 hover:border-cyan-500 transition duration-150"
-                                onclick="selectGiftCardValue(50)">$50 Gift Card</button>
-                            <button data-value="100"
-                                class="btn-secondary py-3 rounded-xl text-lg font-semibold hover:bg-cyan-500/20 hover:border-cyan-500 transition duration-150 border-cyan-500"
-                                onclick="selectGiftCardValue(100)">$100 Gift Card</button>
-                            <button data-value="200"
-                                class="btn-secondary py-3 rounded-xl text-lg font-semibold hover:bg-cyan-500/20 hover:border-cyan-500 transition duration-150"
-                                onclick="selectGiftCardValue(200)">$200 Gift Card</button>
-                        </div>
-                        <p id="selected-card-value" class="mt-4 text-center text-xl font-bold text-cyan-400">
-                            Selected: $100
-                        </p>
+                <div class="relative z-10">
 
-                        <button class="btn-primary w-full text-black font-bold py-4 rounded-xl text-lg mt-6"
-                            onclick="purchaseGiftCard()">
-                            Purchase Digital Gift Card
+                    <!-- Card Value -->
+                    <div class="text-center mb-8">
+                        <p class="text-gray-300 text-lg">Selected Value</p>
+                        <h3 id="card-display-value"
+                            class="text-6xl font-extrabold text-white drop-shadow-[0_0_20px_rgba(0,255,255,0.5)] duration-300">
+                            $100
+                        </h3>
+                    </div>
+
+                    <!-- Selection Buttons -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
+
+                        <button data-value="25" onclick="animatedSelectGift(25)"
+                            class="gift-btn animated-btn">$25</button>
+
+                        <button data-value="50" onclick="animatedSelectGift(50)"
+                            class="gift-btn animated-btn">$50</button>
+
+                        <button data-value="100" onclick="animatedSelectGift(100)"
+                            class="gift-btn animated-btn selected">$100</button>
+
+                        <button data-value="150" onclick="animatedSelectGift(150)"
+                            class="gift-btn animated-btn">$150</button>
+
+                    </div>
+
+                    <!-- Purchase Button -->
+                    <div class="text-center">
+                        <button onclick="animatedPurchaseGift(event)" class="px-10 py-4 bg-cyan-500 hover:bg-cyan-400 text-gray-900 font-extrabold text-xl rounded-2xl
+                                   shadow-[0_0_25px_rgba(0,255,255,0.5)] hover:shadow-[0_0_40px_rgba(0,255,255,0.8)]
+                                   transition-all duration-300 active:scale-95">
+                            Purchase Gift Card
                         </button>
                     </div>
 
-                    <div class="bg-secondary-bg p-6 rounded-2xl border border-gray-700 shadow-xl">
-                        <h4 class="text-xl font-bold text-white mb-3 flex items-center">
-                            <i data-lucide="info" class="w-5 h-5 mr-2 text-cyan-500"></i> Details
-                        </h4>
-                        <ul class="text-sm text-gray-400 space-y-2 list-disc list-inside ml-4">
-                            <li>Delivered instantly via email to your recipient.</li>
-                            <li>No expiration date or hidden fees.</li>
-                            <li>Redeemable on all products store-wide.</li>
-                        </ul>
-                    </div>
                 </div>
 
             </div>
         </div>
     </div>
-
-
 
     <!-- TERMS OF SERVICE PAGE (FIXED — NOW A TOP-LEVEL PAGE) -->
     <div id="terms-page" class="page hidden pt-20 pb-24">

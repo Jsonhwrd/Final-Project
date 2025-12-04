@@ -293,22 +293,59 @@ const toggleCart = (open) => {
 };
 
 // Gift Card Functions
-const selectGiftCardValue = (value) => {
-    selectedCardValue = value;
-    const valueDisplay = document.getElementById('selected-card-value');
-    const cardDisplay = document.getElementById('card-display-value');
-    if (valueDisplay) valueDisplay.textContent = `Selected: $${value}`;
-    if (cardDisplay) cardDisplay.textContent = `$${value}`;
+// =============================
+// ANIMATED GIFT CARD SYSTEM
+// =============================
 
-    // Highlight selected button (optional visual cue)
-    document.querySelectorAll('#gift-card-page button[data-value]').forEach(btn => {
-        btn.classList.remove('border-cyan-500');
-    });
-    const activeBtn = document.querySelector(
-        `#gift-card-page button[data-value="${value}"]`
+// Counter animation
+function animateNumber(element, start, end, duration = 600) {
+    let startTime = null;
+
+    function update(timestamp) {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / duration, 1);
+        const value = Math.floor(start + (end - start) * progress);
+        element.textContent = `$${value}`;
+        if (progress < 1) requestAnimationFrame(update);
+    }
+    requestAnimationFrame(update);
+}
+
+// When gift value is selected
+function animatedSelectGift(value) {
+    const display = document.getElementById("card-display-value");
+
+    animateNumber(display, selectedCardValue, value);
+    selectedCardValue = value;
+
+    // Visual selection
+    document.querySelectorAll(".animated-btn").forEach(btn =>
+        btn.classList.remove("selected")
     );
-    if (activeBtn) activeBtn.classList.add('border-cyan-500');
-};
+    const activeBtn = document.querySelector(`button[data-value="${value}"]`);
+    if (activeBtn) activeBtn.classList.add("selected");
+}
+
+// Purchase animation
+function animatedPurchaseGift(event) {
+    event.preventDefault();
+
+    const card = document.getElementById("gift-card-box");
+
+    // Flip animation
+    card.style.transition = "transform 0.4s ease";
+    card.style.transform = "rotateY(15deg) scale(1.05)";
+
+    setTimeout(() => {
+        card.style.transform = "rotateY(0deg) scale(1)";
+
+        // Show success message
+        showMessage(
+            "Gift Card Purchased!",
+            `You've purchased a $${selectedCardValue} BulkBase Gift Card.`
+        );
+    }, 400);
+}
 
 const purchaseGiftCard = (event) => {
     showMessage(

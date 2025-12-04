@@ -275,3 +275,68 @@
  .history-animate {
      animation: slideFadeIn 0.45s ease-out forwards;
  }
+
+
+
+ /*GIFT CARD */
+ /* Neon pulse animation */
+ @keyframes neonPulse {
+     0% {
+         opacity: 0.35;
+     }
+
+     50% {
+         opacity: 0.75;
+     }
+
+     100% {
+         opacity: 0.35;
+     }
+ }
+
+ .animate-neonPulse {
+     animation: neonPulse 3s infinite ease-in-out;
+ }
+
+ /* Gift value buttons */
+ .gift-btn {
+     padding: 14px;
+     font-size: 1.3rem;
+     border-radius: 1rem;
+     background: #1f2937;
+     border: 1px solid rgba(34, 211, 238, 0.25);
+     color: white;
+     font-weight: 600;
+     transition: all .3s ease;
+ }
+
+ .gift-btn:hover {
+     border-color: #22d3ee;
+     background: rgba(34, 211, 238, 0.15);
+     box-shadow: 0 0 25px rgba(0, 255, 255, 0.5);
+ }
+
+ .gift-btn.selected {
+     border-color: #22d3ee !important;
+     background: rgba(34, 211, 238, 0.3) !important;
+     color: #a5f3fc;
+     box-shadow: 0 0 35px rgba(0, 255, 255, 0.7);
+ }
+
+ #gift-card-box:hover {
+     animation: floatCard 3s ease-in-out infinite;
+ }
+
+ @keyframes floatCard {
+     0% {
+         transform: translateY(-4px) rotateY(0deg);
+     }
+
+     50% {
+         transform: translateY(-12px) rotateY(6deg);
+     }
+
+     100% {
+         transform: translateY(-4px) rotateY(0deg);
+     }
+ }
