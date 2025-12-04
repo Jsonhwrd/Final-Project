@@ -334,26 +334,27 @@
         </div>
 
     </div>
-
     <script type="module">
         import {
             initializeApp
         } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+
         import {
             getAuth,
-            signInAnonymously,
-            signInWithCustomToken,
-            onAuthStateChanged,
-            createUserWithEmailAndPassword,
             signInWithEmailAndPassword,
+            createUserWithEmailAndPassword,
             signOut,
-            updateProfile // Import updateProfile to save the user name
+            updateProfile,
+            onAuthStateChanged
         } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, setLogLevel } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // --- GLOBAL SETUP VARIABLES ---
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        import {
+            getFirestore,
+            setLogLevel
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+
+        // FIREBASE CONFIG ---------------------
         const firebaseConfig = {
             apiKey: "AIzaSyCqTre32R-JxlgqP7HhJ0ZufEeFtFSrOuo",
             authDomain: "login-page-e809f.firebaseapp.com",
@@ -363,231 +364,165 @@
             appId: "1:204682041114:web:0cff442a3a2a94010fbea3",
             measurementId: "G-98WYFYQF1G"
         };
-        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-
-        // --- DOM Elements ---
-        const formTitle = document.getElementById('form-title');
-        const authForm = document.getElementById('auth-form');
-        const formContent = document.getElementById('auth-form-content');
-        const submitBtn = document.getElementById('submit-btn');
-        const switchModeBtn = document.getElementById('switch-mode-btn');
-        const messageBox = document.getElementById('message-box');
-        const userDashboard = document.getElementById('user-dashboard');
-        const userIdDisplay = document.getElementById('user-id-display');
-        const authStatus = document.getElementById('auth-status');
-        const displayNameInfo = document.getElementById('display-name-info');
 
 
-        let isLoginMode = true; // State for form mode
+        // DOM ELEMENTS ------------------------
+        const formTitle = document.getElementById("form-title");
+        const authForm = document.getElementById("auth-form");
+        const formContent = document.getElementById("auth-form-content");
+        const submitBtn = document.getElementById("submit-btn");
+        const switchModeBtn = document.getElementById("switch-mode-btn");
+        const messageBox = document.getElementById("message-box");
+
+        let isLoginMode = true;
         let auth;
 
-        // --- UTILITY FUNCTIONS ---
 
-        // Function to display messages (replaces alert())
+        // MESSAGE HANDLER ---------------------
         function showMessage(message, isError = false) {
             messageBox.textContent = message;
-            messageBox.style.display = 'block';
+            messageBox.style.display = "block";
 
-            // Clear previous classes and apply new ones
-            messageBox.classList.remove('message-success', 'message-error');
-            if (isError) {
-                messageBox.classList.add('message-error');
-            } else {
-                messageBox.classList.add('message-success');
-            }
+            messageBox.classList.remove("message-error", "message-success");
+            messageBox.classList.add(isError ? "message-error" : "message-success");
 
-            // Hide after 5 seconds
             setTimeout(() => {
-                messageBox.style.display = 'none';
-            }, 5000);
+                messageBox.style.display = "none";
+            }, 4000);
         }
 
-        // --- FIREBASE INITIALIZATION & AUTH ---
 
+        // INITIALIZE FIREBASE -----------------
         async function initializeFirebase() {
-            try {
-                // Initialize services
-                const app = initializeApp(firebaseConfig);
-                auth = getAuth(app);
-                const db = getFirestore(app);
-                setLogLevel('Debug');
+            const app = initializeApp(firebaseConfig);
+            auth = getAuth(app);
+            const db = getFirestore(app);
+            setLogLevel("Debug");
 
-                // Attempt custom token sign-in or anonymous fallback
-                if (initialAuthToken) {
-                    await signInWithCustomToken(auth, initialAuthToken);
-                    console.log("Signed in with custom token.");
-                }
-                // Set up Auth State Listener
-                onAuthStateChanged(auth, (user) => {
-                    if (user) {
-                        console.log("User detected:", user.email);
-                        // Do NOT redirect automatically
-                    }
-                });
-
-
-
-
-            } catch (error) {
-                console.error("Firebase Initialization/Auth Error:", error);
-                showMessage(`Initialization failed: ${error.message}`, true);
-            }
+            onAuthStateChanged(auth, (user) => {
+                // No auto redirect — user must click login
+                console.log("User state:", user?.email || "Not logged in");
+            });
         }
 
-        // --- UI RENDERING (UPDATED for Name Input) ---
 
+        // RENDER FORM CONTENT -----------------
         function renderFormContent() {
-            let html = '';
+            let html = "";
 
-            // Add Name Input only in Registration Mode
             if (!isLoginMode) {
                 html += `
-                    <!-- Name Input Group -->
-                    <div class="input-group">
-                        <label for="name">Full Name</label>
-                        <div class="input-field-wrapper">
-                            <i class="fas fa-user"></i>
-                            <input type="text" id="name" name="name" placeholder="John Doe" required>
-                        </div>
-                        <span class="input-accent-line"></span>
-                    </div>
-                `;
+        <div class="input-group">
+            <label>Full Name</label>
+            <div class="input-field-wrapper">
+                <i class="fas fa-user"></i>
+                <input type="text" id="name" required placeholder="John Doe">
+            </div>
+            <span class="input-accent-line"></span>
+        </div>`;
             }
 
-            // Email Input Group
             html += `
-                <div class="input-group">
-                    <label for="email">Email Address</label>
-                    <div class="input-field-wrapper">
-                        <i class="fas fa-at"></i>
-                        <input type="email" id="email" name="email" placeholder="you@example.com" required>
-                    </div>
-                    <span class="input-accent-line"></span>
-                </div>
+        <div class="input-group">
+            <label>Email Address</label>
+            <div class="input-field-wrapper">
+                <i class="fas fa-at"></i>
+                <input type="email" id="email" required placeholder="you@example.com">
+            </div>
+            <span class="input-accent-line"></span>
+        </div>
 
-                <!-- Password Input Group -->
-                <div class="input-group">
-                    <label for="password">Password</label>
-                    <div class="input-field-wrapper">
-                        <i class="fas fa-lock"></i>
-                        <input type="password" id="password" name="password" placeholder="Enter secure password" required>
-                        <!-- NEW: Password Visibility Toggle Button -->
-                        <button type="button" class="password-toggle" id="password-toggle-btn">
-                            <i class="fas fa-eye-slash"></i>
-                        </button>
-                    </div>
-                    <span class="input-accent-line"></span>
-                </div>
-            `;
+        <div class="input-group">
+            <label>Password</label>
+            <div class="input-field-wrapper">
+                <i class="fas fa-lock"></i>
+                <input type="password" id="password" required placeholder="Enter password">
+                <button type="button" class="password-toggle" id="password-toggle-btn">
+                    <i class="fas fa-eye-slash"></i>
+                </button>
+            </div>
+            <span class="input-accent-line"></span>
+        </div>
+    `;
+
             formContent.innerHTML = html;
+
+            const passwordToggleBtn = document.getElementById("password-toggle-btn");
+            passwordToggleBtn.addEventListener("click", togglePasswordVisibility);
         }
 
-        function renderUI(isAuthenticated, user = null) {
-            if (isAuthenticated && user && user.email) {
-                // Show Dashboard
-                authForm.style.display = 'none';
-                userDashboard.style.display = 'block';
-                formTitle.textContent = "Dashboard";
 
-                userIdDisplay.textContent = user.uid;
-                displayNameInfo.textContent = user.displayName || 'N/A (Update Profile)';
-                authStatus.textContent = user.isAnonymous ? 'Anonymous' : 'Email/Password User';
-
-            } else {
-                // Show Auth Form
-                authForm.style.display = 'block';
-                userDashboard.style.display = 'none';
-                updateFormMode(); // Ensure form mode is correct
-            }
-        }
-
-        /**
-         * Toggles the visibility of the password input field.
-         */
+        // TOGGLE PASSWORD VISIBILITY ----------
         function togglePasswordVisibility() {
-            const passwordInput = document.getElementById('password');
-            const toggleBtnIcon = document.querySelector('#password-toggle-btn i');
+            const passwordInput = document.getElementById("password");
+            const icon = document.querySelector("#password-toggle-btn i");
 
-            if (passwordInput && toggleBtnIcon) {
-                if (passwordInput.type === 'password') {
-                    passwordInput.type = 'text';
-                    toggleBtnIcon.classList.remove('fa-eye-slash');
-                    toggleBtnIcon.classList.add('fa-eye');
-                } else {
-                    passwordInput.type = 'password';
-                    toggleBtnIcon.classList.remove('fa-eye');
-                    toggleBtnIcon.classList.add('fa-eye-slash');
-                }
+            if (passwordInput.type === "password") {
+                passwordInput.type = "text";
+                icon.classList.replace("fa-eye-slash", "fa-eye");
+            } else {
+                passwordInput.type = "password";
+                icon.classList.replace("fa-eye", "fa-eye-slash");
             }
         }
 
 
+        // UPDATE FORM MODE (LOGIN / REGISTER) -
         function updateFormMode() {
-            formTitle.textContent = isLoginMode ? 'Sign In' : 'Create Account';
-            submitBtn.textContent = isLoginMode ? 'LOG IN' : 'REGISTER';
-            switchModeBtn.textContent = isLoginMode ? 'Need an account? Register' : 'Have an account? Log In';
+            formTitle.textContent = isLoginMode ? "Sign In" : "Create Account";
+            submitBtn.textContent = isLoginMode ? "LOG IN" : "REGISTER";
+            switchModeBtn.textContent = isLoginMode
+                ? "Need an account? Register"
+                : "Have an account? Log In";
 
             renderFormContent();
-
-            // Attach event listener for the password toggle button after rendering
-            const passwordToggleBtn = document.getElementById('password-toggle-btn');
-            if (passwordToggleBtn) {
-                passwordToggleBtn.addEventListener('click', togglePasswordVisibility);
-            }
         }
 
-        // --- AUTH ACTION HANDLERS ---
 
+        // LOGIN + REGISTER LOGIC -------------
         async function handleAuth(e) {
             e.preventDefault();
-            showMessage('Processing...', false);
+            showMessage("Processing...", false);
 
-            const email = authForm.email.value;
-            const password = authForm.password.value;
-            const name = isLoginMode ? null : authForm.name.value; // Only get name if registering
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
 
             try {
                 if (isLoginMode) {
-                    // LOGIN
-                    signInWithEmailAndPassword(auth, email, password)
+                    // ----- LOGIN -----
+                    const userCredential = await signInWithEmailAndPassword(auth, email, password);
 
+                    showMessage("Login successful! Redirecting...", false);
 
                     setTimeout(() => {
                         window.location.href = "index.html";
-                    }, 1000); // 1000ms = 1 second
-
-
-                    showMessage('Login successful! Redirecting...', false);
-
-                    // Optional: Redirect
-                    // window.location.href = "index.html";
+                    }, 1000);
 
                 } else {
-                    // REGISTER
+                    // ----- REGISTER -----
+                    const name = document.getElementById("name").value.trim();
+
                     const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
-                    // Save Display Name
                     if (name) {
-                        await updateProfile(userCredential.user, {
-                            displayName: name
-                        });
-                        console.log("Display name updated successfully.");
+                        await updateProfile(userCredential.user, { displayName: name });
                     }
 
-                    showMessage('Registration successful!', false);
-
-                    // Optional: Redirect
-                    // setTimeout(() => {
-                    //     window.location.href = "index.html";
-                    // }, 1200);
+                    showMessage("Registration successful!", false);
                 }
-            } catch (error) {
-                console.error("Authentication Error:", error);
-                let errorMessage = error.message.replace('Firebase: ', '');
 
-                if (error.code === 'auth/operation-not-allowed') {
-                    errorMessage = "Email/Password sign-in is disabled. Please enable Email/Password in Firebase Authentication.";
-                } else if (error.code === 'auth/weak-password') {
+            } catch (error) {
+                console.error("Auth Error:", error);
+
+                let errorMessage = "Authentication failed.";
+
+                if (error.code === "auth/wrong-password") {
+                    errorMessage = "Incorrect password.";
+                } else if (error.code === "auth/user-not-found") {
+                    errorMessage = "Email not found.";
+                } else if (error.code === "auth/invalid-email") {
+                    errorMessage = "Invalid email format.";
+                } else if (error.code === "auth/weak-password") {
                     errorMessage = "Password should be at least 6 characters.";
                 }
 
@@ -596,31 +531,31 @@
         }
 
 
+        // LOGOUT ------------------------------
         window.handleLogout = async function () {
             try {
                 await signOut(auth);
-                showMessage('You have been logged out.', false);
-            } catch (error) {
-                console.error("Logout Error:", error);
-                showMessage('Logout failed.', true);
+                showMessage("Logged out successfully.", false);
+            } catch {
+                showMessage("Logout failed.", true);
             }
-        }
+        };
 
-        // --- EVENT LISTENERS & STARTUP ---
 
-        authForm.addEventListener('submit', handleAuth);
+        // EVENT LISTENERS ---------------------
+        authForm.addEventListener("submit", handleAuth);
 
-        switchModeBtn.addEventListener('click', () => {
+        switchModeBtn.addEventListener("click", () => {
             isLoginMode = !isLoginMode;
             updateFormMode();
-            messageBox.style.display = 'none'; // Clear messages on mode switch
         });
 
-        // Start the application
-        initializeFirebase();
-        updateFormMode(); // Initial form render
 
+        // INIT -------------------------------
+        initializeFirebase();
+        updateFormMode();
     </script>
+
 </body>
 
 </html>

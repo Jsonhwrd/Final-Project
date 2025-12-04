@@ -631,14 +631,23 @@
                     <div>
                         <h4
                             class="text-lg font-semibold text-white mb-5 border-b-2 border-cyan-500/30 pb-1 inline-block">
-                            Legal</h4>
+                            Legal
+                        </h4>
                         <ul class="space-y-3 text-sm text-gray-400">
-                            <li><a href="#" class="hover:text-cyan-400 transition hover:translate-x-1 inline-block"
-                                    onclick="showMessage('Policy', 'View our detailed Privacy Policy.', event)">Privacy
-                                    Policy</a></li>
-                            <!-- UPDATED: Now links to a dedicated page -->
-                            <li><a href="#" class="hover:text-cyan-400 transition hover:translate-x-1 inline-block"
-                                    onclick="showPage('terms-of-service-page')">Terms of Service</a></li>
+                            <li>
+                                <a href="#" class="hover:text-cyan-400 transition hover:translate-x-1 inline-block"
+                                    onclick="showMessage('Policy', 'View our detailed Privacy Policy.', event)">
+                                    Privacy Policy
+                                </a>
+                            </li>
+
+                            <!-- FIXED: calls correct page -->
+                            <li>
+                                <a href="#" class="hover:text-cyan-400 transition hover:translate-x-1 inline-block"
+                                    onclick="showPage('terms-page')">
+                                    Terms of Service
+                                </a>
+                            </li>
                         </ul>
                     </div>
 
@@ -877,225 +886,236 @@
                 </div>
             </div>
 
+        </div> <!-- END OF PROFILE PAGE CONTENT -->
+    </div> <!-- END OF PROFILE PAGE WRAPPER -->
 
-            <!-- GIFT CARD PAGE -->
-            <div id="gift-card-page" class="page pt-20 pb-24">
-                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="text-center mb-16" data-aos="fade-down">
-                        <h2 class="text-4xl sm:text-5xl font-extrabold text-white mb-4">BulkBase Gift Cards</h2>
-                        <p class="text-lg sm:text-xl text-cyan-400">The perfect gift for any fitness enthusiast.</p>
-                    </div>
 
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
-                        <!-- Image/Design Placeholder -->
-                        <div class="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-cyan-500/50"
-                            data-aos="zoom-in-right">
-                            <img src="https://placehold.co/600x400/0A0A10/00BFFF?text=BULKBASE\nGIFT+CARD"
-                                alt="BulkBase Gift Card Design" class="w-full h-auto object-cover">
-                            <div class="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent"></div>
-                            <div class="absolute bottom-4 left-4 text-white text-3xl font-bold" id="card-display-value">
-                                $100
-                            </div>
-                        </div>
 
-                        <!-- Purchase Options -->
-                        <div class="space-y-6" data-aos="zoom-in-left">
-                            <div class="bg-secondary-bg p-6 rounded-2xl border border-gray-700 shadow-xl">
-                                <h3 class="text-2xl font-bold text-white mb-4">Choose Value</h3>
-                                <div class="grid grid-cols-2 gap-4">
-                                    <!-- Button Options. Data attribute used for value passing -->
-                                    <button data-value="25"
-                                        class="btn-secondary py-3 rounded-xl text-lg font-semibold hover:bg-cyan-500/20 hover:border-cyan-500 transition duration-150"
-                                        onclick="selectGiftCardValue(25)">$25 Gift Card</button>
-                                    <button data-value="50"
-                                        class="btn-secondary py-3 rounded-xl text-lg font-semibold hover:bg-cyan-500/20 hover:border-cyan-500 transition duration-150"
-                                        onclick="selectGiftCardValue(50)">$50 Gift Card</button>
-                                    <button data-value="100"
-                                        class="btn-secondary py-3 rounded-xl text-lg font-semibold hover:bg-cyan-500/20 hover:border-cyan-500 transition duration-150 border-cyan-500"
-                                        onclick="selectGiftCardValue(100)">$100 Gift Card</button>
-                                    <button data-value="200"
-                                        class="btn-secondary py-3 rounded-xl text-lg font-semibold hover:bg-cyan-500/20 hover:border-cyan-500 transition duration-150"
-                                        onclick="selectGiftCardValue(200)">$200 Gift Card</button>
-                                </div>
-                                <p id="selected-card-value" class="mt-4 text-center text-xl font-bold text-cyan-400">
-                                    Selected:
-                                    $100</p>
-
-                                <button class="btn-primary w-full text-black font-bold py-4 rounded-xl text-lg mt-6"
-                                    onclick="purchaseGiftCard()">
-                                    Purchase Digital Gift Card
-                                </button>
-                            </div>
-
-                            <div class="bg-secondary-bg p-6 rounded-2xl border border-gray-700 shadow-xl">
-                                <h4 class="text-xl font-bold text-white mb-3 flex items-center">
-                                    <i data-lucide="info" class="w-5 h-5 mr-2 text-cyan-500"></i> Details
-                                </h4>
-                                <ul class="text-sm text-gray-400 space-y-2 list-disc list-inside ml-4">
-                                    <li>Delivered instantly via email to your recipient.</li>
-                                    <li>No expiration date or hidden fees.</li>
-                                    <li>Redeemable on all products store-wide.</li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <!-- GIFT CARD PAGE (FIXED — NOW A TOP-LEVEL PAGE) -->
+    <div id="gift-card-page" class="page pt-20 pb-24 hidden">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16" data-aos="fade-down">
+                <h2 class="text-4xl sm:text-5xl font-extrabold text-white mb-4">BulkBase Gift Cards</h2>
+                <p class="text-lg sm:text-xl text-cyan-400">The perfect gift for any fitness enthusiast.</p>
             </div>
 
-            <!-- TERMS OF SERVICE PAGE -->
-            <div id="terms-of-service-page" class="page pt-20 pb-24">
-                <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-                    <div class="text-center mb-16" data-aos="fade-down">
-                        <h2 class="text-4xl sm:text-5xl font-extrabold text-white mb-4">Terms of Service</h2>
-                        <p class="text-lg sm:text-xl text-cyan-400">Last updated: December 2, 2025</p>
-                    </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
 
-                    <div class="bg-secondary-bg p-6 sm:p-8 rounded-2xl shadow-2xl border border-gray-700 space-y-8"
-                        data-aos="fade-up">
-
-                        <section class="space-y-4">
-                            <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-2">1. Agreement to
-                                Terms</h3>
-                            <p class="text-gray-400">By accessing or using the BulkBase website and purchasing any
-                                products, you
-                                agree to be bound by these Terms of Service (the "Terms"). If you do not agree to all of
-                                these
-                                Terms, then you are expressly prohibited from using the Site and you must discontinue
-                                use
-                                immediately.</p>
-                        </section>
-
-                        <section class="space-y-4">
-                            <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-2">2. Products and
-                                Availability
-                            </h3>
-                            <ul class="list-disc list-inside space-y-2 text-gray-400 ml-4">
-                                <li>All products listed on the site are subject to availability.</li>
-                                <li>We reserve the right to discontinue any product at any time.</li>
-                                <li>Prices for our products are subject to change without notice.</li>
-                                <li>Product statements have not been evaluated by the FDA and are not intended to
-                                    diagnose,
-                                    treat, cure, or prevent any disease.</li>
-                            </ul>
-                        </section>
-
-                        <section class="space-y-4">
-                            <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-2">3. User Conduct</h3>
-                            <p class="text-gray-400">You agree not to use the website for any purpose that is unlawful
-                                or
-                                prohibited by these Terms. This includes, but is not limited to, unauthorized access to
-                                our
-                                systems, posting offensive or illegal content, or violating any intellectual property
-                                rights.
-                            </p>
-                        </section>
-
-                        <section class="space-y-4">
-                            <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-2">4. Disclaimer of
-                                Warranties
-                            </h3>
-                            <p class="text-gray-400">The site and products are provided on an "as-is" and "as-available"
-                                basis.
-                                BulkBase makes no warranties, expressed or implied, regarding the operation of the Site
-                                or the
-                                information, content, materials, or products included on this Site.</p>
-                        </section>
-
-                        <section class="space-y-4">
-                            <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-2">5. Limitation of
-                                Liability
-                            </h3>
-                            <p class="text-gray-400">In no event shall BulkBase or its directors, employees, or agents
-                                be liable
-                                for any direct, indirect, incidental, punitive, special, or consequential damages
-                                arising from
-                                your use of any of the services or any products procured using the services, or for any
-                                other
-                                claim related in any way to your use of the service or any product.</p>
-                        </section>
-
-                        <div class="text-center pt-8 border-t border-gray-700">
-                            <p class="text-base text-cyan-400 font-semibold">For any questions about these Terms, please
-                                contact
-                                us directly.</p>
-                        </div>
+                <!-- Gift Card Image -->
+                <div class="relative rounded-2xl overflow-hidden shadow-2xl border-4 border-cyan-500/50"
+                    data-aos="zoom-in-right">
+                    <img src="https://placehold.co/600x400/0A0A10/00BFFF?text=BULKBASE\nGIFT+CARD"
+                        alt="BulkBase Gift Card Design" class="w-full h-auto object-cover">
+                    <div class="absolute inset-0 bg-gradient-to-t from-gray-900/50 to-transparent"></div>
+                    <div class="absolute bottom-4 left-4 text-white text-3xl font-bold" id="card-display-value">
+                        $100
                     </div>
                 </div>
+
+                <!-- Gift Card Options -->
+                <div class="space-y-6" data-aos="zoom-in-left">
+                    <div class="bg-secondary-bg p-6 rounded-2xl border border-gray-700 shadow-xl">
+                        <h3 class="text-2xl font-bold text-white mb-4">Choose Value</h3>
+                        <div class="grid grid-cols-2 gap-4">
+                            <button data-value="25"
+                                class="btn-secondary py-3 rounded-xl text-lg font-semibold hover:bg-cyan-500/20 hover:border-cyan-500 transition duration-150"
+                                onclick="selectGiftCardValue(25)">$25 Gift Card</button>
+                            <button data-value="50"
+                                class="btn-secondary py-3 rounded-xl text-lg font-semibold hover:bg-cyan-500/20 hover:border-cyan-500 transition duration-150"
+                                onclick="selectGiftCardValue(50)">$50 Gift Card</button>
+                            <button data-value="100"
+                                class="btn-secondary py-3 rounded-xl text-lg font-semibold hover:bg-cyan-500/20 hover:border-cyan-500 transition duration-150 border-cyan-500"
+                                onclick="selectGiftCardValue(100)">$100 Gift Card</button>
+                            <button data-value="200"
+                                class="btn-secondary py-3 rounded-xl text-lg font-semibold hover:bg-cyan-500/20 hover:border-cyan-500 transition duration-150"
+                                onclick="selectGiftCardValue(200)">$200 Gift Card</button>
+                        </div>
+                        <p id="selected-card-value" class="mt-4 text-center text-xl font-bold text-cyan-400">
+                            Selected: $100
+                        </p>
+
+                        <button class="btn-primary w-full text-black font-bold py-4 rounded-xl text-lg mt-6"
+                            onclick="purchaseGiftCard()">
+                            Purchase Digital Gift Card
+                        </button>
+                    </div>
+
+                    <div class="bg-secondary-bg p-6 rounded-2xl border border-gray-700 shadow-xl">
+                        <h4 class="text-xl font-bold text-white mb-3 flex items-center">
+                            <i data-lucide="info" class="w-5 h-5 mr-2 text-cyan-500"></i> Details
+                        </h4>
+                        <ul class="text-sm text-gray-400 space-y-2 list-disc list-inside ml-4">
+                            <li>Delivered instantly via email to your recipient.</li>
+                            <li>No expiration date or hidden fees.</li>
+                            <li>Redeemable on all products store-wide.</li>
+                        </ul>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- TERMS OF SERVICE PAGE (FIXED — NOW A TOP-LEVEL PAGE) -->
+    <div id="terms-page" class="page hidden pt-20 pb-24">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <!-- Header -->
+            <div class="text-center mb-16" data-aos="fade-down">
+                <h2 class="text-4xl sm:text-5xl font-extrabold text-white mb-4">Terms of Service</h2>
+                <p class="text-lg sm:text-xl text-cyan-400">Last updated: December 2, 2025</p>
             </div>
 
-            <script src="js/main.js"></script>
+            <div class="bg-secondary-bg p-6 sm:p-8 rounded-2xl shadow-2xl border border-gray-700 space-y-8"
+                data-aos="fade-up">
+
+                <section class="space-y-4">
+                    <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-2">1. Agreement to
+                        Terms</h3>
+                    <p class="text-gray-400">By accessing or using the BulkBase website and purchasing any
+                        products, you
+                        agree to be bound by these Terms of Service (the "Terms"). If you do not agree to all of
+                        these
+                        Terms, then you are expressly prohibited from using the Site and you must discontinue
+                        use
+                        immediately.</p>
+                </section>
+
+                <section class="space-y-4">
+                    <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-2">2. Products and
+                        Availability
+                    </h3>
+                    <ul class="list-disc list-inside space-y-2 text-gray-400 ml-4">
+                        <li>All products listed on the site are subject to availability.</li>
+                        <li>We reserve the right to discontinue any product at any time.</li>
+                        <li>Prices for our products are subject to change without notice.</li>
+                        <li>Product statements have not been evaluated by the FDA and are not intended to
+                            diagnose,
+                            treat, cure, or prevent any disease.</li>
+                    </ul>
+                </section>
+
+                <section class="space-y-4">
+                    <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-2">3. User Conduct</h3>
+                    <p class="text-gray-400">You agree not to use the website for any purpose that is unlawful
+                        or
+                        prohibited by these Terms. This includes, but is not limited to, unauthorized access to
+                        our
+                        systems, posting offensive or illegal content, or violating any intellectual property
+                        rights.
+                    </p>
+                </section>
+
+                <section class="space-y-4">
+                    <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-2">4. Disclaimer of
+                        Warranties
+                    </h3>
+                    <p class="text-gray-400">The site and products are provided on an "as-is" and "as-available"
+                        basis.
+                        BulkBase makes no warranties, expressed or implied, regarding the operation of the Site
+                        or the
+                        information, content, materials, or products included on this Site.</p>
+                </section>
+
+                <section class="space-y-4">
+                    <h3 class="text-2xl font-bold text-white border-b border-gray-700 pb-2">5. Limitation of
+                        Liability
+                    </h3>
+                    <p class="text-gray-400">In no event shall BulkBase or its directors, employees, or agents
+                        be liable
+                        for any direct, indirect, incidental, punitive, special, or consequential damages
+                        arising from
+                        your use of any of the services or any products procured using the services, or for any
+                        other
+                        claim related in any way to your use of the service or any product.</p>
+                </section>
+
+                <div class="text-center pt-8 border-t border-gray-700">
+                    <p class="text-base text-cyan-400 font-semibold">For any questions about these Terms, please
+                        contact
+                        us directly.</p>
+
+                </div>
+            </div>
+        </div>
+
+
+
+        <script src="js/main.js"></script>
 
 
 
 
 
-            <script type="module">
+        <script type="module">
 
-                /* ======================================================
-                   🔥 FIREBASE INITIALIZATION
-                ====================================================== */
-                import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-                import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+            /* ======================================================
+               🔥 FIREBASE INITIALIZATION
+            ====================================================== */
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+            import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
-                const firebaseConfig = {
-                    apiKey: "AIzaSyCqTre32R-JxlgqP7HhJ0ZufEeFtFSrOuo",
-                    authDomain: "login-page-e809f.firebaseapp.com",
-                    projectId: "login-page-e809f",
-                    storageBucket: "login-page-e809f.firebasestorage.app",
-                    messagingSenderId: "204682041114",
-                    appId: "1:204682041114:web:0cff442a3a2a94010fbea3"
-                };
+            const firebaseConfig = {
+                apiKey: "AIzaSyCqTre32R-JxlgqP7HhJ0ZufEeFtFSrOuo",
+                authDomain: "login-page-e809f.firebaseapp.com",
+                projectId: "login-page-e809f",
+                storageBucket: "login-page-e809f.firebasestorage.app",
+                messagingSenderId: "204682041114",
+                appId: "1:204682041114:web:0cff442a3a2a94010fbea3"
+            };
 
-                const app = initializeApp(firebaseConfig);
-                const auth = getAuth(app);
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
 
-                /* ======================================================
-                   🔐 AUTH LISTENER + PROFILE AUTO UPDATE
-                ====================================================== */
-                onAuthStateChanged(auth, (user) => {
-                    if (!user) {
-                        window.location.href = "login.html";
-                        return;
-                    }
-
-                    document.getElementById("profile-name").textContent = user.displayName || "User";
-                    document.getElementById("profile-email").textContent = user.email;
-
-                    const joined = new Date(user.metadata.creationTime);
-                    document.getElementById("profile-member-since").textContent =
-                        `${joined.getDate()} ${joined.toLocaleString("en-US", { month: "short" })} ${joined.getFullYear()}`;
-
-                    loadUserReviews();
-                });
-
-                /* LOGOUT */
-                window.realLogout = async function () {
-                    await signOut(auth);
+            /* ======================================================
+               🔐 AUTH LISTENER + PROFILE AUTO UPDATE
+            ====================================================== */
+            onAuthStateChanged(auth, (user) => {
+                if (!user) {
                     window.location.href = "login.html";
-                };
+                    return;
+                }
+
+                document.getElementById("profile-name").textContent = user.displayName || "User";
+                document.getElementById("profile-email").textContent = user.email;
+
+                const joined = new Date(user.metadata.creationTime);
+                document.getElementById("profile-member-since").textContent =
+                    `${joined.getDate()} ${joined.toLocaleString("en-US", { month: "short" })} ${joined.getFullYear()}`;
+
+                loadUserReviews();
+            });
+
+            /* LOGOUT */
+            window.realLogout = async function () {
+                await signOut(auth);
+                window.location.href = "login.html";
+            };
 
 
-                /* ======================================================
-                   ⭐ LOAD USER REVIEWS (PREMIUM VERSION)
-                ====================================================== */
+            /* ======================================================
+               ⭐ LOAD USER REVIEWS (PREMIUM VERSION)
+            ====================================================== */
 
-                function loadUserReviews() {
-                    const track = document.getElementById("user-reviews-carousel");
-                    if (!track) return;
+            function loadUserReviews() {
+                const track = document.getElementById("user-reviews-carousel");
+                if (!track) return;
 
-                    const saved = JSON.parse(localStorage.getItem("bulkbase_reviews") || "[]");
+                const saved = JSON.parse(localStorage.getItem("bulkbase_reviews") || "[]");
 
-                    if (saved.length === 0) {
-                        track.innerHTML = `
+                if (saved.length === 0) {
+                    track.innerHTML = `
             <p class="text-gray-400 text-center w-full py-10 italic">
                 No reviews yet — be the first to review!
             </p>`;
-                        return;
-                    }
+                    return;
+                }
 
-                    const latest = saved.slice(0, 12);
+                const latest = saved.slice(0, 12);
 
-                    track.innerHTML = latest.map(r => `
+                track.innerHTML = latest.map(r => `
         <div class="review-card premium-card">
             <div class="review-stars">
                 ${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}
@@ -1109,109 +1129,109 @@
         </div>
     `).join("");
 
-                    initPremiumCarousel();
+                initPremiumCarousel();
+            }
+
+
+            /* ======================================================
+               PREMIUM 3D CAROUSEL ENGINE
+            ====================================================== */
+
+            function initPremiumCarousel() {
+                const track = document.getElementById("user-reviews-carousel");
+                if (!track) return;
+
+                const cards = [...track.children];
+                let index = 0;
+
+                function updateCarousel() {
+                    cards.forEach((c, i) => {
+                        c.classList.remove("active");
+                        if (i === index) c.classList.add("active");
+
+                        const offset = (i - index) * 380;
+                        c.style.transform = `translateX(${offset}px)`;
+                    });
                 }
 
+                updateCarousel();
 
-                /* ======================================================
-                   PREMIUM 3D CAROUSEL ENGINE
-                ====================================================== */
-
-                function initPremiumCarousel() {
-                    const track = document.getElementById("user-reviews-carousel");
-                    if (!track) return;
-
-                    const cards = [...track.children];
-                    let index = 0;
-
-                    function updateCarousel() {
-                        cards.forEach((c, i) => {
-                            c.classList.remove("active");
-                            if (i === index) c.classList.add("active");
-
-                            const offset = (i - index) * 380;
-                            c.style.transform = `translateX(${offset}px)`;
-                        });
-                    }
-
+                /* === Arrow Buttons === */
+                document.getElementById("review-prev").onclick = () => {
+                    index = (index - 1 + cards.length) % cards.length;
                     updateCarousel();
-
-                    /* === Arrow Buttons === */
-                    document.getElementById("review-prev").onclick = () => {
-                        index = (index - 1 + cards.length) % cards.length;
-                        updateCarousel();
-                    };
-
-                    document.getElementById("review-next").onclick = () => {
-                        index = (index + 1) % cards.length;
-                        updateCarousel();
-                    };
-
-                    /* === Auto Slide === */
-                    setInterval(() => {
-                        index = (index + 1) % cards.length;
-                        updateCarousel();
-                    }, 4000);
-
-                    /* === Drag to slide === */
-                    let startX = 0;
-                    let dragging = false;
-
-                    track.addEventListener("mousedown", e => {
-                        dragging = true;
-                        startX = e.pageX;
-                    });
-
-                    window.addEventListener("mouseup", () => dragging = false);
-
-                    window.addEventListener("mousemove", e => {
-                        if (!dragging) return;
-
-                        const diff = e.pageX - startX;
-
-                        if (diff > 50) {
-                            document.getElementById("review-prev").click();
-                            dragging = false;
-                        }
-
-                        if (diff < -50) {
-                            document.getElementById("review-next").click();
-                            dragging = false;
-                        }
-                    });
-                }
-
-
-                /* ======================================================
-                   STARTUP
-                ====================================================== */
-                document.addEventListener("DOMContentLoaded", loadUserReviews);
-
-
-                /* ======================================================
-                   🛒 CHECKOUT HANDLER
-                ====================================================== */
-                window.handleCheckout = function () {
-                    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-                    if (cart.length === 0) {
-                        alert("Your cart is empty!");
-                        return;
-                    }
-                    window.location.href = "checkout.html";
                 };
 
-                // Hook flavour modal "Add to Cart" button
-                document.addEventListener("DOMContentLoaded", () => {
-                    const flavourAddBtn = document.getElementById("flavour-add-btn");
-                    if (flavourAddBtn && window.confirmFlavourAndAdd) {
-                        flavourAddBtn.addEventListener("click", () => {
-                            window.confirmFlavourAndAdd();
-                        });
-                    }
+                document.getElementById("review-next").onclick = () => {
+                    index = (index + 1) % cards.length;
+                    updateCarousel();
+                };
+
+                /* === Auto Slide === */
+                setInterval(() => {
+                    index = (index + 1) % cards.length;
+                    updateCarousel();
+                }, 4000);
+
+                /* === Drag to slide === */
+                let startX = 0;
+                let dragging = false;
+
+                track.addEventListener("mousedown", e => {
+                    dragging = true;
+                    startX = e.pageX;
                 });
 
+                window.addEventListener("mouseup", () => dragging = false);
 
-            </script>
+                window.addEventListener("mousemove", e => {
+                    if (!dragging) return;
+
+                    const diff = e.pageX - startX;
+
+                    if (diff > 50) {
+                        document.getElementById("review-prev").click();
+                        dragging = false;
+                    }
+
+                    if (diff < -50) {
+                        document.getElementById("review-next").click();
+                        dragging = false;
+                    }
+                });
+            }
+
+
+            /* ======================================================
+               STARTUP
+            ====================================================== */
+            document.addEventListener("DOMContentLoaded", loadUserReviews);
+
+
+            /* ======================================================
+               🛒 CHECKOUT HANDLER
+            ====================================================== */
+            window.handleCheckout = function () {
+                const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+                if (cart.length === 0) {
+                    alert("Your cart is empty!");
+                    return;
+                }
+                window.location.href = "checkout.html";
+            };
+
+            // Hook flavour modal "Add to Cart" button
+            document.addEventListener("DOMContentLoaded", () => {
+                const flavourAddBtn = document.getElementById("flavour-add-btn");
+                if (flavourAddBtn && window.confirmFlavourAndAdd) {
+                    flavourAddBtn.addEventListener("click", () => {
+                        window.confirmFlavourAndAdd();
+                    });
+                }
+            });
+
+
+        </script>
 
 
 

@@ -358,24 +358,31 @@ const mobileMenuButton = document.getElementById('mobile-menu-button');
 if (mobileMenuButton) {
     mobileMenuButton.addEventListener('click', () => toggleMobileMenu());
 }
-
+// PAGE CONTROLLER
 const showPage = (pageId) => {
+    // Hide all pages
     document.querySelectorAll('.page').forEach(page => {
         page.classList.remove('active');
+        page.classList.add('hidden');    // make sure it is hidden
     });
 
+    // Show selected page
     const target = document.getElementById(pageId);
     if (target) {
         target.classList.add('active');
+        target.classList.remove('hidden');   // make sure it is shown
     }
 
-    // Load orders
+    // Load orders when opening profile page
     if (pageId === "profile-page") {
         loadOrderHistory();
     }
 
+    // Scroll to top
     window.scrollTo(0, 0);
 };
+
+
 
 
 const showProductDetail = (productId) => {
@@ -540,8 +547,3 @@ function setupHistoryToggle() {
         }
     });
 }
-
-
-
-
-
