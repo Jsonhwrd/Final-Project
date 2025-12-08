@@ -524,3 +524,19 @@
      opacity: 1;
      transform: translateY(0);
  }
+
+ @keyframes tierPulse {
+
+     0%,
+     100% {
+         text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+     }
+
+     50% {
+         text-shadow: 0 0 22px rgba(255, 255, 255, 0.9);
+     }
+ }
+
+ .tier-pulse {
+     animation: tierPulse 1.8s infinite ease-in-out;
+ }

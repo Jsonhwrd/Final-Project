@@ -364,6 +364,39 @@ function calculateProgressToNextTier(orderCount) {
     return Math.min(100, Math.round(((orderCount - start) / (end - start)) * 100));
 }
 
+function applyTierTextColor(tier) {
+    const tierTextEl = document.getElementById("stat-tier");
+    if (!tierTextEl) return;
+
+    // Reset previous classes/colors
+    tierTextEl.style.color = "";
+    tierTextEl.style.textShadow = "";
+
+    const tierGlow = {
+        "New Member": {
+            color: "#9ca3af",
+            glow: "0 0 6px rgba(156,163,175,0.5)"
+        },
+        "Silver": {
+            color: "#cfd8ea",
+            glow: "0 0 8px rgba(200,200,255,0.6)"
+        },
+        "Gold": {
+            color: "#ffd86b",
+            glow: "0 0 10px rgba(255,215,100,0.7)"
+        },
+        "Elite": {
+            color: "#00eaff",
+            glow: "0 0 16px rgba(0,234,255,0.9)"
+        }
+    };
+
+    const theme = tierGlow[tier] || tierGlow["New Member"];
+
+    tierTextEl.style.color = theme.color;
+    tierTextEl.style.textShadow = theme.glow;
+}
+
 
 /* =========================================================
    ANALYTICS ENGINE + REAL-TIME PROGRESS BAR
@@ -420,6 +453,8 @@ function loadProfileAnalytics() {
 
 
     statTier.textContent = tier;
+    applyTierTextColor(tier);
+
 
     if (tierBadge) {
         tierBadge.textContent = tier;
