@@ -1,653 +1,1008 @@
-// 1. Initialise Icons and AOS
-document.addEventListener('DOMContentLoaded', () => {
-    if (window.lucide) {
-        lucide.createIcons();
-    }
+/* =========================================================
+   BOOT + UI INIT
+========================================================= */
+document.addEventListener("DOMContentLoaded", () => {
+    if (window.lucide) lucide.createIcons();
     if (window.AOS) {
-        AOS.init({
-            duration: 1000,
-            once: true,
-            // Disable AOS on smaller screens (less than 768px) for performance
-            disable: window.innerWidth < 768,
-        });
-        // Re-initialize AOS on resize to handle changes across breakpoints
-        window.addEventListener('resize', () => {
-            AOS.init({ disable: window.innerWidth < 768 });
-        });
+        AOS.init({ duration: 1000, once: true, disable: window.innerWidth < 768 });
+        window.addEventListener("resize", () =>
+            AOS.init({ disable: window.innerWidth < 768 })
+        );
     }
 
-    // Default gift card state + render cart from localStorage
+    // Default gift card
     selectGiftCardValue(100);
+
+    // Initial cart render
     updateCartDisplay();
+
+    // If profile page is the first page shown, make sure analytics are ready
+    if (document.getElementById("profile-page")?.classList.contains("active")) {
+        loadProfileAnalytics();
+        initProfileSection();
+    }
 });
 
-// 2. Product and Cart Data (with flavours)
+
+/* =========================================================
+   PRODUCT DATABASE
+========================================================= */
 const products = {
-    // Whey: Chocolate, Vanilla, Cookies & Cream
-    'bbwhey49': {
-        name: 'Isolate Whey',
+    bbwhey49: {
+        name: "Isolate Whey",
         price: 49.99,
-        img: 'source/image.jpg',
-        flavours: ['Chocolate', 'Vanilla', 'Cookies & Cream']
+        img: "source/image.jpg",
+        flavours: ["Chocolate", "Vanilla", "Cookies & Cream"],
     },
-    // Creatine: Unflavoured
-    'bbcreat29': {
-        name: 'Micronized Creatine',
+    bbcreat29: {
+        name: "Micronized Creatine",
         price: 29.99,
-        img: 'source/creatine 2.jpg',
-        flavours: ['Unflavoured']
+        img: "source/creatine 2.jpg",
+        flavours: ["Unflavoured"],
     },
-    // BCAA: Mango, Lemon Lime
-    'bbpre34': {
-        name: 'Essential BCAA',
+    bbpre34: {
+        name: "Essential BCAA",
         price: 34.99,
-        img: 'source/bcaa.jpg',
-        flavours: ['Mango', 'Lemon Lime']
-    }
+        img: "source/bcaa.jpg",
+        flavours: ["Mango", "Lemon Lime"],
+    },
 };
 
-// 🔒 Persistent cart stored in localStorage (so checkout.html can read it)
-let cart = JSON.parse(localStorage.getItem('cart') || '[]');
-let selectedCardValue = 100; // State for the gift card value
-
-// 🧃 Flavour selection modal state
+let cart = JSON.parse(localStorage.getItem("cart") || "[]");
 let flavourProductId = null;
 let currentSelectedFlavour = null;
 
-// Open flavour selector for a specific product
-window.openFlavourSelector = function (productId) {
-    const product = products[productId];
-    const modal = document.getElementById('flavour-modal');
-    const titleEl = document.getElementById('flavour-modal-title');
-    const flavourOptions = document.getElementById('flavour-options');
 
-    if (!product || !modal || !titleEl || !flavourOptions) return;
+/* =========================================================
+   FLAVOUR MODAL
+========================================================= */
+window.openFlavourSelector = function (id) {
+    const product = products[id];
+    const modal = document.getElementById("flavour-modal");
+    const title = document.getElementById("flavour-modal-title");
+    const list = document.getElementById("flavour-options");
+    if (!product || !modal || !title || !list) return;
 
-    flavourProductId = productId;
+    flavourProductId = id;
     currentSelectedFlavour = null;
 
-    titleEl.textContent = `Choose flavour for ${product.name}`;
-    flavourOptions.innerHTML = '';
+    modal.classList.remove("hidden");
+    modal.classList.add("flex");
+    title.textContent = `Choose flavour for ${product.name}`;
+    list.innerHTML = "";
 
-    const flavours = product.flavours && product.flavours.length
-        ? product.flavours
-        : ['Standard'];
-
-    flavours.forEach(flavour => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.textContent = flavour;
-        btn.dataset.flavour = flavour;
-
-        // ⭐ NEW PREMIUM BUTTON STYLE
-        btn.className = `
-        flavour-option
-        w-full p-4 rounded-2xl border flex items-center justify-between
-        bg-gray-900/40 border-cyan-400/20 text-gray-200
-        hover:border-cyan-400 hover:bg-gray-900/60
-        transition-all duration-200 cursor-pointer
-        mb-3
-    `;
-
-        // ⭐ Animated tick
-        const tick = document.createElement('span');
-        tick.innerHTML = '✔';
-        tick.className = 'opacity-0 text-cyan-400 text-sm ml-3 transition-all';
-        btn.appendChild(tick);
-
-        // ⭐ When selected
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('#flavour-options .flavour-option').forEach(el => {
-                el.classList.remove(
-                    "border-cyan-400",
-                    "bg-cyan-500/10",
-                    "text-cyan-300",
-                    "shadow-[0_0_20px_rgba(0,255,255,0.25)]",
-                    "ring-2", "ring-cyan-400", "bg-gray-900"
-                );
-                el.querySelector('span').classList.add('opacity-0');
-            });
-
-            // ⭐ Selected glowing state
-            btn.classList.add(
-                "border-cyan-400",
-                "bg-cyan-500/10",
-                "text-cyan-300",
-                "shadow-[0_0_20px_rgba(0,255,255,0.25)]"
+    product.flavours.forEach((flavour) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className =
+            "flavour-option w-full p-4 bg-gray-900/40 text-gray-200 border border-cyan-400/20 rounded-xl hover:border-cyan-400 hover:bg-gray-900/60 transition flex justify-between items-center mb-3";
+        btn.innerHTML = `
+            <span>${flavour}</span>
+            <span class="opacity-0 ml-2 text-cyan-400">✔</span>
+        `;
+        btn.onclick = () => {
+            document.querySelectorAll(".flavour-option span:last-child").forEach((el) =>
+                el.classList.add("opacity-0")
             );
-
-            tick.classList.remove('opacity-0');
+            btn.querySelector("span:last-child").classList.remove("opacity-0");
             currentSelectedFlavour = flavour;
-        });
-
-        flavourOptions.appendChild(btn);
+        };
+        list.appendChild(btn);
     });
-
-
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
 };
 
-// Close flavour modal
 window.closeFlavourModal = function () {
-    const modal = document.getElementById('flavour-modal');
+    const modal = document.getElementById("flavour-modal");
     if (!modal) return;
-
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
     flavourProductId = null;
     currentSelectedFlavour = null;
 };
 
-
-// Confirm flavour and add to cart
 window.confirmFlavourAndAdd = function () {
-    if (!flavourProductId) {
-        closeFlavourModal();
-        return;
-    }
-
+    if (!flavourProductId) return closeFlavourModal();
     const product = products[flavourProductId];
-    if (!product) {
-        closeFlavourModal();
-        return;
+    if (!product) return closeFlavourModal();
+
+    if (!currentSelectedFlavour && product.flavours.length === 1) {
+        currentSelectedFlavour = product.flavours[0];
     }
 
-    // If only one flavour, auto-select it
     if (!currentSelectedFlavour) {
-        if (product.flavours && product.flavours.length === 1) {
-            currentSelectedFlavour = product.flavours[0];
-        } else {
-            // no flavour selected and multiple options
-            const msgBox = document.getElementById('message-box');
-            if (msgBox) {
-                // reuse global message UI
-                showMessage('Select a Flavour', 'Please pick a flavour before adding to cart.');
-            }
-            return;
-        }
+        showMessage("Select a Flavour", "Please pick a flavour before adding to cart.");
+        return;
     }
 
     addToCart(flavourProductId, currentSelectedFlavour);
     closeFlavourModal();
-
-    // Open cart with a nice slide-in after adding
     toggleCart(true);
 };
 
-const saveCart = () => {
-    localStorage.setItem('cart', JSON.stringify(cart));
-};
 
+/* =========================================================
+   CART SYSTEM
+========================================================= */
+function saveCart() {
+    localStorage.setItem("cart", JSON.stringify(cart));
+}
 
-// 3. Core Cart Functions
-const updateCartDisplay = () => {
-    const cartItemsContainer = document.getElementById('cart-items');
-    const cartCount = document.getElementById('cart-count');
-    const cartTotal = document.getElementById('cart-total');
-    const checkoutBtn = document.getElementById('checkout-btn');
+function updateCartDisplay() {
+    const container = document.getElementById("cart-items");
+    const count = document.getElementById("cart-count");
+    const totalEl = document.getElementById("cart-total");
+    const btn = document.getElementById("checkout-btn");
+    if (!container || !count || !totalEl || !btn) return;
 
-    if (!cartItemsContainer || !cartCount || !cartTotal || !checkoutBtn) return;
-
+    container.innerHTML = "";
     let total = 0;
-    let count = 0;
-    cartItemsContainer.innerHTML = '';
+    let qty = 0;
 
-    if (cart.length === 0) {
-        cartItemsContainer.innerHTML =
-            '<p class="text-gray-500 text-center italic mt-4">Your cart is empty.</p>';
-        checkoutBtn.disabled = true;
-        checkoutBtn.classList.add('opacity-50', 'cursor-not-allowed');
+    if (!cart.length) {
+        container.innerHTML =
+            `<p class="text-gray-500 text-center italic mt-4">Your cart is empty.</p>`;
+        btn.disabled = true;
+        btn.classList.add("opacity-50", "cursor-not-allowed");
     } else {
-        checkoutBtn.disabled = false;
-        checkoutBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+        btn.disabled = false;
+        btn.classList.remove("opacity-50", "cursor-not-allowed");
 
-        cart.forEach(item => {
+        cart.forEach((item) => {
+            qty += item.quantity;
             total += item.price * item.quantity;
-            count += item.quantity;
 
-            const itemHtml = `
-    <div class="flex items-center space-x-4 p-3 bg-gray-800 rounded-lg">
-        <img src="${item.img}" alt="${item.name}"
-             class="w-12 h-12 rounded object-cover border border-gray-700">
-        <div class="flex-grow">
-            <p class="font-semibold text-white truncate">${item.name}</p>
-            ${item.flavour ? `<p class="text-xs text-cyan-300">Flavour: ${item.flavour}</p>` : ''}
-            <p class="text-sm text-gray-400">Qty: ${item.quantity}</p>
-            <p class="text-sm text-cyan-400">$${item.price.toFixed(2)}</p>
-        </div>
-        <button onclick="removeFromCart('${item.id}')"
-                class="text-gray-500 hover:text-red-500 transition p-1">
-            <i data-lucide="trash-2" class="w-5 h-5"></i>
-        </button>
-    </div>
-`;
-
-            cartItemsContainer.insertAdjacentHTML('beforeend', itemHtml);
+            container.insertAdjacentHTML(
+                "beforeend",
+                `
+                <div class="flex items-center space-x-4 p-3 bg-gray-800 rounded-lg">
+                    <img src="${item.img}" class="w-12 h-12 rounded border border-gray-700 object-cover">
+                    <div class="flex-grow">
+                        <p class="font-semibold text-white truncate">${item.name}</p>
+                        ${item.flavour
+                    ? `<p class="text-xs text-cyan-300">Flavour: ${item.flavour}</p>`
+                    : ""
+                }
+                        <p class="text-sm text-gray-400">Qty: ${item.quantity}</p>
+                        <p class="text-sm text-cyan-400">$${item.price.toFixed(2)}</p>
+                    </div>
+                    <button onclick="removeFromCart('${item.id}')"
+                            class="text-gray-500 hover:text-red-500 transition p-1">
+                        <i data-lucide="trash-2" class="w-5 h-5"></i>
+                    </button>
+                </div>
+                `
+            );
         });
 
-        if (window.lucide) {
-            lucide.createIcons(); // Re-render icons for new items
-        }
+        if (window.lucide) lucide.createIcons();
     }
 
-    cartCount.textContent = count;
-    cartTotal.textContent = `$${total.toFixed(2)}`;
-};
+    count.textContent = qty;
+    totalEl.textContent = `$${total.toFixed(2)}`;
+}
 
-// Add item to cart (with flavour, quantity, and stored in localStorage)
-const addToCart = (productId, flavour = null) => {
-    const product = products[productId];
+function addToCart(id, flavour = null) {
+    const product = products[id];
     if (!product) return;
 
-    // Treat same product + same flavour as one line item
-    const existing = cart.find(
-        item => item.productId === productId && item.flavour === flavour
-    );
-
+    const existing = cart.find((i) => i.productId === id && i.flavour === flavour);
     if (existing) {
-        existing.quantity += 1;
+        existing.quantity++;
     } else {
         cart.push({
             id: Date.now(),
-            productId,
+            productId: id,
             name: product.name,
             price: product.price,
             img: product.img,
             quantity: 1,
-            flavour: flavour
+            flavour,
         });
     }
 
     saveCart();
     updateCartDisplay();
     showMessage(
-        'Item Added!',
-        `${product.name}${flavour ? ' - ' + flavour : ''} has been added to your cart.`
+        "Item Added!",
+        `${product.name}${flavour ? " - " + flavour : ""} has been added to your cart.`
     );
-};
+}
 
-// Remove item from cart
-const removeFromCart = (itemId) => {
-    cart = cart.filter(item => String(item.id) !== String(itemId));
+function removeFromCart(id) {
+    cart = cart.filter((item) => String(item.id) !== String(id));
     saveCart();
     updateCartDisplay();
-};
+}
 
-// Open / close cart panel
-const toggleCart = (open) => {
-    const cartPanel = document.getElementById('cart-panel');
-    const overlay = document.getElementById('overlay');
+function toggleCart(show) {
+    const panel = document.getElementById("cart-panel");
+    const overlay = document.getElementById("overlay");
+    if (!panel || !overlay) return;
 
-    if (!cartPanel || !overlay) return;
-
-    if (open) {
-        cartPanel.classList.add('open');
-        overlay.classList.add('active');
+    if (show) {
+        panel.classList.add("open");
+        overlay.classList.add("active");
         updateCartDisplay();
     } else {
-        cartPanel.classList.remove('open');
-        overlay.classList.remove('active');
+        panel.classList.remove("open");
+        overlay.classList.remove("active");
     }
+}
+
+
+/* =========================================================
+   ORDER STORAGE / HELPERS
+========================================================= */
+function getOrders() {
+    return JSON.parse(localStorage.getItem("orders") || "[]");
+}
+
+function buildOrderCard(order) {
+    const itemList = order.items
+        .map(i => `<li class="flex justify-between text-gray-300 text-sm">
+                      <span>${i.name} x${i.quantity}</span>
+                      <span class="text-cyan-300">$${(i.price * i.quantity).toFixed(2)}</span>
+                   </li>`)
+        .join("");
+
+    const status = order.status || "Delivered";
+    const badgeColor =
+        status === "Delivered" ? "bg-green-500/20 text-green-400" :
+            status === "Processing" ? "bg-yellow-500/20 text-yellow-400" :
+                "bg-red-500/20 text-red-400";
+
+    return `
+        <div class="order-card p-5 bg-gray-800/80 border border-gray-700 rounded-2xl shadow hover:border-cyan-400 transition cursor-pointer group">
+
+            <div class="flex justify-between items-center mb-2">
+                <p class="font-bold text-white">Order #${order.id}</p>
+                <span class="text-cyan-400 text-lg font-semibold">$${Number(order.total || 0).toFixed(2)}</span>
+            </div>
+
+            <p class="text-xs text-gray-500">${order.date}</p>
+
+            <div class="mt-2 inline-block px-3 py-1 rounded-full text-xs font-semibold ${badgeColor}">
+                ${status}
+            </div>
+
+            <div class="order-items hidden mt-4 border-t border-gray-700 pt-3">
+                <ul class="space-y-2">${itemList}</ul>
+            </div>
+
+            <div class="mt-2 flex text-cyan-400 text-xs opacity-60 group-hover:opacity-100 transition">
+                <i data-lucide="chevron-down" class="w-3 h-3 mr-1"></i>
+                Click to view details
+            </div>
+        </div>
+    `;
+}
+/* =========================================================
+   TIER BENEFITS PER UNLOCK
+========================================================= */
+const tierBenefits = {
+    "New Member": [
+        "Welcome badge unlocked 🎉",
+        "You start earning reward points!"
+    ],
+    "Silver": [
+        "2% cashback on every order ⭐",
+        "Priority support access",
+        "Exclusive monthly promo"
+    ],
+    "Gold": [
+        "5% cashback on every order ✨",
+        "VIP early product access",
+        "Free sample in every order"
+    ],
+    "Elite": [
+        "10% cashback 🔥",
+        "Invite-only product drops",
+        "Birthday gift pack",
+        "Expedited support channel"
+    ]
 };
 
-// Gift Card Functions
-// =============================
-// ANIMATED GIFT CARD SYSTEM
-// =============================
 
-// Counter animation
+/* =========================================================
+   TIER THRESHOLDS
+   (Orders needed for each tier)
+========================================================= */
+const tierThresholds = {
+    "New Member": 0,
+    Silver: 10,
+    Gold: 25,
+    Elite: 60,
+};
+
+/* =========================================================
+   TIER COLOR THEMES FOR UI
+========================================================= */
+const tierColors = {
+    "New Member": {
+        badge: "#6b7280",      // gray
+        bar: "#6b7280",
+        glow: "rgba(107,114,128,0.3)",
+    },
+    Silver: {
+        badge: "#c0c0c0",
+        bar: "#c0c0c0",
+        glow: "rgba(192,192,192,0.4)",
+    },
+    Gold: {
+        badge: "#ffbf00",
+        bar: "#ffbf00",
+        glow: "rgba(255,191,0,0.45)",
+    },
+    Elite: {
+        badge: "#00eaff",
+        bar: "#00eaff",
+        glow: "rgba(0,234,255,0.5)",
+    },
+};
+
+
+function calculateProgressToNextTier(orderCount) {
+    if (orderCount >= tierThresholds.Elite) return 100;
+
+    let nextTier = null;
+
+    if (orderCount < tierThresholds.Silver) nextTier = "Silver";
+    else if (orderCount < tierThresholds.Gold) nextTier = "Gold";
+    else if (orderCount < tierThresholds.Elite) nextTier = "Elite";
+
+    const currentTier = orderCount >= tierThresholds.Gold
+        ? "Gold"
+        : orderCount >= tierThresholds.Silver
+            ? "Silver"
+            : "New Member";
+
+    const start = tierThresholds[currentTier];
+    const end = tierThresholds[nextTier];
+
+    if (!end || end === start) return 0;
+
+    return Math.min(100, Math.round(((orderCount - start) / (end - start)) * 100));
+}
+
+
+/* =========================================================
+   ANALYTICS ENGINE + REAL-TIME PROGRESS BAR
+========================================================= */
+function loadProfileAnalytics() {
+    const orders = getOrders();
+
+    const statOrders = document.getElementById("stat-orders");
+    const statSpent = document.getElementById("stat-spent");
+    const statTier = document.getElementById("stat-tier");
+
+    const anaTopItem = document.getElementById("ana-top-item");
+    const anaAOV = document.getElementById("ana-aov");
+    const anaLast = document.getElementById("ana-last");
+
+    const progressBar = document.getElementById("tier-progress-bar");
+    const tierBadge = document.getElementById("profile-tier-badge");
+
+    if (!statOrders || !statSpent || !statTier || !anaTopItem || !anaAOV || !anaLast) return;
+
+    if (!orders.length) {
+        statOrders.textContent = "0";
+        statSpent.textContent = "$0.00";
+        statTier.textContent = "New Member";
+        anaTopItem.textContent = "-";
+        anaAOV.textContent = "-";
+        anaLast.textContent = "-";
+
+        if (progressBar) {
+            progressBar.style.transition = "width 0.7s ease";
+            progressBar.style.width = "0%";
+            progressBar.dataset.current = "0";
+        }
+
+        if (tierBadge) {
+            tierBadge.textContent = "New Member";
+        }
+        return;
+    }
+
+    // Totals
+    const orderCount = orders.length;
+    statOrders.textContent = orderCount.toString();
+
+    const totalSpent = orders.reduce((sum, o) => sum + Number(o.total || 0), 0);
+    statSpent.textContent = `$${totalSpent.toFixed(2)}`;
+
+    // Determine tier
+    let tier = "New Member";
+    if (orderCount >= tierThresholds.Elite) tier = "Elite";
+    else if (orderCount >= tierThresholds.Gold) tier = "Gold";
+    else if (orderCount >= tierThresholds.Silver) tier = "Silver";
+
+
+
+    statTier.textContent = tier;
+
+    if (tierBadge) {
+        tierBadge.textContent = tier;
+
+        const color = tierColors[tier];
+
+        tierBadge.style.backgroundColor = color.badge;
+        tierBadge.style.color = "#000"; // readable text
+        tierBadge.style.boxShadow = `0 0 15px ${color.glow}`;
+        tierBadge.style.transition = "all .3s ease";
+
+    }
+
+    // ⭐ Tier Unlock Event
+    const savedTier = localStorage.getItem("lastTier") || "New Member";
+
+    if (tier !== savedTier) {
+        triggerTierUnlockPopup(
+            tier,
+            tierColors[tier] || tierColors["New Member"]
+        );
+    }
+
+
+    // MOST BOUGHT PRODUCT
+    const count = {};
+    orders.forEach((o) =>
+        o.items.forEach((i) => {
+            count[i.name] = (count[i.name] || 0) + i.quantity;
+        })
+    );
+
+    let topProduct = "-";
+    let max = 0;
+    Object.entries(count).forEach(([name, qty]) => {
+        if (qty > max) {
+            max = qty;
+            topProduct = name;
+        }
+    });
+    anaTopItem.textContent = topProduct;
+
+    // Average order value
+    anaAOV.textContent = `$${(totalSpent / orderCount).toFixed(2)}`;
+
+    // Last purchase date (latest first in saveOrder, so last element == oldest)
+    anaLast.textContent = orders[0]?.date || "-";
+
+    // 🎯 REAL-TIME PROGRESS ANIMATION
+    if (progressBar) {
+        const target = calculateProgressToNextTier(orderCount);
+        const current = parseFloat(progressBar.dataset.current || "0");
+
+        const start = isNaN(current) ? 0 : current;
+        const end = target;
+        const duration = 700;
+        let startTime = null;
+
+        progressBar.style.transition = "none"; // we'll animate manually
+
+        function step(ts) {
+            if (!startTime) startTime = ts;
+            const progress = Math.min((ts - startTime) / duration, 1);
+            const value = start + (end - start) * progress;
+            progressBar.style.width = `${value.toFixed(1)}%`;
+
+            // Update progress bar color + glow based on tier
+            if (progressBar) {
+                const color = tierColors[tier];
+                progressBar.style.backgroundColor = color.bar;
+                progressBar.style.boxShadow = `0 0 20px ${color.glow}`;
+                progressBar.style.transition = "background .3s ease, box-shadow .3s ease";
+            }
+
+
+
+            if (progress < 1) {
+                requestAnimationFrame(step);
+            } else {
+                progressBar.dataset.current = String(end);
+            }
+        }
+
+        requestAnimationFrame(step);
+    }
+}
+
+
+/* =========================================================
+   PROFILE INIT
+========================================================= */
+function initProfileSection() {
+    // Refresh stats + progress
+    loadProfileAnalytics();
+
+    const orders = getOrders();
+    const latest = document.getElementById("order-latest");
+    const full = document.getElementById("order-history-full");
+
+    if (!latest || !full) return;
+
+    latest.innerHTML = "";
+    full.innerHTML = "";
+
+    // Render latest 5
+    orders.slice(0, 5).forEach(order =>
+        latest.insertAdjacentHTML("beforeend", buildOrderCard(order))
+    );
+
+    // Render full history
+    orders.forEach(order =>
+        full.insertAdjacentHTML("beforeend", buildOrderCard(order))
+    );
+
+    if (window.lucide) lucide.createIcons();
+}
+
+
+/* =========================================================
+   PAGE CONTROLLER  ⚡ FIXED
+========================================================= */
+window.showPage = function (id) {
+
+    // Hide all pages
+    document.querySelectorAll(".page").forEach((p) => {
+        p.classList.add("hidden");
+        p.classList.remove("active");
+    });
+
+    // Show selected page
+    const target = document.getElementById(id);
+    if (target) {
+        target.classList.remove("hidden");
+        target.classList.add("active");
+    }
+
+    // When profile loads, refresh analytics + history button logic
+    if (id === "profile-page") {
+        initProfileSection();   // render list + stats
+        setupHistoryToggle();   // attach toggle logic
+        if (window.lucide) lucide.createIcons(); // refresh icons
+    }
+
+    // Refresh AOS animations
+    if (window.AOS) AOS.refresh();
+
+    // Scroll to top on change
+    window.scrollTo(0, 0);
+};
+
+
+/* =========================================================
+   FULL HISTORY TOGGLE
+========================================================= */
+function setupHistoryToggle() {
+    const btn = document.getElementById("toggle-history-btn");
+    const fullPanel = document.getElementById("order-history-full");
+    const latestPanel = document.getElementById("order-latest");
+
+    if (!btn || !fullPanel || !latestPanel) return;
+
+    let open = false;
+
+    btn.onclick = () => {
+        open = !open;
+
+        if (open) {
+            /** 🔹 HIDE RECENT LIST (Shopify slide + fade) */
+            latestPanel.style.transition =
+                "opacity 260ms ease, transform 260ms ease";
+            latestPanel.style.opacity = "0";
+            latestPanel.style.transform = "translateY(10px)";
+
+            // Fully hide after fade completes
+            setTimeout(() => latestPanel.classList.add("hidden"), 260);
+
+            /** 🔹 PREP FULL HISTORY ENTRY */
+            fullPanel.classList.remove("hidden");
+            fullPanel.style.opacity = "0";
+            fullPanel.style.transform = "translateY(14px) scale(0.96)";
+            fullPanel.style.transition =
+                "opacity 420ms cubic-bezier(0.18, 0.89, 0.32, 1.28), transform 420ms cubic-bezier(0.18, 0.89, 0.32, 1.28)";
+
+            /** 🔹 PLAY EXPAND ANIMATION */
+            requestAnimationFrame(() => {
+                fullPanel.style.opacity = "1";
+                fullPanel.style.transform = "translateY(0) scale(1)";
+            });
+
+            btn.innerHTML =
+                `Hide Full History <i data-lucide="chevron-up" class="w-4 h-4"></i>`;
+        } else {
+            /** 🔹 ANIMATE FULL PANEL OUT — Shopify bounce reverse */
+            fullPanel.style.transition =
+                "opacity 320ms cubic-bezier(0.18, 0.89, 0.32, 1.28), transform 320ms cubic-bezier(0.18, 0.89, 0.32, 1.28)";
+            fullPanel.style.opacity = "0";
+            fullPanel.style.transform = "translateY(14px) scale(0.95)";
+
+            // Fully hide after animation finishes
+            setTimeout(() => fullPanel.classList.add("hidden"), 320);
+
+            /** 🔹 BRING BACK LATEST LIST — Shopify lift-in */
+            latestPanel.classList.remove("hidden");
+            latestPanel.style.opacity = "0";
+            latestPanel.style.transform = "translateY(-10px) scale(0.98)";
+            latestPanel.style.transition =
+                "opacity 380ms cubic-bezier(0.18, 0.89, 0.32, 1.28), transform 380ms cubic-bezier(0.18, 0.89, 0.32, 1.28)";
+
+            requestAnimationFrame(() => {
+                latestPanel.style.opacity = "1";
+                latestPanel.style.transform = "translateY(0) scale(1)";
+            });
+
+            btn.innerHTML =
+                `View Full History <i data-lucide="chevron-down" class="w-4 h-4"></i>`;
+        }
+
+        if (window.lucide) lucide.createIcons();
+    };
+}
+
+
+
+
+/* =========================================================
+   ORDER CARD EXPAND/COLLAPSE
+========================================================= */
+document.addEventListener("click", (event) => {
+    const card = event.target.closest(".order-card");
+    if (!card) return;
+
+    const details = card.querySelector(".order-items");
+    if (!details) return;
+
+    const isOpen = !details.classList.contains("hidden");
+
+    document.querySelectorAll(".order-items").forEach((el) =>
+        el.classList.add("hidden")
+    );
+
+    if (!isOpen) {
+        details.classList.remove("hidden");
+    }
+});
+
+
+/* =========================================================
+   GLOBAL MESSAGE MODAL
+========================================================= */
+function showMessage(title, text, event) {
+    if (event) event.preventDefault();
+
+    const box = document.getElementById("message-box");
+    const titleEl = document.getElementById("message-title");
+    const textEl = document.getElementById("message-text");
+    if (!box || !titleEl || !textEl) return;
+
+    titleEl.textContent = title || "";
+    textEl.textContent = text || "";
+    box.classList.remove("hidden");
+    box.classList.add("flex");
+}
+
+
+/* =========================================================
+   PROFILE NAME UPDATE TOAST  ✔ FIXED + GLOBAL ACCESS
+========================================================= */
+window.showNameToast = function (msg) {
+    const toast = document.getElementById("name-toast");
+    if (!toast) return;
+
+    toast.textContent = msg;
+
+    // Reset state cleanly before animation
+    toast.classList.remove("hidden");
+    toast.style.opacity = "0";
+    toast.style.transform = "translateY(10px) scale(0.95)";
+    toast.style.pointerEvents = "auto";
+
+    // Let browser register style before animating
+    requestAnimationFrame(() => {
+        toast.style.transition = "opacity .35s ease, transform .35s ease";
+        toast.style.opacity = "1";
+        toast.style.transform = "translateY(0) scale(1)";
+    });
+
+    // Auto hide after 2 seconds
+    setTimeout(() => {
+        toast.style.opacity = "0";
+        toast.style.transform = "translateY(10px) scale(0.95)";
+
+        // Cleanup after animation completes
+        setTimeout(() => {
+            toast.classList.add("hidden");
+            toast.style.pointerEvents = "none";
+        }, 350);
+    }, 2000);
+};
+
+
+/* =========================================================
+   GIFT CARD ANIMATION
+========================================================= */
+let selectedCardValue = 100;
+
 function animateNumber(element, start, end, duration = 600) {
     let startTime = null;
 
-    function update(timestamp) {
+    function step(timestamp) {
         if (!startTime) startTime = timestamp;
         const progress = Math.min((timestamp - startTime) / duration, 1);
-        const value = Math.floor(start + (end - start) * progress);
+        const value = Math.round(start + (end - start) * progress);
         element.textContent = `$${value}`;
-        if (progress < 1) requestAnimationFrame(update);
+        if (progress < 1) requestAnimationFrame(step);
     }
-    requestAnimationFrame(update);
+
+    requestAnimationFrame(step);
 }
 
-// When gift value is selected
 function animatedSelectGift(value) {
     const display = document.getElementById("card-display-value");
+    if (!display) return;
 
     animateNumber(display, selectedCardValue, value);
     selectedCardValue = value;
 
-    // Visual selection
-    document.querySelectorAll(".animated-btn").forEach(btn =>
+    document.querySelectorAll(".animated-btn").forEach((btn) =>
         btn.classList.remove("selected")
     );
     const activeBtn = document.querySelector(`button[data-value="${value}"]`);
     if (activeBtn) activeBtn.classList.add("selected");
 }
 
-// Purchase animation
+let giftAnimating = false;
+
 function animatedPurchaseGift(event) {
-    event.preventDefault();
+    if (event) event.preventDefault();
+
+    // Prevent double click spam glitch
+    if (giftAnimating) return;
+    giftAnimating = true;
 
     const card = document.getElementById("gift-card-box");
+    if (!card) return;
 
-    // Flip animation
-    card.style.transition = "transform 0.4s ease";
-    card.style.transform = "rotateY(15deg) scale(1.05)";
+    // Reset before animation
+    card.style.transition = "none";
+    card.style.transform = "scale(1) rotateY(0deg)";
+    card.style.boxShadow = "";
+
+    // Smooth start delay (for better GPU sync)
+    requestAnimationFrame(() => {
+
+        card.style.transition = `
+            transform 0.65s cubic-bezier(0.21, 1.02, 0.73, 1),
+            box-shadow 0.65s ease
+        `;
+
+        // Lift + rotate + glow
+        card.style.transform = "translateY(-6px) rotateY(12deg) scale(1.03)";
+        card.style.boxShadow = "0 0 55px rgba(0,255,255,0.55)";
+
+        setTimeout(() => {
+            // Reset motion
+            card.style.transform = "translateY(0) rotateY(0deg) scale(1)";
+            card.style.boxShadow = "0 0 25px rgba(0,255,255,0.25)";
+
+            // After animation finishes, show popup
+            setTimeout(() => {
+                showMessage(
+                    "Gift Card Purchased 🎉",
+                    `You've successfully bought a $${selectedCardValue} BulkBase Gift Card!`
+                );
+
+                // Release lock
+                giftAnimating = false;
+
+            }, 350);
+
+        }, 650);
+
+    });
+}
+
+function selectGiftCardValue(amount) {
+    selectedCardValue = amount;
+    const display = document.getElementById("card-display-value");
+    if (display) display.textContent = `$${amount}`;
+}
+
+/* =========================================================
+   🎉 TIER UNLOCK POPUP + EFFECT ENGINE
+========================================================= */
+let lastTier = localStorage.getItem("lastTier") || "New Member";
+
+function triggerTierUnlockPopup(tierName, color) {
+
+    const popup = document.getElementById("tier-unlock-popup");
+    const box = document.getElementById("tier-popup-box");
+    const title = document.getElementById("tier-unlock-title");
+    const text = document.getElementById("tier-unlock-text");
+    const confetti = document.getElementById("tier-confetti");
+    const particles = document.getElementById("tier-particles");
+    const perkArea = document.getElementById("tier-benefits");
+
+    if (!popup || !box || !title) return;
+
+    // ⭐ Title + subtitle
+    title.style.color = color.badge;
+    text.textContent = `Congratulations! You’ve reached ${tierName} Tier 🎉`;
+
+    // ⭐ Glow bar update
+    const glowBar = document.getElementById("tier-glow-bar");
+    if (glowBar) {
+        glowBar.style.background = color.badge;
+        glowBar.style.boxShadow = `0 0 35px ${color.glow}`;
+    }
+
+    // ⭐ Update perk list visually
+    if (perkArea) {
+        perkArea.innerHTML = ""; // reset
+
+        const perks = tierBenefits[tierName] || [];
+
+        perks.forEach((p, index) => {
+            let item = document.createElement("div");
+            item.className = "perk-item"; // animation class
+            item.textContent = "• " + p;
+            perkArea.appendChild(item);
+
+            // staggered animation like Shopify reveal
+            setTimeout(() => {
+                item.classList.add("show");
+            }, 200 + index * 120);
+        });
+    }
+
+    // RESET EFFECT LAYERS
+    confetti.innerHTML = "";
+    particles.innerHTML = "";
+
+    // 🎉 Premium confetti burst
+    for (let i = 0; i < 30; i++) {
+        const piece = document.createElement("div");
+        piece.className = "confetti-piece";
+        piece.style.left = Math.random() * 100 + "%";
+        piece.style.top = "-10px";
+        piece.style.background = Math.random() > 0.5 ? color.badge : "#ffffff";
+        piece.style.width = Math.random() * 6 + 4 + "px";
+        piece.style.height = Math.random() * 10 + 8 + "px";
+        piece.style.animationDelay = (Math.random() * 0.4) + "s";
+        confetti.appendChild(piece);
+    }
+
+    // 🌌 Floating atmospheric particles
+    for (let i = 0; i < 12; i++) {
+        const dot = document.createElement("div");
+        dot.className = "absolute rounded-full blur-md bg-cyan-300/50";
+        const size = 3 + Math.random() * 6;
+        dot.style.width = `${size}px`;
+        dot.style.height = `${size}px`;
+        dot.style.left = Math.random() * 100 + "%";
+        dot.style.top = Math.random() * 100 + "%";
+        dot.style.animation = `floatingParticle ${2.5 + Math.random() * 3}s infinite ease-in-out`;
+        particles.appendChild(dot);
+    }
+
+    // 📌 Animate popup open
+    popup.classList.remove("pointer-events-none");
+    popup.style.opacity = "1";
+
+    requestAnimationFrame(() => {
+        box.style.opacity = "1";
+        box.style.transform = "scale(1)";
+    });
+
+    // Save the new unlocked tier
+    localStorage.setItem("lastTier", tierName);
+}
+
+
+
+window.hideTierUnlockPopup = function () {
+    const popup = document.getElementById("tier-unlock-popup");
+    const box = document.getElementById("tier-popup-box");
+
+    box.style.opacity = "0";
+    box.style.transform = "scale(0.9)";
 
     setTimeout(() => {
-        card.style.transform = "rotateY(0deg) scale(1)";
-
-        // Show success message
-        showMessage(
-            "Gift Card Purchased!",
-            `You've purchased a $${selectedCardValue} BulkBase Gift Card.`
-        );
-    }, 400);
-}
-
-const purchaseGiftCard = (event) => {
-    showMessage(
-        'Gift Card Purchase',
-        `A $${selectedCardValue} BulkBase Gift Card has been successfully purchased (simulated). The digital card will be delivered to your email.`,
-        event
-    );
+        popup.style.opacity = "0";
+        popup.classList.add("pointer-events-none");
+    }, 300);
 };
 
-// 4. UI Management Functions
-const mobileMenu = document.getElementById('mobile-menu');
-const menuIconOpen = document.getElementById('menu-icon-open');
-const menuIconClose = document.getElementById('menu-icon-close');
-const backToTopBtn = document.getElementById('back-to-top');
 
-// Scroll listener for Back to Top button
-window.addEventListener('scroll', () => {
-    if (!backToTopBtn) return;
-    if (window.scrollY > 300) {
-        backToTopBtn.classList.add('visible');
-    } else {
-        backToTopBtn.classList.remove('visible');
-    }
-});
+/* =========================================================
+   🎉 TIER UNLOCK POPUP + EFFECT ENGINE
+========================================================= */
 
-const toggleMobileMenu = (forceState) => {
-    if (!mobileMenu || !menuIconOpen || !menuIconClose) return;
+window.hideTierUnlockPopup = function () {
+    const popup = document.getElementById("tier-unlock-popup");
+    const box = document.getElementById("tier-popup-box");
 
-    const isOpen = mobileMenu.classList.contains('is-open');
+    box.style.opacity = "0";
+    box.style.transform = "scale(0.9)";
 
-    if (forceState === false || isOpen) {
-        // Close Menu
-        mobileMenu.style.maxHeight = '0';
-        mobileMenu.classList.remove('is-open');
-        menuIconOpen.classList.remove('hidden');
-        menuIconClose.classList.add('hidden');
-    } else {
-        // Open Menu
-        mobileMenu.style.maxHeight = mobileMenu.scrollHeight + 'px';
-        mobileMenu.classList.add('is-open');
-        menuIconOpen.classList.add('hidden');
-        menuIconClose.classList.remove('hidden');
-    }
+    setTimeout(() => {
+        popup.style.opacity = "0";
+        popup.classList.add("pointer-events-none");
+    }, 300);
 };
 
-const mobileMenuButton = document.getElementById('mobile-menu-button');
-if (mobileMenuButton) {
-    mobileMenuButton.addEventListener('click', () => toggleMobileMenu());
-}
-// PAGE CONTROLLER
-const showPage = (pageId) => {
-    // Hide all pages
-    document.querySelectorAll('.page').forEach(page => {
-        page.classList.remove('active');
-        page.classList.add('hidden');    // make sure it is hidden
+/* =========================================================
+   ⭐ Tier Benefit Modal Controller
+========================================================= */
+window.openTierBenefitPanel = function () {
+    const popup = document.getElementById("tier-benefit-popup");
+    const box = document.getElementById("tier-benefit-box");
+    const tierText = document.getElementById("stat-tier")?.textContent || "Unknown";
+    const title = document.getElementById("benefit-title");
+    const desc = document.getElementById("benefit-desc");
+    const list = document.getElementById("benefit-list");
+
+    if (!popup || !box || !list) return;
+
+    list.innerHTML = ""; // reset
+
+    title.textContent = `${tierText} Tier Benefits`;
+    desc.textContent = `${tierText} Member Benefits`;
+
+    const perks = tierBenefits[tierText] || [];
+
+    perks.forEach((p, i) => {
+        let item = document.createElement("div");
+        item.className = "benefit-item";
+        item.textContent = "• " + p;
+        list.appendChild(item);
+
+        setTimeout(() => {
+            item.classList.add("show");
+        }, 150 + i * 120);
     });
 
-    // Show selected page
-    const target = document.getElementById(pageId);
-    if (target) {
-        target.classList.add('active');
-        target.classList.remove('hidden');   // make sure it is shown
-    }
+    popup.classList.remove("pointer-events-none");
+    popup.style.opacity = "1";
 
-    // Load orders when opening profile page
-    if (pageId === "profile-page") {
-        loadOrderHistory();
-    }
-
-    // Scroll to top
-    window.scrollTo(0, 0);
-};
-
-
-
-
-const showProductDetail = (productId) => {
-    const product = products[productId];
-    if (product) {
-        showMessage(
-            'Product Details',
-            `Details for ${product.name} - Price: $${product.price.toFixed(2)}. This would link to a full product page in a real store.`
-        );
-    }
-};
-
-const showMessage = (title, text, event) => {
-    if (event) event.preventDefault();
-    const titleEl = document.getElementById('message-title');
-    const textEl = document.getElementById('message-text');
-    const box = document.getElementById('message-box');
-
-    if (!titleEl || !textEl || !box) return;
-
-    titleEl.textContent = title;
-    textEl.textContent = text;
-    box.classList.remove('hidden');
-    box.classList.add('flex');
-};
-
-// ⭐ LOAD ORDER HISTORY INTO PROFILE PAGE
-function loadOrderHistory() {
-    const container = document.querySelector("#profile-page .order-history-container");
-    if (!container) return;
-
-    let orders = JSON.parse(localStorage.getItem("orders") || "[]");
-
-    if (orders.length === 0) {
-        container.innerHTML = `
-            <p class="text-gray-400 text-center italic">No orders yet.</p>
-        `;
-        return;
-    }
-
-    container.innerHTML = "";
-
-    orders.forEach(order => {
-        const itemsText = order.items
-            .map(i => `${i.name} (x${i.quantity})`)
-            .join(", ");
-
-        const html = `
-            <div class="bg-gray-800 p-4 rounded-lg border-l-4 border-cyan-500">
-                <div class="flex justify-between mb-2">
-                    <span class="text-sm font-medium text-gray-400">Order #${order.id}</span>
-                    <span class="text-sm font-semibold text-green-400">${order.status}</span>
-                </div>
-                <div class="flex justify-between text-white">
-                    <span class="font-bold">$${order.total}</span>
-                    <span class="text-xs text-gray-500">Placed: ${order.date}</span>
-                </div>
-                <p class="text-xs text-gray-500 mt-2">Items: ${itemsText}</p>
-            </div>
-        `;
-
-        container.insertAdjacentHTML("beforeend", html);
+    requestAnimationFrame(() => {
+        box.style.opacity = "1";
+        box.style.transform = "scale(1)";
     });
-}
+};
 
+window.closeTierBenefitPanel = function () {
+    const popup = document.getElementById("tier-benefit-popup");
+    const box = document.getElementById("tier-benefit-box");
 
-// ===============================
-// ORDER HISTORY SYSTEM (NEW)
-// ===============================
+    if (!popup || !box) return;
 
-function loadOrderHistory() {
-    const container = document.querySelector("#profile-page .order-history-container");
-    if (!container) return;
+    box.style.opacity = "0";
+    box.style.transform = "scale(0.9)";
 
-    let orders = JSON.parse(localStorage.getItem("orders") || "[]");
+    setTimeout(() => {
+        popup.style.opacity = "0";
+        popup.classList.add("pointer-events-none");
+    }, 300);
+};
 
-    if (orders.length === 0) {
-        container.innerHTML = `
-            <p class="text-gray-400 text-center italic">No orders yet.</p>
-        `;
-        return;
-    }
-
-    container.innerHTML = "";
-
-    orders.forEach(order => {
-        const itemsText = order.items
-            .map(i => `${i.name} (x${i.quantity})`)
-            .join(", ");
-
-        const html = `
-            <div class="bg-gray-800 p-4 rounded-lg border-l-4 border-cyan-500">
-                <div class="flex justify-between mb-2">
-                    <span class="text-sm font-medium text-gray-400">Order #${order.id}</span>
-                    <span class="text-sm font-semibold text-green-400">${order.status}</span>
-                </div>
-                <div class="flex justify-between text-white">
-                    <span class="font-bold">$${order.total}</span>
-                    <span class="text-xs text-gray-500">Placed: ${order.date}</span>
-                </div>
-                <p class="text-xs text-gray-500 mt-2">Items: ${itemsText}</p>
-            </div>
-        `;
-
-        container.insertAdjacentHTML("beforeend", html);
-    });
-}
-// Card builder: matches your UI theme
-function buildOrderCard(order) {
-    const items = order.items
-        .map(item => `${item.name} (x${item.quantity})`)
-        .join(", ");
-
-    const orderID = `BB-${String(order.id).slice(-4)}`;
-
-    return `
-    <div class="p-5 bg-gray-800 rounded-xl border border-gray-700 shadow-md">
-        <div class="flex justify-between items-center">
-            <p class="text-lg font-semibold text-white">Order #${orderID}</p>
-            <span class="text-green-400 font-semibold">Delivered</span>
-        </div>
-
-        <p class="text-2xl font-bold text-white mt-2">$${order.total.toFixed(2)}</p>
-        <p class="text-gray-400 text-sm mt-1">Items: ${items}</p>
-
-        <p class="text-gray-500 text-xs mt-2">Placed: ${order.date}</p>
-    </div>`;
-}
-
-// Run on page load
+/* =========================================================
+   RESET ORDER HISTORY BUTTON
+========================================================= */
 document.addEventListener("DOMContentLoaded", () => {
-    loadOrderHistory();
-    setupHistoryToggle();
+    const resetBtn = document.getElementById("reset-orders-btn");
+    if (resetBtn) {
+        resetBtn.addEventListener("click", () => {
+            if (confirm("Are you sure? This will clear your order history.")) {
+                localStorage.removeItem("orders");
+                initProfileSection();
+                loadProfileAnalytics();
+                alert("Order history reset successfully!");
+            }
+        });
+    }
 });
 
-
-// ===============================
-// HISTORY DROPDOWN TOGGLE
-// ===============================
-
-function setupHistoryToggle() {
-    const btn = document.getElementById("toggle-history");
-    const fullList = document.getElementById("order-history-full");
-
-    if (!btn || !fullList) return;
-
-    btn.addEventListener("click", () => {
-        const isHidden = fullList.classList.contains("hidden");
-
-        if (isHidden) {
-            // Show with animation
-            fullList.classList.remove("hidden");
-            setTimeout(() => fullList.classList.add("history-animate"), 20);
-
-            btn.textContent = "Hide Full History";
-        } else {
-            // Hide with animation
-            fullList.classList.remove("history-animate");
-            setTimeout(() => fullList.classList.add("hidden"), 250);
-
-            btn.textContent = "View Full History";
-        }
-    });
-}
-/* ================================
-   GIFT CARD UPGRADED SYSTEM
-================================ */
-
-let selectedGiftAmount = 150;
-
-// Update selected value + active style + bonus system
-function selectGiftCardValue(amount) {
-    selectedGiftAmount = amount;
-    document.getElementById("gift-selected").innerText = `$${amount}`;
-
-    document.querySelectorAll(".gift-amount-btn").forEach(btn => {
-        btn.classList.remove("active");
-        if (btn.innerText === `$${amount}`) {
-            btn.classList.add("active");
-        }
-    });
-
-    // Auto Bonus System: G
-    let bonus = 0;
-    if (amount >= 200) bonus = 20;
-    else if (amount >= 100) bonus = 10;
-
-    localStorage.setItem("gift_bonus", bonus);
-}
-
-// Unique gift card code generator
-function generateGiftCode() {
-    return "BB-" + Math.random().toString(36).substring(2, 10).toUpperCase();
-}
-
-// E) Add Gift Card to cart
-function addGiftCardToCart() {
-    const email = document.getElementById("gift-email").value.trim();
-    if (!email) return alert("Enter recipient email first.");
-
-    const bonus = Number(localStorage.getItem("gift_bonus") || 0);
-
-    const cartItem = {
-        id: "gift-" + Date.now(),
-        name: `Digital Gift Card ($${selectedGiftAmount})`,
-        price: selectedGiftAmount,
-        bonus: bonus,
-        email: email,
-        quantity: 1,
-        img: "source/giftcard.jpg"
-    };
-
-    const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-    cart.push(cartItem);
-    localStorage.setItem("cart", JSON.stringify(cart));
-
-    alert("Gift card added to cart!");
-    updateCartDisplay();
-}
-
-// D) Email Delivery Simulation
-function sendGiftCardEmail() {
-    const email = document.getElementById("gift-email").value.trim();
-    if (!email) return alert("Enter recipient email first.");
-
-    const code = generateGiftCode();
-    localStorage.setItem("gift_code", code);
-
-    alert(`Gift Card Sent!\nRecipient: ${email}\nCode: ${code}`);
-}
 

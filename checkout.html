@@ -856,23 +856,7 @@
         let discount = 0;
         let shipping = 0;
 
-        // 🔹 Order history saver (unused but kept)
-        function saveOrderHistory() {
-            const currentOrders = JSON.parse(localStorage.getItem("orders") || "[]");
 
-            const newOrder = {
-                id: Date.now(),
-                date: new Date().toLocaleString(),
-                items: cart,
-                subtotal: subtotal,
-                discount: discount,
-                shipping: shipping,
-                total: subtotal - discount + shipping
-            };
-
-            currentOrders.push(newOrder);
-            localStorage.setItem("orders", JSON.stringify(currentOrders));
-        }
 
         // 🔹 Skeleton loader while cart is “loading”
         function showSkeleton() {
@@ -1111,6 +1095,7 @@
 
         // 🔹 Place Order: loading → success → save → clear cart → LUXURY REVIEW OVERLAY
         placeOrderBtn.addEventListener("click", () => {
+
             if (!cart.length) {
                 showMessage("Your cart is empty.", true);
                 return;
@@ -1118,48 +1103,63 @@
 
             loadingOverlay.classList.remove("hidden");
 
-            // Step bar: go to Payment step (animated)
             animateStep(2);
 
             setTimeout(() => {
+
                 loadingOverlay.classList.add("hidden");
                 showMessage("Order Placed Successfully!");
-
-                // Step bar: go to Review step (animated)
                 animateStep(3);
 
-                // Save order + clear cart
-                saveOrder();
-                localStorage.removeItem("cart");
+                saveOrder();  // <-- Correct call here
 
-                // Show LUXURY REVIEW OVERLAY instead of old review modal
                 if (window.showLuxuryReview) {
                     window.showLuxuryReview();
                 } else {
                     window.location.href = "index.html";
                 }
+
             }, 2000);
         });
 
-        // 🔥 SAVE ORDER TO LOCAL STORAGE
+
+        /* =========================================================
+  📌 REAL ORDER SAVE SYSTEM — FIXED & CLEANED
+  ========================================================= */
         function saveOrder() {
-            const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-            if (cart.length === 0) return;
 
-            const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+            // 🔹 Capture cart BEFORE clearing
+            const storedCart = JSON.parse(localStorage.getItem("cart") || "[]");
 
+            if (!storedCart.length) return;
+
+            // 🔹 Compute order value
+            let subtotalCalc = 0;
+            storedCart.forEach(item => subtotalCalc += item.price * item.quantity);
+
+            // 🔹 Build saved order object
             const newOrder = {
                 id: "BB-" + Math.floor(Math.random() * 9000 + 1000),
                 date: new Date().toISOString().split("T")[0],
                 status: "Delivered",
-                items: cart,
-                total: subtotal.toFixed(2)
+                items: storedCart,
+                total: subtotalCalc
             };
 
+            // 🔹 Read existing history
             let orders = JSON.parse(localStorage.getItem("orders") || "[]");
+
+            // 🔹 Save newest first
             orders.unshift(newOrder);
+
+            // 🔹 Store properly
             localStorage.setItem("orders", JSON.stringify(orders));
+
+            // 🔹 Clear cart safely
+            localStorage.removeItem("cart");
         }
+
+
 
         // ⭐ Old review-modal hooks (safe no-op)
         if (reviewStarsWrap) {

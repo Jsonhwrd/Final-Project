@@ -839,59 +839,187 @@
         </div>
     </div>
 
-    <!-- PROFILE PAGE -->
-    <div id="profile-page" class="page pt-20 pb-24">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="text-center mb-16" data-aos="fade-down">
-                <h2 class="text-4xl sm:text-5xl font-extrabold text-white mb-4">My BulkBase Profile</h2>
-                <p class="text-lg sm:text-xl text-cyan-400">Manage your account, orders, and details.</p>
+    <!-- ⭐ PREMIUM PROFILE / DASHBOARD PAGE -->
+    <div id="profile-page" class="page pt-20 pb-24 hidden">
+
+        <div class="max-w-6xl mx-auto px-6">
+
+            <!-- Header -->
+            <div class="text-center mb-12" data-aos="fade-down">
+                <h2 class="text-5xl font-extrabold text-white drop-shadow-lg tracking-wide">My Dashboard</h2>
+                <p class="text-lg text-cyan-400/90 mt-2">Track your journey — insights — orders — progress.</p>
             </div>
 
-            <!-- Profile Info Card -->
-            <div class="bg-secondary-bg p-6 sm:p-8 rounded-2xl shadow-2xl mb-12 border border-gray-700"
+            <!-- 🔥 Profile Identity Card -->
+            <div class="relative bg-gradient-to-br from-gray-900/80 to-gray-800/60 border border-cyan-500/20 
+                rounded-3xl p-8 mb-12 shadow-[0_0_40px_rgba(0,255,255,0.25)] backdrop-blur-lg" data-aos="fade-up">
+
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-8">
+
+                    <!-- Avatar + Info -->
+                    <div class="flex items-center gap-5">
+                        <div
+                            class="w-20 h-20 rounded-2xl bg-cyan-500/20 border-2 border-cyan-400/30 flex justify-center items-center text-3xl font-bold text-cyan-300 shadow-xl">
+                            👤
+                        </div>
+
+                        <!-- ⭐ FIXED relative wrapper -->
+                        <div class="relative w-fit">
+
+                            <!-- Clickable name -->
+                            <h3 id="profile-name"
+                                class="text-2xl font-bold text-white cursor-pointer transition-all duration-200">
+                                —
+                            </h3>
+
+                            <!-- Edit icon -->
+                            <i data-lucide="pencil" id="edit-name-btn"
+                                class="w-4 h-4 text-cyan-400 opacity-0 ml-2 absolute top-1 right-[-20px] transition-opacity duration-200 cursor-pointer"></i>
+
+                            <!-- Editable input (ABSOLUTE but positioned inside REL wrapper) -->
+                            <input id="profile-name-edit" type="text" class="hidden absolute left-0 top-0 bg-gray-900 border border-cyan-400/40 text-white px-3 py-1 rounded-lg shadow-lg
+            w-[180px] transition-all duration-200 opacity-0 scale-95 focus:ring-2 focus:ring-cyan-400 z-50">
+
+                            <!-- Email + date -->
+                            <p id="profile-email" class="text-gray-300 text-sm mt-1"></p>
+                            <p class="text-gray-500 text-xs flex items-center gap-1">
+                                <i data-lucide="calendar" class="w-3 h-3"></i>
+                                Member since: <span id="profile-member-since"></span>
+                            </p>
+                        </div>
+                    </div>
+
+
+
+                    <!-- Tier Badge -->
+                    <div class="text-right">
+                        <p class="text-xs uppercase text-gray-400 tracking-wider">Reward Status</p>
+                        <div id="profile-tier-badge"
+                            class="inline-block px-4 py-1.5 mt-1 rounded-full font-bold text-sm shadow-lg cursor-pointer hover:scale-105 transition-all duration-300"
+                            onclick="openTierBenefitPanel()">
+                        </div>
+
+                    </div>
+
+                    <!-- Sign Out button -->
+                    <button onclick="realLogout()"
+                        class="px-5 py-2 bg-red-500 hover:bg-red-400 font-bold rounded-xl text-black transition shadow-md hover:shadow-lg">
+                        Sign Out
+                    </button>
+                </div>
+
+                <!-- 🔄 Logout Overlay -->
+                <div id="logout-overlay" class="fixed inset-0 bg-black/90 flex flex-col items-center justify-center opacity-0 pointer-events-none 
+       transition-all duration-700 z-[2000] scale-95">
+
+                    <div class="flex flex-col items-center relative">
+                        <!-- Simple Pulse Loader -->
+                        <div class="flex items-center justify-center w-24 h-24">
+                            <div class="w-6 h-6 bg-cyan-400 rounded-full animate-simplePulse"></div>
+                        </div>
+
+                        <!-- Goodbye Text -->
+                        <p id="logout-text" class="text-3xl font-extrabold text-cyan-300 mt-6 opacity-0 tracking-wide transition-all duration-700
+              drop-shadow-[0_0_15px_rgba(0,255,255,0.4)]">
+                            Signing You Out...
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Tier Progress -->
+                <div class="mt-6">
+                    <p class="text-xs uppercase text-gray-400 tracking-widest mb-1">Progress to next tier</p>
+                    <div class="w-full bg-gray-700/50 h-2 rounded-full overflow-hidden">
+                        <div id="tier-progress-bar"
+                            class="h-full bg-cyan-400 rounded-full w-[0%] transition-all duration-700"></div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Analytics -->
+            <div id="analytics-panel"
+                class="bg-gray-900/60 border border-cyan-500/20 p-8 rounded-3xl shadow-xl mb-12 backdrop-blur-md"
                 data-aos="fade-up">
-                <h3 class="text-2xl sm:text-3xl font-bold text-white mb-6 flex items-center">
-                    <i data-lucide="user-circle" class="w-8 h-8 mr-3 text-cyan-500"></i> Account Details
-                </h3>
-                <div class="space-y-4 text-gray-300">
-                    <div class="flex justify-between items-center p-3 bg-gray-800 rounded-lg">
-                        <span class="font-semibold text-gray-400">Name:</span>
-                        <span id="profile-name">Loading...</span>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
+
+                    <div class="bg-gray-800/60 border border-gray-700 p-6 rounded-2xl text-center shadow-xl">
+                        <p class="text-sm text-gray-400">Total Orders</p>
+                        <p id="stat-orders" class="text-3xl font-bold text-cyan-400">0</p>
                     </div>
-                    <div class="flex justify-between items-center p-3 bg-gray-800 rounded-lg">
-                        <span class="font-semibold text-gray-400">Email:</span>
-                        <span id="profile-email">Loading...</span>
+
+                    <div class="bg-gray-800/60 border border-gray-700 p-6 rounded-2xl text-center shadow-xl">
+                        <p class="text-sm text-gray-400">Total Spent</p>
+                        <p id="stat-spent" class="text-3xl font-bold text-green-400">$0.00</p>
                     </div>
-                    <div class="flex justify-between items-center p-3 bg-gray-800 rounded-lg">
-                        <span class="font-semibold text-gray-400">Member Since:</span>
-                        <span id="profile-member-since">Loading...</span>
+
+                    <div class="bg-gray-800/60 border border-gray-700 p-6 rounded-2xl text-center shadow-xl">
+                        <p class="text-sm text-gray-400">Loyalty Tier</p>
+                        <p id="stat-tier" class="text-2xl font-bold transition-all duration-500">
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- Purchase Insights -->
+                <div id="purchase-insights" class="bg-gray-900/60 p-6 rounded-3xl border border-gray-700 shadow-xl">
+
+                    <h3 class="text-xl font-bold text-white mb-6 flex items-center gap-2">
+                        <i data-lucide="activity"></i> Purchase Insights
+                    </h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+                        <div class="bg-gray-800/40 p-4 rounded-2xl border border-gray-700">
+                            <p class="text-gray-400 text-sm">Most Bought</p>
+                            <p id="ana-top-item" class="text-cyan-400 font-bold text-lg"></p>
+                        </div>
+
+                        <div class="bg-gray-800/40 p-4 rounded-2xl border border-gray-700">
+                            <p class="text-gray-400 text-sm">Avg. Order Value</p>
+                            <p id="ana-aov" class="text-cyan-400 font-bold text-lg"></p>
+                        </div>
+
+                        <div class="bg-gray-800/40 p-4 rounded-2xl border border-gray-700">
+                            <p class="text-gray-400 text-sm">Last Purchase</p>
+                            <p id="ana-last" class="text-cyan-400 font-bold text-lg"></p>
+                        </div>
 
                     </div>
                 </div>
-                <button class="mt-6 btn-secondary w-full py-3 rounded-xl hover:border-red-500 hover:text-red-500"
-                    onclick="realLogout()">
-                    Sign Out
-                </button>
 
-            </div>
-
-            <!-- Order History -->
-            <div class="bg-secondary-bg p-6 sm:p-8 rounded-2xl shadow-2xl border border-gray-700">
-                <h3 class="text-2xl sm:text-3xl font-bold text-white mb-6 flex items-center">
-                    <i data-lucide="package-open" class="w-8 h-8 mr-3 text-cyan-500"></i> Order History
-                </h3>
-
-                <div class="space-y-4 order-history-container">
-                    <!-- JS will load user orders here -->
+                <!-- 🔁 Reset Order History -->
+                <div class="flex justify-end mt-4">
+                    <button id="reset-orders-btn"
+                        class="px-5 py-2.5 rounded-xl font-semibold bg-red-500/80 text-white hover:bg-red-400 transition">
+                        Reset Order History
+                    </button>
                 </div>
+
+                <!-- Latest Orders -->
+                <div data-aos="fade-up" class="mb-12">
+                    <div class="flex justify-between items-center mb-6">
+                        <h3 class="text-2xl font-bold text-white flex items-center gap-2">
+                            <i data-lucide="package"></i> Recent Activity
+                        </h3>
+                        <button id="toggle-history-btn"
+                            class="text-cyan-400 font-semibold hover:text-cyan-300 transition flex items-center gap-1">
+                            View Full History <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                    <div id="order-latest" class="space-y-4"></div>
+                </div>
+
+                <!-- Full Order History -->
+                <div id="order-history-full"
+                    class="hidden opacity-0 translate-y-3 space-y-4 transition-all duration-500"></div>
+
             </div>
-
-        </div> <!-- END OF PROFILE PAGE CONTENT -->
-    </div> <!-- END OF PROFILE PAGE WRAPPER -->
-
+        </div>
+    </div>
 
 
-    <!-- GIFT CARD PAGE (FIXED — NOW A TOP-LEVEL PAGE) -->
     <!-- ===========================
      PREMIUM ANIMATED GIFT CARD
 =============================== -->
@@ -902,7 +1030,9 @@
             <!-- Header -->
             <div class="text-center mb-14" data-aos="fade-down">
                 <h2 class="text-4xl font-extrabold text-white">BulkBase Digital Gift Card</h2>
-                <p class="text-cyan-400 mt-3 text-lg">Instant delivery • Never expires • Perfect for fitness lovers</p>
+                <p class="text-cyan-400 mt-3 text-lg">Instant delivery • Never expires • Perfect for fitness
+                    lovers
+                </p>
             </div>
 
             <!-- The Card Container -->
@@ -1043,82 +1173,191 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="name-toast" class="fixed bottom-6 right-6 bg-cyan-500 text-black font-semibold px-6 py-3 rounded-xl shadow-lg
+            opacity-0 translate-y-3 pointer-events-none transition-all duration-500 z-[3000] hidden">
+    </div>
+
+    <!-- 🌟 Premium Tier Unlock Celebration -->
+    <div id="tier-unlock-popup"
+        class="fixed inset-0 bg-black/80 backdrop-blur-xl flex items-center justify-center opacity-0 pointer-events-none transition-all duration-500 z-[5000]">
+
+        <div id="tier-popup-box" class="relative px-12 py-12 rounded-3xl bg-gradient-to-b from-gray-900/95 to-gray-800/60 border border-cyan-400/40 
+               shadow-[0_0_55px_rgba(0,255,255,0.45)] opacity-0 scale-90 transition-all duration-500 overflow-hidden 
+               flex flex-col items-center">
+
+            <!-- Holo ring -->
+            <div class="absolute inset-[-40%] bg-cyan-400/10 blur-3xl animate-pulse"></div>
+
+            <!-- spotlight layer -->
+            <div
+                class="absolute inset-0 bg-gradient-to-t from-transparent via-cyan-400/10 to-transparent opacity-70 blur-2xl mix-blend-screen">
+            </div>
+
+            <!-- particle depth behind -->
+            <div id="tier-particles" class="absolute inset-0 pointer-events-none mix-blend-screen"></div>
+
+            <!-- tier accent glow bar -->
+            <div id="tier-glow-bar"
+                class="absolute top-0 w-[75%] h-[6px] rounded-full mx-auto left-1/2 -translate-x-1/2 bg-cyan-300/60 shadow-[0_0_25px_rgba(0,255,255,0.8)]">
+            </div>
+
+            <!-- Heading -->
+            <h2 id="tier-unlock-title"
+                class="text-4xl font-extrabold text-center text-white drop-shadow-[0_0_25px_rgba(0,255,255,0.8)] relative z-20 tracking-wide">
+                Tier Unlocked!
+            </h2>
+
+            <!-- Congratulations text -->
+            <p id="tier-unlock-text"
+                class="text-cyan-300 text-lg text-center mt-4 font-semibold relative z-20 leading-relaxed"></p>
+
+            <!-- ⭐ Dynamic Benefits -->
+            <div id="tier-benefits" class="space-y-2 mt-6 text-cyan-200 text-sm relative z-20 w-full text-center"></div>
+
+            <!-- CTA -->
+            <button onclick="hideTierUnlockPopup()" class="relative z-20 mt-8 bg-gradient-to-r from-cyan-500 to-cyan-300 hover:from-cyan-400 hover:to-cyan-200 
+                   text-black font-bold px-9 py-3 rounded-xl shadow-lg hover:shadow-[0_0_45px_rgba(0,255,255,0.8)]
+                   transition-all duration-300 text-lg scale-95 hover:scale-100">
+                Awesome!
+            </button>
+
+            <!-- Confetti -->
+            <div id="tier-confetti" class="absolute inset-0 z-20 pointer-events-none overflow-hidden"></div>
+        </div>
+    </div>
+
+    <!-- ⭐ Tier Benefit Info Modal -->
+    <div id="tier-benefit-popup"
+        class="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center opacity-0 pointer-events-none transition-all duration-500 z-[6000]">
+
+        <div id="tier-benefit-box" class="relative px-10 py-10 rounded-3xl bg-gradient-to-br from-gray-900/95 to-gray-800/60 border border-cyan-400/40
+               shadow-[0_0_40px_rgba(0,255,255,0.35)]
+               opacity-0 scale-90 transition-all duration-500 overflow-hidden
+               flex flex-col items-center text-center">
+
+            <div class="absolute inset-[-35%] bg-cyan-400/10 blur-2xl animate-pulse"></div>
+
+            <h2 id="benefit-title"
+                class="text-3xl font-extrabold text-white relative z-20 drop-shadow-[0_0_20px_rgba(0,255,255,0.5)]">
+                Tier Benefits
+            </h2>
+
+            <p id="benefit-desc" class="text-cyan-300 mt-2 text-sm relative z-20"></p>
+
+            <div id="benefit-list" class="mt-6 space-y-2 text-cyan-200 text-sm relative z-20"></div>
+
+            <button onclick="closeTierBenefitPanel()" class="mt-8 bg-cyan-500 hover:bg-cyan-400 text-black
+                       font-bold px-6 py-2 rounded-xl shadow-lg hover:shadow-[0_0_30px_rgba(0,255,255,0.6)]
+                       transition-all duration-300 relative z-20">
+                Close
+            </button>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+
+    <script type="module">
+
+        /* ======================================================
+           🔥 FIREBASE INITIALIZATION
+        ====================================================== */
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCqTre32R-JxlgqP7HhJ0ZufEeFtFSrOuo",
+            authDomain: "login-page-e809f.firebaseapp.com",
+            projectId: "login-page-e809f",
+            storageBucket: "login-page-e809f.firebasestorage.app",
+            messagingSenderId: "204682041114",
+            appId: "1:204682041114:web:0cff442a3a2a94010fbea3"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        /* ======================================================
+           🔐 AUTH LISTENER + PROFILE AUTO UPDATE
+        ====================================================== */
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = "login.html";
+                return;
+            }
+
+            document.getElementById("profile-name").textContent = user.displayName || "User";
+            document.getElementById("profile-email").textContent = user.email;
+
+            // 🔹 Save name for logout animation
+            localStorage.setItem("username", user.displayName || "User");
+
+            const joined = new Date(user.metadata.creationTime);
+            document.getElementById("profile-member-since").textContent =
+                `${joined.getDate()} ${joined.toLocaleString("en-US", { month: "short" })} ${joined.getFullYear()}`;
+
+            // ⭐ Enable inline username editing
+            enableNameEdit(auth);
+            loadUserReviews();
+        });
 
 
+        /* LOGOUT */
+        window.realLogout = async function () {
+            const overlay = document.getElementById("logout-overlay");
+            const textEl = document.getElementById("logout-text");
 
-        <script src="js/main.js"></script>
+            let userName = localStorage.getItem("username") || "User";
 
-
-
-
-
-        <script type="module">
-
-            /* ======================================================
-               🔥 FIREBASE INITIALIZATION
-            ====================================================== */
-            import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-            import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-
-            const firebaseConfig = {
-                apiKey: "AIzaSyCqTre32R-JxlgqP7HhJ0ZufEeFtFSrOuo",
-                authDomain: "login-page-e809f.firebaseapp.com",
-                projectId: "login-page-e809f",
-                storageBucket: "login-page-e809f.firebasestorage.app",
-                messagingSenderId: "204682041114",
-                appId: "1:204682041114:web:0cff442a3a2a94010fbea3"
-            };
-
-            const app = initializeApp(firebaseConfig);
-            const auth = getAuth(app);
-
-            /* ======================================================
-               🔐 AUTH LISTENER + PROFILE AUTO UPDATE
-            ====================================================== */
-            onAuthStateChanged(auth, (user) => {
-                if (!user) {
-                    window.location.href = "login.html";
-                    return;
-                }
-
-                document.getElementById("profile-name").textContent = user.displayName || "User";
-                document.getElementById("profile-email").textContent = user.email;
-
-                const joined = new Date(user.metadata.creationTime);
-                document.getElementById("profile-member-since").textContent =
-                    `${joined.getDate()} ${joined.toLocaleString("en-US", { month: "short" })} ${joined.getFullYear()}`;
-
-                loadUserReviews();
+            // Step 1 — enter overlay smoother
+            overlay.classList.remove("pointer-events-none");
+            requestAnimationFrame(() => {
+                overlay.classList.remove("opacity-0", "scale-95");
+                overlay.classList.add("scale-100");
             });
 
-            /* LOGOUT */
-            window.realLogout = async function () {
+            // Step 2 — stagger message for cinematic effect
+            setTimeout(() => {
+                textEl.textContent = `Signing You Out...`;
+                textEl.style.opacity = "1";
+                textEl.style.transform = "translateY(10px)";
+            }, 800);
+
+            // Step 3 — overlay glow fade-in effect
+            setTimeout(() => {
+                overlay.style.background = "rgba(0,0,0,1)";
+            }, 2000);
+
+            // Step 4 — smooth redirect
+            setTimeout(async () => {
                 await signOut(auth);
                 window.location.href = "login.html";
-            };
+            }, 3600);
+        };
 
+        /* ======================================================
+           ⭐ LOAD USER REVIEWS (PREMIUM VERSION)
+        ====================================================== */
 
-            /* ======================================================
-               ⭐ LOAD USER REVIEWS (PREMIUM VERSION)
-            ====================================================== */
+        function loadUserReviews() {
+            const track = document.getElementById("user-reviews-carousel");
+            if (!track) return;
 
-            function loadUserReviews() {
-                const track = document.getElementById("user-reviews-carousel");
-                if (!track) return;
+            const saved = JSON.parse(localStorage.getItem("bulkbase_reviews") || "[]");
 
-                const saved = JSON.parse(localStorage.getItem("bulkbase_reviews") || "[]");
-
-                if (saved.length === 0) {
-                    track.innerHTML = `
+            if (saved.length === 0) {
+                track.innerHTML = `
             <p class="text-gray-400 text-center w-full py-10 italic">
                 No reviews yet — be the first to review!
             </p>`;
-                    return;
-                }
+                return;
+            }
 
-                const latest = saved.slice(0, 12);
+            const latest = saved.slice(0, 12);
 
-                track.innerHTML = latest.map(r => `
+            track.innerHTML = latest.map(r => `
         <div class="review-card premium-card">
             <div class="review-stars">
                 ${"★".repeat(r.rating)}${"☆".repeat(5 - r.rating)}
@@ -1132,109 +1371,197 @@
         </div>
     `).join("");
 
-                initPremiumCarousel();
+            initPremiumCarousel();
+        }
+
+
+        /* ======================================================
+           PREMIUM 3D CAROUSEL ENGINE
+        ====================================================== */
+
+        function initPremiumCarousel() {
+            const track = document.getElementById("user-reviews-carousel");
+            if (!track) return;
+
+            const cards = [...track.children];
+            let index = 0;
+
+            function updateCarousel() {
+                cards.forEach((c, i) => {
+                    c.classList.remove("active");
+                    if (i === index) c.classList.add("active");
+
+                    const offset = (i - index) * 380;
+                    c.style.transform = `translateX(${offset}px)`;
+                });
             }
 
+            updateCarousel();
 
-            /* ======================================================
-               PREMIUM 3D CAROUSEL ENGINE
-            ====================================================== */
-
-            function initPremiumCarousel() {
-                const track = document.getElementById("user-reviews-carousel");
-                if (!track) return;
-
-                const cards = [...track.children];
-                let index = 0;
-
-                function updateCarousel() {
-                    cards.forEach((c, i) => {
-                        c.classList.remove("active");
-                        if (i === index) c.classList.add("active");
-
-                        const offset = (i - index) * 380;
-                        c.style.transform = `translateX(${offset}px)`;
-                    });
-                }
-
+            /* === Arrow Buttons === */
+            document.getElementById("review-prev").onclick = () => {
+                index = (index - 1 + cards.length) % cards.length;
                 updateCarousel();
-
-                /* === Arrow Buttons === */
-                document.getElementById("review-prev").onclick = () => {
-                    index = (index - 1 + cards.length) % cards.length;
-                    updateCarousel();
-                };
-
-                document.getElementById("review-next").onclick = () => {
-                    index = (index + 1) % cards.length;
-                    updateCarousel();
-                };
-
-                /* === Auto Slide === */
-                setInterval(() => {
-                    index = (index + 1) % cards.length;
-                    updateCarousel();
-                }, 4000);
-
-                /* === Drag to slide === */
-                let startX = 0;
-                let dragging = false;
-
-                track.addEventListener("mousedown", e => {
-                    dragging = true;
-                    startX = e.pageX;
-                });
-
-                window.addEventListener("mouseup", () => dragging = false);
-
-                window.addEventListener("mousemove", e => {
-                    if (!dragging) return;
-
-                    const diff = e.pageX - startX;
-
-                    if (diff > 50) {
-                        document.getElementById("review-prev").click();
-                        dragging = false;
-                    }
-
-                    if (diff < -50) {
-                        document.getElementById("review-next").click();
-                        dragging = false;
-                    }
-                });
-            }
-
-
-            /* ======================================================
-               STARTUP
-            ====================================================== */
-            document.addEventListener("DOMContentLoaded", loadUserReviews);
-
-
-            /* ======================================================
-               🛒 CHECKOUT HANDLER
-            ====================================================== */
-            window.handleCheckout = function () {
-                const cart = JSON.parse(localStorage.getItem("cart") || "[]");
-                if (cart.length === 0) {
-                    alert("Your cart is empty!");
-                    return;
-                }
-                window.location.href = "checkout.html";
             };
 
-            // Hook flavour modal "Add to Cart" button
-            document.addEventListener("DOMContentLoaded", () => {
-                const flavourAddBtn = document.getElementById("flavour-add-btn");
-                if (flavourAddBtn && window.confirmFlavourAndAdd) {
-                    flavourAddBtn.addEventListener("click", () => {
-                        window.confirmFlavourAndAdd();
-                    });
-                }
+            document.getElementById("review-next").onclick = () => {
+                index = (index + 1) % cards.length;
+                updateCarousel();
+            };
+
+            /* === Auto Slide === */
+            setInterval(() => {
+                index = (index + 1) % cards.length;
+                updateCarousel();
+            }, 4000);
+
+            /* === Drag to slide === */
+            let startX = 0;
+            let dragging = false;
+
+            track.addEventListener("mousedown", e => {
+                dragging = true;
+                startX = e.pageX;
             });
 
+            window.addEventListener("mouseup", () => dragging = false);
 
-        </script>
+            window.addEventListener("mousemove", e => {
+                if (!dragging) return;
+
+                const diff = e.pageX - startX;
+
+                if (diff > 50) {
+                    document.getElementById("review-prev").click();
+                    dragging = false;
+                }
+
+                if (diff < -50) {
+                    document.getElementById("review-next").click();
+                    dragging = false;
+                }
+            });
+        }
+
+
+        /* ======================================================
+           STARTUP
+        ====================================================== */
+        document.addEventListener("DOMContentLoaded", loadUserReviews);
+
+
+        /* ======================================================
+           🛒 CHECKOUT HANDLER
+        ====================================================== */
+        window.handleCheckout = function () {
+            const cart = JSON.parse(localStorage.getItem("cart") || "[]");
+            if (cart.length === 0) {
+                alert("Your cart is empty!");
+                return;
+            }
+            window.location.href = "checkout.html";
+        };
+
+        // Hook flavour modal "Add to Cart" button
+        document.addEventListener("DOMContentLoaded", () => {
+            const flavourAddBtn = document.getElementById("flavour-add-btn");
+            if (flavourAddBtn && window.confirmFlavourAndAdd) {
+                flavourAddBtn.addEventListener("click", () => {
+                    window.confirmFlavourAndAdd();
+                });
+            }
+        });
+
+        /* ======================================================
+           ⭐ ENABLE INLINE USERNAME EDITING
+        ====================================================== */
+        import { updateProfile } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        function enableNameEdit(auth) {
+            const nameText = document.getElementById("profile-name");
+            const editBtn = document.getElementById("edit-name-btn");
+            const input = document.getElementById("profile-name-edit");
+
+            if (!nameText || !editBtn || !input) return;
+
+            function enterEdit() {
+                input.value = nameText.textContent.trim();
+
+                const rect = nameText.getBoundingClientRect();
+                const wrapRect = nameText.parentElement.getBoundingClientRect();
+
+                input.style.left = (rect.left - wrapRect.left) + "px";
+                input.style.top = (rect.top - wrapRect.top) + "px";
+                input.style.width = (rect.width + 20) + "px";
+
+                // Prepare input hidden (pre-animation state)
+                input.style.opacity = "0";
+                input.style.transform = "scale(0.95)";
+                input.classList.remove("hidden");
+
+                // Fade text out
+                nameText.style.transition = "opacity .22s ease";
+                nameText.style.opacity = "0";
+
+                // Force browser to register state before animating
+                requestAnimationFrame(() => {
+                    requestAnimationFrame(() => {
+                        input.style.opacity = "1";
+                        input.style.transform = "scale(1)";
+                    });
+                });
+
+                input.focus();
+                input.select();
+            }
+
+            async function applyEdit() {
+                const newName = input.value.trim();
+                if (!newName) return exitEdit();
+
+                const user = auth.currentUser;
+                if (!user) return;
+
+                try {
+                    await updateProfile(user, { displayName: newName });
+                    nameText.textContent = newName;
+                    localStorage.setItem("username", newName);
+
+                    window.showNameToast("Profile name updated !!!");
+
+                } catch (err) {
+                    console.error("Name update failed", err);
+                }
+
+                exitEdit();
+            }
+
+            function exitEdit() {
+                // Animate input out smoothly
+                input.style.transition = "opacity .22s ease, transform .22s ease";
+                input.style.opacity = "0";
+                input.style.transform = "scale(0.95)";
+
+                // Fade name back in
+                nameText.style.opacity = "1";
+
+                setTimeout(() => input.classList.add("hidden"), 200);
+            }
+
+            editBtn.onclick = enterEdit;
+            nameText.onclick = enterEdit;
+
+            input.addEventListener("keydown", e => {
+                if (e.key === "Enter") applyEdit();
+                if (e.key === "Escape") exitEdit();
+            });
+
+            input.addEventListener("blur", applyEdit);
+        }
+
+
+    </script>
+
 </body>
 
 </html>

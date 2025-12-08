@@ -340,3 +340,187 @@
          transform: translateY(-4px) rotateY(0deg);
      }
  }
+
+ #order-history-full {
+     max-height: 500px;
+     overflow-y: auto;
+     padding-bottom: 2rem;
+ }
+
+
+
+
+ #gift-card-box::after {
+     content: "";
+     position: absolute;
+     inset: 0;
+     background: linear-gradient(120deg, rgba(255, 255, 255, 0.15), transparent 60%);
+     transform: translateX(-120%);
+     transition: transform 0.8s ease-in-out;
+     pointer-events: none;
+ }
+
+ #gift-card-box.animate-shimmer::after {
+     transform: translateX(120%);
+ }
+
+
+
+ /* Loader spin smoothing */
+ #logout-overlay .animate-spin {
+     animation: spinSmooth 1.2s ease-in-out infinite;
+ }
+
+ @keyframes simplePulse {
+     0% {
+         transform: scale(1);
+         opacity: 0.6;
+     }
+
+     50% {
+         transform: scale(1.6);
+         opacity: 1;
+     }
+
+     100% {
+         transform: scale(1);
+         opacity: 0.6;
+     }
+ }
+
+ .animate-simplePulse {
+     animation: simplePulse 1s infinite ease-in-out;
+ }
+
+ #logout-text {
+     transition: opacity 1s ease, transform 1s ease;
+ }
+
+ #profile-name {
+     transition: all 0.25s ease;
+ }
+
+ #profile-name-edit {
+     transition: all .25s cubic-bezier(0.2, 0.65, 0.3, 1);
+ }
+
+ #profile-tier-badge {
+     transition: background 0.35s ease, box-shadow 0.35s ease;
+ }
+
+ @keyframes confetti-fall {
+     0% {
+         transform: translateY(-20px) rotate(0deg);
+         opacity: 1;
+     }
+
+     100% {
+         transform: translateY(260px) rotate(360deg);
+         opacity: 0;
+     }
+ }
+
+ .confetti-piece {
+     position: absolute;
+     width: 10px;
+     height: 14px;
+     border-radius: 2px;
+     opacity: 0.95;
+     transform-origin: top left;
+     animation: confetti-fall 1.8s ease-out forwards;
+ }
+
+ @keyframes floatingParticle {
+     0% {
+         transform: translateY(0) scale(1);
+         opacity: 0.3;
+     }
+
+     50% {
+         transform: translateY(-10px) scale(1.2);
+         opacity: 0.8;
+     }
+
+     100% {
+         transform: translateY(0) scale(1);
+         opacity: 0.3;
+     }
+ }
+
+ @keyframes pulseGlow {
+
+     0%,
+     100% {
+         opacity: .5;
+     }
+
+     50% {
+         opacity: 1;
+     }
+ }
+
+ #tier-benefits .perk-item {
+     opacity: 0;
+     animation: fadeInUp 0.5s ease forwards;
+ }
+
+ @keyframes fadeInUp {
+     0% {
+         opacity: 0;
+         transform: translateY(10px);
+     }
+
+     100% {
+         opacity: 1;
+         transform: translateY(0);
+     }
+ }
+
+ .perk-item {
+     opacity: 0;
+     transform: translateY(8px);
+     transition: opacity .4s ease, transform .4s ease;
+ }
+
+ .perk-item.show {
+     opacity: 1;
+     transform: translateY(0);
+ }
+
+ @keyframes floatingParticle {
+
+     0%,
+     100% {
+         transform: translateY(0) translateX(0);
+         opacity: .6;
+     }
+
+     50% {
+         transform: translateY(-10px) translateX(6px);
+         opacity: 1;
+     }
+ }
+
+ .confetti-piece {
+     position: absolute;
+     border-radius: 2px;
+     animation: fall 1s linear forwards;
+ }
+
+ @keyframes fall {
+     100% {
+         transform: translateY(120vh) rotate(360deg);
+         opacity: 0;
+     }
+ }
+
+ .benefit-item {
+     opacity: 0;
+     transform: translateY(8px);
+     transition: opacity .4s ease, transform .4s ease;
+ }
+
+ .benefit-item.show {
+     opacity: 1;
+     transform: translateY(0);
+ }
