@@ -305,7 +305,6 @@ const tierBenefits = {
 
 /* =========================================================
    TIER THRESHOLDS
-   (Orders needed for each tier)
 ========================================================= */
 const tierThresholds = {
     "New Member": 0,

@@ -780,12 +780,12 @@
             }
         }
 
-        // 🔹 Lucide icons
+        // Lucide icons
         if (window.lucide) {
             lucide.createIcons();
         }
 
-        // 🔹 Toast / message helper
+        //  Toast / message helper
         function showMessage(text, isError = false) {
             const box = document.getElementById('message-box');
             const messageText = document.getElementById('message-text');
@@ -804,7 +804,7 @@
             }, 3000);
         }
 
-        // 🔹 Firebase Auth (autofill profile info)
+        //  Firebase Auth (autofill profile info)
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
@@ -841,7 +841,7 @@
             }
         });
 
-        // 🔹 Cart + pricing logic (shared with index via localStorage)
+        //  Cart + pricing logic (shared with index via localStorage)
         const cart = JSON.parse(localStorage.getItem("cart") || "[]");
         const summaryContainer = document.getElementById("order-summary");
         const subtotalEl = document.getElementById("subtotal");
@@ -858,7 +858,7 @@
 
 
 
-        // 🔹 Skeleton loader while cart is “loading”
+        //  Skeleton loader while cart is “loading”
         function showSkeleton() {
             summaryContainer.innerHTML = `
             <div class="animate-pulse bg-gray-700/50 h-16 rounded-xl border border-cyan-500/10 shadow-[0_0_20px_rgba(0,255,255,0.25)]"></div>
@@ -866,7 +866,7 @@
         `;
         }
 
-        // 🔹 Total calculator (subtotal + discount + shipping)
+        //  Total calculator (subtotal + discount + shipping)
         function updateTotal() {
             if (subtotal > 75) {
                 shipping = 0;
@@ -882,7 +882,7 @@
             totalEl.textContent = `$${total.toFixed(2)}`;
         }
 
-        // 🔹 Render cart items from localStorage
+        //  Render cart items from localStorage
         function renderCart() {
             subtotal = 0;
 
@@ -914,11 +914,11 @@
             updateTotal();
         }
 
-        // 🔹 Init shipping from selected radio
+        // Init shipping from selected radio
         const checkedShipping = document.querySelector('input[name="shipping"]:checked');
         shipping = checkedShipping ? parseFloat(checkedShipping.value) : 0;
 
-        // 🔹 Shipping option change listener
+        //  Shipping option change listener
         shippingOptions.forEach((option) => {
             option.addEventListener("change", () => {
                 shipping = parseFloat(option.value);
@@ -926,7 +926,7 @@
             });
         });
 
-        // 🔹 Promo code logic (FIT10, BULK5, BULK10)
+        //  Promo code logic (FIT10, BULK5, BULK10)
         document.getElementById("apply-promo").addEventListener("click", () => {
             const code = promoInput.value.trim().toUpperCase();
 
@@ -955,11 +955,11 @@
             updateTotal();
         });
 
-        // 🔹 Show skeleton then real cart
+        //  Show skeleton then real cart
         showSkeleton();
         setTimeout(renderCart, 400);
 
-        // 🔹 3D tilt effect on summary card (desktop only)
+        //  3D tilt effect on summary card (desktop only)
         if (window.matchMedia("(pointer: fine)").matches) {
             const tiltCards = document.querySelectorAll(".tilt-card");
             const strength = 14;
@@ -987,7 +987,7 @@
             });
         }
 
-        // 🔹 Address Book using localStorage
+        // Address Book using localStorage
         const ADDRESS_KEY = "bulkbase_addresses";
         const addressModal = document.getElementById("address-modal");
         const addressList = document.getElementById("address-list");
@@ -1093,7 +1093,7 @@
             showMessage("Address saved successfully!");
         });
 
-        // 🔹 Place Order: loading → success → save → clear cart → LUXURY REVIEW OVERLAY
+        //  Place Order: loading → success → save → clear cart → review/home
         placeOrderBtn.addEventListener("click", () => {
 
             if (!cart.length) {
@@ -1124,7 +1124,7 @@
 
 
         /* =========================================================
-  📌 REAL ORDER SAVE SYSTEM — FIXED & CLEANED
+  REAL ORDER SAVE SYSTEM 
   ========================================================= */
         function saveOrder() {
 
@@ -1161,7 +1161,7 @@
 
 
 
-        // ⭐ Old review-modal hooks (safe no-op)
+        //  Old review-modal hooks (safe no-op)
         if (reviewStarsWrap) {
             const starButtons = reviewStarsWrap.querySelectorAll("button[data-rating]");
             starButtons.forEach(btn => {
@@ -1203,7 +1203,7 @@
         }
     </script>
 
-    <!-- ADVANCED GOOGLE AUTOCOMPLETE -->
+    <!--  GOOGLE AUTOCOMPLETE -->
     <script type="module">
         let autocomplete;
 

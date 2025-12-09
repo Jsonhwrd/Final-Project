@@ -50,7 +50,7 @@
     </div>
 
 
-    <!-- 🧃 Flavour Selection Modal -->
+    <!--  Flavour Selection Modal -->
     <div id="flavour-modal"
         class="fixed inset-0 z-[120] hidden items-center justify-center bg-black/70 backdrop-blur-sm">
         <div
@@ -839,7 +839,7 @@
         </div>
     </div>
 
-    <!-- ⭐ PREMIUM PROFILE / DASHBOARD PAGE -->
+    <!--  DASHBOARD PAGE -->
     <div id="profile-page" class="page pt-20 pb-24 hidden">
 
         <div class="max-w-6xl mx-auto px-6">
@@ -850,7 +850,7 @@
                 <p class="text-lg text-cyan-400/90 mt-2">Track your journey — insights — orders — progress.</p>
             </div>
 
-            <!-- 🔥 Profile Identity Card -->
+            <!--  Profile Identity Card -->
             <div class="relative bg-gradient-to-br from-gray-900/80 to-gray-800/60 border border-cyan-500/20 
                 rounded-3xl p-8 mb-12 shadow-[0_0_40px_rgba(0,255,255,0.25)] backdrop-blur-lg" data-aos="fade-up">
 
@@ -908,7 +908,7 @@
                     </button>
                 </div>
 
-                <!-- 🔄 Logout Overlay -->
+                <!--  Logout Overlay -->
                 <div id="logout-overlay" class="fixed inset-0 bg-black/90 flex flex-col items-center justify-center opacity-0 pointer-events-none 
        transition-all duration-700 z-[2000] scale-95">
 
@@ -989,7 +989,7 @@
                     </div>
                 </div>
 
-                <!-- 🔁 Reset Order History -->
+                <!-- Reset Order History -->
                 <div class="flex justify-end mt-4">
                     <button id="reset-orders-btn"
                         class="px-5 py-2.5 rounded-xl font-semibold bg-red-500/80 text-white hover:bg-red-400 transition">
@@ -1021,7 +1021,7 @@
 
 
     <!-- ===========================
-     PREMIUM ANIMATED GIFT CARD
+     GIFT CARD
 =============================== -->
     <div id="gift-card-page" class="page hidden pt-20 pb-24">
 
@@ -1180,7 +1180,7 @@
             opacity-0 translate-y-3 pointer-events-none transition-all duration-500 z-[3000] hidden">
     </div>
 
-    <!-- 🌟 Premium Tier Unlock Celebration -->
+    <!--  Tier Unlock Celebration -->
     <div id="tier-unlock-popup"
         class="fixed inset-0 bg-black/80 backdrop-blur-xl flex items-center justify-center opacity-0 pointer-events-none transition-all duration-500 z-[5000]">
 
@@ -1214,7 +1214,7 @@
             <p id="tier-unlock-text"
                 class="text-cyan-300 text-lg text-center mt-4 font-semibold relative z-20 leading-relaxed"></p>
 
-            <!-- ⭐ Dynamic Benefits -->
+            <!--  Dynamic Benefits -->
             <div id="tier-benefits" class="space-y-2 mt-6 text-cyan-200 text-sm relative z-20 w-full text-center"></div>
 
             <!-- CTA -->
@@ -1229,7 +1229,7 @@
         </div>
     </div>
 
-    <!-- ⭐ Tier Benefit Info Modal -->
+    <!--  Tier Benefit Info Modal -->
     <div id="tier-benefit-popup"
         class="fixed inset-0 bg-black/70 backdrop-blur-md flex items-center justify-center opacity-0 pointer-events-none transition-all duration-500 z-[6000]">
 
@@ -1262,7 +1262,7 @@
     <script type="module">
 
         /* ======================================================
-           🔥 FIREBASE INITIALIZATION
+            FIREBASE 
         ====================================================== */
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -1280,7 +1280,7 @@
         const auth = getAuth(app);
 
         /* ======================================================
-           🔐 AUTH LISTENER + PROFILE AUTO UPDATE
+           AUTH LISTENER + PROFILE AUTO UPDATE
         ====================================================== */
         onAuthStateChanged(auth, (user) => {
             if (!user) {
@@ -1338,7 +1338,7 @@
         };
 
         /* ======================================================
-           ⭐ LOAD USER REVIEWS (PREMIUM VERSION)
+           LOAD USER REVIEWS 
         ====================================================== */
 
         function loadUserReviews() {
@@ -1376,7 +1376,7 @@
 
 
         /* ======================================================
-           PREMIUM 3D CAROUSEL ENGINE
+            3D CAROUSEL ENGINE
         ====================================================== */
 
         function initPremiumCarousel() {
@@ -1451,7 +1451,7 @@
 
 
         /* ======================================================
-           🛒 CHECKOUT HANDLER
+            CHECKOUT 
         ====================================================== */
         window.handleCheckout = function () {
             const cart = JSON.parse(localStorage.getItem("cart") || "[]");
@@ -1473,7 +1473,7 @@
         });
 
         /* ======================================================
-           ⭐ ENABLE INLINE USERNAME EDITING
+            ENABLE INLINE USERNAME EDITING
         ====================================================== */
         import { updateProfile } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
 
