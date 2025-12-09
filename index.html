@@ -636,7 +636,7 @@
                         <ul class="space-y-3 text-sm text-gray-400">
                             <li>
                                 <a href="#" class="hover:text-cyan-400 transition hover:translate-x-1 inline-block"
-                                    onclick="showMessage('Policy', 'View our detailed Privacy Policy.', event)">
+                                    onclick="showPage('privacy-page')">
                                     Privacy Policy
                                 </a>
                             </li>
@@ -1174,6 +1174,93 @@
             </div>
         </div>
     </div>
+
+    <!-- ================= PRIVACY POLICY PAGE ================= -->
+    <div id="privacy-page" class="page hidden px-6 py-12 max-w-4xl mx-auto text-gray-300 leading-relaxed">
+
+        <h1 class="text-4xl font-extrabold text-white mb-8">
+            Privacy Policy
+        </h1>
+
+        <p class="text-gray-400 mb-10 text-sm italic">
+            Last Updated: <span id="policy-date"></span>
+        </p>
+
+        <div class="space-y-10">
+
+            <section>
+                <h2 class="legal-heading">1. Introduction</h2>
+                <p>
+                    At BulkBase, your privacy is important to us. This policy explains how we collect,
+                    handle, and protect your personal information.
+                </p>
+            </section>
+
+            <section>
+                <h2 class="legal-heading">2. Information We Collect</h2>
+                <ul class="legal-list">
+                    <li>Account details (name, email, profile information)</li>
+                    <li>Order processing data</li>
+                    <li>Analytics and device information</li>
+                    <li>Customer support interactions</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2 class="legal-heading">3. How We Use Your Data</h2>
+                <p>We use your information to:</p>
+                <ul class="legal-list">
+                    <li>Process purchases & transactions</li>
+                    <li>Improve service performance</li>
+                    <li>Optimize user experience and marketing</li>
+                    <li>Prevent fraudulent activities</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2 class="legal-heading">4. Cookies & Tracking</h2>
+                <p>
+                    BulkBase uses cookies to improve site functionality. You may disable cookies in your
+                    browser settings, though certain features may not work.
+                </p>
+            </section>
+
+            <section>
+                <h2 class="legal-heading">5. Data Sharing</h2>
+                <p>
+                    We do not sell your personal data. Some information may be shared securely with
+                    trusted service providers such as payment, analytics, shipping or account systems.
+                </p>
+            </section>
+
+            <section>
+                <h2 class="legal-heading">6. Data Protection</h2>
+                <p>
+                    Your account information and transactions are stored with industry-standard
+                    encryption and verification protections.
+                </p>
+            </section>
+
+            <section>
+                <h2 class="legal-heading">7. Your Rights</h2>
+                <ul class="legal-list">
+                    <li>Request access to your information</li>
+                    <li>Request updates or removal</li>
+                    <li>Opt-out of marketing communications</li>
+                </ul>
+            </section>
+
+            <section>
+                <h2 class="legal-heading">8. Contact Us</h2>
+                <p>
+                    For privacy requests or concerns, contact us at:
+                    <span class="text-cyan-300 font-semibold">support@bulkbase.com</span>
+                </p>
+            </section>
+
+        </div>
+    </div>
+
 
     <!-- TOAST NOTIFICATION -->
     <div id="name-toast" class="fixed bottom-6 right-6 bg-cyan-500 text-black font-semibold px-6 py-3 rounded-xl shadow-lg

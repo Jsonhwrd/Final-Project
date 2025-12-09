@@ -1040,3 +1040,17 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+/* =========================================================
+   PRIVACY POLICY AUTO-DATE UPDATE
+========================================================= */
+document.addEventListener("DOMContentLoaded", () => {
+    const el = document.getElementById("policy-date");
+    if (el) {
+        const today = new Date().toLocaleDateString("en-US", {
+            year: "numeric",
+            month: "long",
+            day: "numeric"
+        });
+        el.textContent = today;
+    }
+});
