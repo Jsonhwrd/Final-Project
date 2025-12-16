@@ -1,3 +1,4 @@
+
 /* =========================================================
    BOOT + UI INIT
 ========================================================= */
@@ -792,7 +793,6 @@ let giftAnimating = false;
 function animatedPurchaseGift(event) {
     if (event) event.preventDefault();
 
-    // Prevent double click spam glitch
     if (giftAnimating) return;
     giftAnimating = true;
 
