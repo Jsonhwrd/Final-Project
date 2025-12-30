@@ -1,50 +1,30 @@
-Final Project – Web Application
-Project Description
+# Bulk Base
 
-This project is a web-based application developed as a final course project.
-It demonstrates frontend development, user interaction, and basic system logic using JavaScript.
+## 1. Introduction
+Web-based applications play a critical role in modern software systems. 
+This project focuses on implementing a client-side web application that supports user interaction, authentication, and persistent data storage.
 
-Features
+## 2. System Overview
+The system consists of a frontend interface developed using HTML, CSS, and JavaScript. 
+User authentication is handled through Firebase Authentication, while cart and session data are stored using the Local Storage API.
 
-Interactive user interface
+## 3. Languages and other system
+- HTML5
+- CSS3 / Tailwind CSS
+- JavaScript
+- Firebase Authentication
+- Local Storage API
+- GitHub Pages
 
-Product and cart functionality
-
-User login and session handling
-
-Client-side data storage
-
-Technologies Used
-
-HTML
-
-CSS / Tailwind CSS
-
-JavaScript
-
-Firebase Authentication
-
-Local Storage
-
-GitHub Pages
-
-How to Run the Project
-Run Locally
-
-Clone the repository:
-
-git clone https://github.com/Jsonhwrd/Final-Project.git
-
-
-Open index.html in a web browser.
-
-Live Demo
-
-The project is deployed using GitHub Pages and can be accessed at:
-
+## 4. Deployment
+The system is deployed using GitHub Pages and is publicly accessible at:
 https://jsonhwrd.github.io/Final-Project/
 
-Author
+## 5. Conclusion
+This project demonstrates the successful implementation and deployment of a web-based application using modern frontend technologies and cloud services.
 
-Group 14 s1141446 Jason Howard 
+## Author
+Group 14 s1141446 Jason Howard  
+
+
 
