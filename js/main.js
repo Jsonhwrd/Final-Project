@@ -399,7 +399,7 @@ function applyTierTextColor(tier) {
 
 
 /* =========================================================
-   ANALYTICS ENGINE + REAL-TIME PROGRESS BAR
+   ANALYTICS ENGINE 
 ========================================================= */
 function loadProfileAnalytics() {
     const orders = getOrders();
@@ -500,7 +500,7 @@ function loadProfileAnalytics() {
     // Average order value
     anaAOV.textContent = `$${(totalSpent / orderCount).toFixed(2)}`;
 
-    // Last purchase date (latest first in saveOrder, so last element == oldest)
+
     anaLast.textContent = orders[0]?.date || "-";
 
     // PROGRESS ANIMATION
@@ -593,15 +593,15 @@ window.showPage = function (id) {
 
     // When profile loads, refresh analytics + history button logic
     if (id === "profile-page") {
-        initProfileSection();   // render list + stats
-        setupHistoryToggle();   // attach toggle logic
-        if (window.lucide) lucide.createIcons(); // refresh icons
+        initProfileSection();
+        setupHistoryToggle();
+        if (window.lucide) lucide.createIcons();
     }
 
-    // Refresh AOS animations
+
     if (window.AOS) AOS.refresh();
 
-    // Scroll to top on change
+
     window.scrollTo(0, 0);
 };
 
@@ -653,10 +653,10 @@ function setupHistoryToggle() {
             fullPanel.style.opacity = "0";
             fullPanel.style.transform = "translateY(14px) scale(0.95)";
 
-            // Fully hide after animation finishes
+
             setTimeout(() => fullPanel.classList.add("hidden"), 320);
 
-            /*  BRING BACK LATEST LIST  */
+
             latestPanel.classList.remove("hidden");
             latestPanel.style.opacity = "0";
             latestPanel.style.transform = "translateY(-10px) scale(0.98)";
@@ -728,25 +728,25 @@ window.showNameToast = function (msg) {
 
     toast.textContent = msg;
 
-    // Reset state cleanly before animation
+
     toast.classList.remove("hidden");
     toast.style.opacity = "0";
     toast.style.transform = "translateY(10px) scale(0.95)";
     toast.style.pointerEvents = "auto";
 
-    // Let browser register style before animating
+
     requestAnimationFrame(() => {
         toast.style.transition = "opacity .35s ease, transform .35s ease";
         toast.style.opacity = "1";
         toast.style.transform = "translateY(0) scale(1)";
     });
 
-    // Auto hide after 2 seconds
+
     setTimeout(() => {
         toast.style.opacity = "0";
         toast.style.transform = "translateY(10px) scale(0.95)";
 
-        // Cleanup after animation completes
+
         setTimeout(() => {
             toast.classList.add("hidden");
             toast.style.pointerEvents = "none";
@@ -812,16 +812,16 @@ function animatedPurchaseGift(event) {
             box-shadow 0.65s ease
         `;
 
-        // Lift + rotate + glow
+
         card.style.transform = "translateY(-6px) rotateY(12deg) scale(1.03)";
         card.style.boxShadow = "0 0 55px rgba(0,255,255,0.55)";
 
         setTimeout(() => {
-            // Reset motion
+
             card.style.transform = "translateY(0) rotateY(0deg) scale(1)";
             card.style.boxShadow = "0 0 25px rgba(0,255,255,0.25)";
 
-            // After animation finishes, show popup
+
             setTimeout(() => {
                 showMessage(
                     "Gift Card Purchased 🎉",
@@ -845,7 +845,7 @@ function selectGiftCardValue(amount) {
 }
 
 /* =========================================================
-    TIER UNLOCK POPUP + EFFECT ENGINE
+    TIER UNLOCK POPUP
 ========================================================= */
 let lastTier = localStorage.getItem("lastTier") || "New Member";
 
@@ -884,7 +884,7 @@ function triggerTierUnlockPopup(tierName, color) {
             item.textContent = "• " + p;
             perkArea.appendChild(item);
 
-            // staggered animation like Shopify reveal
+
             setTimeout(() => {
                 item.classList.add("show");
             }, 200 + index * 120);
