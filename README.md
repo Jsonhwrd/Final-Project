@@ -24,7 +24,7 @@ https://jsonhwrd.github.io/Final-Project/
 This project demonstrates the successful implementation and deployment of a web-based application using modern frontend technologies and cloud services.
 
 ## Author
-Group 14 s1141446 Jason Howard  
+Group 14_s1141446_Jason Howard  
 
 
 
